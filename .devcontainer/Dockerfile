@@ -1,0 +1,40 @@
+FROM mcr.microsoft.com/vscode/devcontainers/cpp:jammy
+
+ENV DEBIAN_FRONTEND="noninteractive"
+
+RUN apt-get update && apt-get dist-upgrade -y
+
+# Install C++ development tools
+RUN apt-get install -y \
+    ninja-build \
+    gdb \
+    valgrind \
+    clang-14 \
+    libc++-14-dev \
+    libc++abi-14-dev \
+    clang-format \
+    python3-pip
+RUN apt-get clean
+
+# Install CMake version that supports presets
+ENV CMAKE_TAG="v3.27"
+ENV CMAKE_VERSION="3.27.6"
+ENV CMAKE_PLATFORM="linux-x86_64"
+ENV CMAKE_RELEASE="cmake-${CMAKE_VERSION}-${CMAKE_PLATFORM}"
+RUN wget -qO- "https://cmake.org/files/${CMAKE_TAG}/${CMAKE_RELEASE}.tar.gz" \
+  | tar --strip-components=1 -xz -C "/usr/local"
+
+ENV CCACHE_TAG="v4.8.3"
+ENV CCACHE_VERSION="4.8.3"
+ENV CCACHE_PLATFORM="linux-x86_64"
+ENV CCACHE_RELEASE="ccache-${CCACHE_VERSION}-${CCACHE_PLATFORM}"
+RUN wget -qO- "https://github.com/ccache/ccache/releases/download/${CCACHE_TAG}/${CCACHE_RELEASE}.tar.xz" \
+  | tar -xJ -C "/opt" \
+  && mv "/opt/${CCACHE_RELEASE}/ccache" "/usr/local/bin" \
+  && rm -rf "/opt/${CCACHE_RELEASE}"
+
+# Install Conan package manager
+RUN python3.10 -m pip install conan --upgrade
+
+# Taskfile setup
+RUN sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b "/usr/local/bin"

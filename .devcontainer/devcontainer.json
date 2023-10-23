@@ -1,0 +1,9 @@
+{
+  "name": "Dao Workspace",
+  "dockerComposeFile": [
+    "docker-compose.dev.yaml"
+  ],
+  "service": "workspace",
+  "workspaceFolder": "/workspace/dao",
+  "shutdownAction": "stopCompose"
+}
