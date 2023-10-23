@@ -11,7 +11,7 @@ tasks:
     cmds:
       - |
         conan install . \
-          --profile="profiles/clang.toml" \
+          --profile="profiles/clang.ini" \
           --output-folder="build" \
           --build=missing
 
