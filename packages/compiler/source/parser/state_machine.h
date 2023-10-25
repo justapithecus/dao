@@ -22,6 +22,7 @@ typedef enum lexical_state {
   lexical_state_identifier_end,
   lexical_state_numeral,
   lexical_state_numeral_end,
+  lexical_state_operator,
   lexical_state_new_line,
   lexical_state_eof,
   lexical_state_error,
@@ -30,9 +31,16 @@ typedef enum lexical_state {
 
 // Character to character-equivalence classes lookup table
 //
-// character-equivalence classes are pre-computed offsets used to index into
-// the lexical state machine lookup table, to determine the next lexical state.
+// Character-equivalence classes are pre-computed offsets used to index into
+// the lexical state transitions lookup table.
 extern unsigned char const ch_to_eqc[256];
+
+// Lexical state transitions lookup table
+//
+// Index using the current state offset by a a character-equivalence class, to lookup
+// the next lexical state.
+#define LEX_TRANS_SIZE ((glyph_count) * (lexical_state_count))
+extern unsigned char const lex_trans[LEX_TRANS_SIZE];
 
 typedef enum token_kind {
   token_kind_identifier,
