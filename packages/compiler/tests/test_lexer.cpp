@@ -1,4 +1,8 @@
-#include <boost/ut.hpp>
+#include "fixtures.hpp"
+#include "parser/lexer.hpp"
 
-auto main() {
+auto directory = Approvals::useApprovalsSubdirectory("golden-files");
+
+auto main() -> int {
+  "fibonacci"_test = []() { auto lexemes = dao::lex("../examples/fibonacci.dao"); };
 }

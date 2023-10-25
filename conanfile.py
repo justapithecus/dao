@@ -13,7 +13,7 @@ class DaoConanFile(ConanFile):
   settings = "os", "arch", "compiler", "build_type"
   generators = "CMakeDeps"
 
-  required = REQUIRES
+  requires = REQUIRES
 
   def generate(self):
     tc = CMakeToolchain(self, generator="Ninja")
