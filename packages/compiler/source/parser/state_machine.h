@@ -33,14 +33,23 @@ typedef enum lexical_state {
 //
 // Character-equivalence classes are pre-computed offsets used to index into
 // the lexical state transitions lookup table.
-extern unsigned char const ch_to_eqc[256];
+extern unsigned char const equivalence_class[256];
 
 // Lexical state transitions lookup table
 //
 // Index using the current state offset by a a character-equivalence class, to lookup
 // the next lexical state.
 #define LEX_TRANS_SIZE ((glyph_count) * (lexical_state_count))
-extern unsigned char const lex_trans[LEX_TRANS_SIZE];
+extern unsigned char const transition[LEX_TRANS_SIZE];
+
+// Character rewind
+//
+// Certain lexical states, typically those terminating a lexeme, requires shifting back 1
+// character, to start lexing anew.
+extern unsigned char const ch_rewind[lexical_state_count];
+
+// True if inside an identifier, value, or operator
+extern unsigned char const inside[lexical_state_count];
 
 typedef enum token_kind {
   token_kind_identifier,

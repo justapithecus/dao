@@ -2,13 +2,13 @@
 
 #define offset(kind) ((kind) * (lexical_state_count))
 
-unsigned char const ch_to_eqc[256] = {
+unsigned char const equivalence_class[256] = {
   // Layout
   [0]          = offset(glyph_eof),
   [1 ... 9]    = offset(glyph_layout),
   ['\n']       = offset(glyph_new_line),
-  ['\r']       = offset(glyph_new_line),
   [11 ... 12]  = offset(glyph_layout),
+  ['\r']       = offset(glyph_new_line),
   [14 ... 31]  = offset(glyph_layout),
   [' ']        = offset(glyph_white_space),
   // Special
@@ -44,14 +44,37 @@ unsigned char const ch_to_eqc[256] = {
 
 // reduce applies a state transition
 #define reduce(prev_state, transition, next_state) \
-  [previous_state + offset(transition)] = next_state
+  [prev_state + offset(transition)] = next_state
 // clang-format on
 
-unsigned char const lex_trans[LEX_TRANS_SIZE] = {
+unsigned char const transition[LEX_TRANS_SIZE] = {
   initiating_states(lexical_state_next_char),
   initiating_states(lexical_state_new_line),
   initiating_states(lexical_state_identifier_end),
   initiating_states(lexical_state_numeral_end),
   initiating_states(lexical_state_separator),
   initiating_states(lexical_state_operator),
+
+  reduce(lexical_state_identifier, glyph_white_space, lexical_state_identifier_end),
+  reduce(lexical_state_identifier, glyph_letter, lexical_state_identifier),
+  reduce(lexical_state_identifier, glyph_number, lexical_state_identifier),
+  reduce(lexical_state_identifier, glyph_operator, lexical_state_identifier_end),
+  reduce(lexical_state_identifier, glyph_separator, lexical_state_identifier_end),
+
+  reduce(lexical_state_numeral, glyph_white_space, lexical_state_numeral_end),
+  reduce(lexical_state_numeral, glyph_letter, lexical_state_numeral_end),
+  reduce(lexical_state_numeral, glyph_number, lexical_state_numeral),
+  reduce(lexical_state_numeral, glyph_operator, lexical_state_numeral_end),
+  reduce(lexical_state_numeral, glyph_separator, lexical_state_numeral_end),
+};
+
+unsigned char const ch_rewind[lexical_state_count] = {
+  [lexical_state_identifier_end] = -1,
+  [lexical_state_numeral_end]    = -1,
+};
+
+unsigned char const inside[lexical_state_count] = {
+  [lexical_state_operator]   = 1,
+  [lexical_state_identifier] = 1,
+  [lexical_state_numeral]    = 1,
 };

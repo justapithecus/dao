@@ -23,16 +23,19 @@ namespace dao {
     dao::lexeme             lexeme{};
     auto                    source{dao::fread(fpath.data())};
     auto                    src_ptr{source.data()};
-    unsigned char           state{lexical_state_final};
+    unsigned char           state{lexical_state_next_char};
 
     do {
       unsigned char ch;
-      auto          eqc = ch_to_eqc[(ch = *src_ptr++)];
+      auto          eqc = equivalence_class[(ch = *src_ptr++)];
 
-      state = lex_trans[state + eqc];
+      state = transition[state + eqc];
+      src_ptr += ch_rewind[state];
+      lexeme.col_num += ch_rewind[state];
+      lexeme.len += inside[state];
 
       switch (state) {
-      [[likely]] case lexical_state_next_char:
+      case lexical_state_next_char:
         ++lexeme.col_num;
         break;
       case lexical_state_identifier:
@@ -40,15 +43,24 @@ namespace dao {
         break;
       case lexical_state_identifier_end:
         lexeme.update_repr(src_ptr, 1, 0);
-
-        // end of lexeme requires re-evaluation
-        // auto reeval = ch_reeval[ch]
-        // src_ptr += reeval;
-        // TODO(andrew): update column position according to lexeme length, if re-evaluation occurred
-        // lexeme.col_num += reeval
-
         lexeme.reset();
         tokens.emplace_back(lexeme.as_token());
+        break;
+      case lexical_state_numeral:
+        lexeme.token_kind = token_kind_numeral;
+        break;
+      case lexical_state_numeral_end:
+        lexeme.update_repr(src_ptr, 1, 0);
+        lexeme.reset();
+        tokens.emplace_back(lexeme.as_token());
+        break;
+      case lexical_state_operator:
+        lexeme.token_kind = token_kind_operator;
+        lexeme.update_repr(src_ptr, 0, 0);
+        lexeme.reset();
+        tokens.emplace_back(lexeme.as_token());
+        break;
+      default:
         break;
       }
 
