@@ -9,7 +9,6 @@ namespace dao {
   struct token {
     std::string  repr;
     std::uint8_t kind;
-    std::uint8_t len;
   };
 
   static_assert(sizeof(dao::token) <= 32);

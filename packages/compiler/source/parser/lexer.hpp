@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string_view>
 #include <vector>
 
@@ -13,12 +14,13 @@ namespace dao {
     std::uint8_t col_num;
 
     explicit lexeme()
-      : line_num{1}
+      : len{0}
+      , line_num{1}
       , col_num{1} {
     }
 
-    auto update_repr(char const *src_ptr, int start_offset, int end_offset) {
-      auto first{src_ptr - (len + start_offset)};
+    auto update_repr(char const *src_ptr, int end_offset) {
+      auto first{src_ptr - len};
       auto last{first + (len + end_offset)};
       repr = std::string{first, last};
     }
@@ -30,7 +32,7 @@ namespace dao {
     }
 
     auto as_token() {
-      return dao::token{repr, token_kind, len};
+      return dao::token{repr, token_kind};
     }
   };
 

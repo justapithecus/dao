@@ -56,24 +56,27 @@ unsigned char const transition[LEX_TRANS_SIZE] = {
   initiating_states(lexical_state_operator),
 
   reduce(lexical_state_identifier, glyph_white_space, lexical_state_identifier_end),
+  reduce(lexical_state_identifier, glyph_new_line, lexical_state_identifier_end),
   reduce(lexical_state_identifier, glyph_letter, lexical_state_identifier),
   reduce(lexical_state_identifier, glyph_number, lexical_state_identifier),
   reduce(lexical_state_identifier, glyph_operator, lexical_state_identifier_end),
   reduce(lexical_state_identifier, glyph_separator, lexical_state_identifier_end),
 
   reduce(lexical_state_numeral, glyph_white_space, lexical_state_numeral_end),
+  reduce(lexical_state_numeral, glyph_new_line, lexical_state_numeral_end),
   reduce(lexical_state_numeral, glyph_letter, lexical_state_numeral_end),
   reduce(lexical_state_numeral, glyph_number, lexical_state_numeral),
   reduce(lexical_state_numeral, glyph_operator, lexical_state_numeral_end),
   reduce(lexical_state_numeral, glyph_separator, lexical_state_numeral_end),
 };
 
-unsigned char const ch_rewind[lexical_state_count] = {
+char const ch_rewind[lexical_state_count] = {
   [lexical_state_identifier_end] = -1,
   [lexical_state_numeral_end]    = -1,
 };
 
 unsigned char const inside[lexical_state_count] = {
+  [lexical_state_separator]  = 1,
   [lexical_state_operator]   = 1,
   [lexical_state_identifier] = 1,
   [lexical_state_numeral]    = 1,

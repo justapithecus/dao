@@ -46,7 +46,7 @@ extern unsigned char const transition[LEX_TRANS_SIZE];
 //
 // Certain lexical states, typically those terminating a lexeme, requires shifting back 1
 // character, to start lexing anew.
-extern unsigned char const ch_rewind[lexical_state_count];
+extern char const ch_rewind[lexical_state_count];
 
 // True if inside an identifier, value, or operator
 extern unsigned char const inside[lexical_state_count];

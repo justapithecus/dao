@@ -31,7 +31,7 @@ namespace dao {
 
       state = transition[state + eqc];
       src_ptr += ch_rewind[state];
-      lexeme.col_num += ch_rewind[state];
+      // lexeme.col_num += ch_rewind[state];
       lexeme.len += inside[state];
 
       switch (state) {
@@ -42,7 +42,7 @@ namespace dao {
         lexeme.token_kind = token_kind_identifier;
         break;
       case lexical_state_identifier_end:
-        lexeme.update_repr(src_ptr, 1, 0);
+        lexeme.update_repr(src_ptr, 0);
         lexeme.reset();
         tokens.emplace_back(lexeme.as_token());
         break;
@@ -50,13 +50,13 @@ namespace dao {
         lexeme.token_kind = token_kind_numeral;
         break;
       case lexical_state_numeral_end:
-        lexeme.update_repr(src_ptr, 1, 0);
+        lexeme.update_repr(src_ptr, 0);
         lexeme.reset();
         tokens.emplace_back(lexeme.as_token());
         break;
       case lexical_state_operator:
         lexeme.token_kind = token_kind_operator;
-        lexeme.update_repr(src_ptr, 0, 0);
+        lexeme.update_repr(src_ptr, 0);
         lexeme.reset();
         tokens.emplace_back(lexeme.as_token());
         break;
