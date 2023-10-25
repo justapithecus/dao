@@ -39,6 +39,8 @@ BraceWrapping:
   SplitEmptyFunction: true
   SplitEmptyRecord: true
   SplitEmptyNamespace: true
+BreakAfterAttributes: Always
+BreakAfterJavaFieldAnnotations: false
 BreakBeforeBinaryOperators: None
 BreakBeforeBraces: Attach
 BreakBeforeInheritanceComma: true
@@ -46,7 +48,6 @@ BreakInheritanceList: BeforeColon
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializersBeforeComma: true
 BreakConstructorInitializers: BeforeColon
-BreakAfterJavaFieldAnnotations: false
 BreakStringLiterals: true
 ColumnLimit: 90
 CommentPragmas: "^ IWYU pragma:"
@@ -116,8 +117,5 @@ SpacesInCStyleCastParentheses: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
 Standard: c++20
-StatementMacros:
-  - Q_UNUSED
-  - QT_REQUIRE_VERSION
 TabWidth: 2
 UseTab: Never

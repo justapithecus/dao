@@ -9,4 +9,5 @@ target_sources(daoc
     main.cpp
     parser/lexer.cpp
     parser/state_machine.c
+    parser/token.cpp
 )

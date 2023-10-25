@@ -3,6 +3,10 @@ project(dao
   LANGUAGES C CXX
 )
 
+enable_testing()
+
+set(GLOBAL PROPERTY CTEST_TARGETS_ADDED 1)
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -13,5 +17,4 @@ set(CMAKE_CXX_COMPILER_LAUNCHER "ccache")
 include_directories(${CMAKE_INCLUDE_PATH})
 link_directories(${CMAKE_LIBRARY_PATH})
 
-enable_testing()
 add_subdirectory(packages/compiler)

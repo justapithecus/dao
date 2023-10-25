@@ -18,6 +18,7 @@ function (add_compiler_test TARGET ENTRY)
     PRIVATE
       ${CMAKE_CURRENT_SOURCE_DIR}/../source/parser/lexer.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/../source/parser/state_machine.c
+      ${CMAKE_CURRENT_SOURCE_DIR}/../source/parser/token.cpp
   )
 
 endfunction()

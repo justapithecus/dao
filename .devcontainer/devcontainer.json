@@ -5,5 +5,12 @@
   ],
   "service": "workspace",
   "workspaceFolder": "/workspace/dao",
-  "shutdownAction": "stopCompose"
+  "shutdownAction": "stopCompose",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "llvm-vs-code-extensions.vscode-clangd"
+      ]
+    }
+  }
 }
