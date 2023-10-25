@@ -1,12 +1,20 @@
 from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain
 
+REQUIRES = (
+  "approvaltests.cpp/10.12.2",
+  "boost-ext-ut/2.0.0"
+)
+
+
 class DaoConanFile(ConanFile):
-    name = "Dao"
+  name = "Dao"
 
-    settings = "os", "arch", "compiler", "build_type"
-    generators = "CMakeDeps"
+  settings = "os", "arch", "compiler", "build_type"
+  generators = "CMakeDeps"
 
-    def generate(self):
-        tc = CMakeToolchain(self, generator="Ninja")
-        tc.generate()
+  required = REQUIRES
+
+  def generate(self):
+    tc = CMakeToolchain(self, generator="Ninja")
+    tc.generate()

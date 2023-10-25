@@ -6,5 +6,7 @@ set_target_properties(daoc
 
 target_sources(daoc
   PRIVATE
-    main.cpp
+    source/main.cpp
+    source/parser/lexer.cpp
+    source/parser/state_machine.c
 )

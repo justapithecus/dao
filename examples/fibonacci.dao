@@ -1,0 +1,7 @@
+function fibonacci(x)
+  if x < 3
+    1
+  else
+    fibonacci(x-1) + fibonacci(x-2)
+
+fibonacci(40)
