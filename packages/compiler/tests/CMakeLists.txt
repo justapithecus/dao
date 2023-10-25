@@ -2,6 +2,7 @@
 function (add_compiler_test TARGET ENTRY)
   set(TEST_EXE test_${TARGET})
 
+  add_test(NAME ${TEST_EXE} COMMAND ${TEST_EXE})
   add_executable(${TEST_EXE} ${ENTRY})
   target_include_directories(${TEST_EXE}
     PRIVATE
