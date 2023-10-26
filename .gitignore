@@ -5,4 +5,5 @@
 build/
 
 # ApprovalTests
-*.received.txt
+*.received.*
+*.received.*
