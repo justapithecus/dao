@@ -29,7 +29,7 @@ namespace dao {
 
     [[nodiscard]]
     auto is_eof() const {
-      return cursor_ != tokens_.end();
+      return cursor_ == tokens_.end();
     }
 
     auto eat() {

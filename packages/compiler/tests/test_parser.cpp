@@ -31,11 +31,17 @@ namespace dao {
     case 0: // std::monostate
       break;
     case 1: {
-      j = json{{"number_expr", std::get<dao::number_expr>(node).val}};
+      j = json{
+        {"type", "identifier_expr"},
+        {"value", std::get<dao::identifier_expr>(node).name},
+      };
       break;
     }
     case 2: {
-      j = json{{"variable_expr", std::get<dao::variable_expr>(node).name}};
+      j = json{
+        {"type", "number_expre"},
+        {"value", std::get<dao::number_expr>(node).val},
+      };
       break;
     }
     }

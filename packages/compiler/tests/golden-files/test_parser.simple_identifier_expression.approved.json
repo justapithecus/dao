@@ -1,6 +1,6 @@
 {
   "root": {
     "type": "identifier_expr",
-    "node": "function"
+    "value": "function"
   }
 }

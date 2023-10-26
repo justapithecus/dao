@@ -2,8 +2,6 @@
 #include "ast.hpp"
 #include "state_machine.h"
 #include "token.hpp"
-#include <memory>
-#include <utility>
 
 namespace dao {
 
@@ -22,7 +20,7 @@ namespace dao {
   }
 
   auto parse_identifier_expr(parse_context &ctx) -> std::unique_ptr<dao::ast_node> {
-    variable_expr expr{ctx.peek()->repr};
+    identifier_expr expr{ctx.peek()->repr};
     ctx.eat();
     return std::make_unique<dao::ast_node>(std::move(expr));
   }
