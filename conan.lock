@@ -1,6 +1,7 @@
 {
     "version": "0.5",
     "requires": [
+        "nlohmann_json/3.11.2#a35423bb6e1eb8f931423557e282c7ed%1666619820.488",
         "boost-ext-ut/2.0.0#446a4f0f4d172adf9326eef83681b457%1696889034.707",
         "approvaltests.cpp/10.12.2#67630d974505426cc69a7fa51e298b40%1679259416.037"
     ],
