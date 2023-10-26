@@ -1,1 +1,8 @@
+# clangd
+.cache/
+
+# CMake
 build/
+
+# ApprovalTests
+*.received.txt

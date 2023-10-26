@@ -1,0 +1,32 @@
+fibonacci.dao
+
+
+[0] =   Identifier | function |
+[1] =   Identifier | fibonacci |
+[2] =     Operator | ( |
+[3] =   Identifier | x |
+[4] =     Operator | ) |
+[5] =   Identifier | if |
+[6] =   Identifier | x |
+[7] =     Operator | < |
+[8] =      Numeral | 3 |
+[9] =      Numeral | 1 |
+[10] =   Identifier | else |
+[11] =   Identifier | fibonacci |
+[12] =     Operator | ( |
+[13] =   Identifier | x |
+[14] =     Operator | - |
+[15] =      Numeral | 1 |
+[16] =     Operator | ) |
+[17] =     Operator | + |
+[18] =   Identifier | fibonacci |
+[19] =     Operator | ( |
+[20] =   Identifier | x |
+[21] =     Operator | - |
+[22] =      Numeral | 2 |
+[23] =     Operator | ) |
+[24] =   Identifier | fibonacci |
+[25] =     Operator | ( |
+[26] =      Numeral | 40 |
+[27] =     Operator | ) |
+

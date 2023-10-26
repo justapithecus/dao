@@ -4,17 +4,31 @@ ENV DEBIAN_FRONTEND="noninteractive"
 
 RUN apt-get update && apt-get dist-upgrade -y
 
-# Install C++ development tools
+# Install development tools
 RUN apt-get install -y \
-    ninja-build \
-    gdb \
-    valgrind \
-    clang-14 \
-    libc++-14-dev \
-    libc++abi-14-dev \
-    clang-format \
-    python3-pip
-RUN apt-get clean
+  --no-install-recommends \
+  software-properties-common \
+  ninja-build \
+  gdb \
+  valgrind \
+  python3-pip
+
+# Install Clang 16
+RUN wget -nv -O - https://apt.llvm.org/llvm-snapshot.gpg.key \
+  | tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc \
+  && add-apt-repository \
+  "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-16 main" \
+  && apt-get update
+RUN apt-get install -y \
+  --no-install-recommends \
+  clang-16 \
+  libc++-16-dev \
+  libc++abi-16-dev \
+  clangd-16 \
+  clang-format-16 \
+  clang-tidy-16
+
+RUN apt-get clean && rm -rf "/var/lib/apt/lists/*"
 
 # Install CMake version that supports presets
 ENV CMAKE_TAG="v3.27"

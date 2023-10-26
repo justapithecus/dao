@@ -1,24 +1,24 @@
 {
-  "version": 4,
-  "vendor": {
-    "conan": {}
-  },
-  "include": [
-    "/workspace/dao/build/CMakePresets.json"
-  ],
-  "configurePresets": [
-    {
-      "name": "default",
-      "displayName": "Default",
-      "inherits": "conan-debug"
-    }
-  ],
-  "buildPresets": [
-    {
-      "name": "default",
-      "configurePreset": "default",
-      "configuration": "Default",
-      "inherits": "conan-debug"
-    }
-  ]
+    "version": 4,
+    "vendor": {
+        "conan": {}
+    },
+    "include": [
+        "/workspace/dao/build/CMakePresets.json"
+    ],
+    "configurePresets": [
+        {
+            "name": "default",
+            "displayName": "Default",
+            "inherits": "conan-debug"
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "default",
+            "configurePreset": "default",
+            "configuration": "Default",
+            "inherits": "conan-debug"
+        }
+    ]
 }
