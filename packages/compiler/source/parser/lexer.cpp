@@ -41,21 +41,15 @@ namespace dao {
       case lexical_state_identifier:
         lexeme.token_kind = token_kind_identifier;
         break;
-      case lexical_state_identifier_end:
-        lexeme.update_repr(src_ptr, 0);
-        lexeme.reset();
-        tokens.emplace_back(lexeme.as_token());
-        break;
       case lexical_state_numeral:
         lexeme.token_kind = token_kind_numeral;
         break;
-      case lexical_state_numeral_end:
-        lexeme.update_repr(src_ptr, 0);
-        lexeme.reset();
-        tokens.emplace_back(lexeme.as_token());
-        break;
       case lexical_state_operator:
         lexeme.token_kind = token_kind_operator;
+        [[fallthrough]];
+      case lexical_state_identifier_end:
+        [[fallthrough]];
+      case lexical_state_numeral_end:
         lexeme.update_repr(src_ptr, 0);
         lexeme.reset();
         tokens.emplace_back(lexeme.as_token());
