@@ -1,22 +1,9 @@
-#include <fstream>
-#include <iostream>
-#include <sstream>
+#include "../utils.hpp"
 
 #include "lexer.hpp"
 #include "state_machine.h"
 
 namespace dao {
-
-  auto fread(char const *fpath) -> std::string {
-    std::ifstream file{fpath};
-    if (file.is_open()) {
-      auto first = std::istreambuf_iterator<char>{file.rdbuf()};
-      auto last  = std::istreambuf_iterator<char>{};
-      return std::string{first, last};
-    } else {
-      throw std::runtime_error{"failed to open source file"};
-    }
-  }
 
   auto lex(std::string_view fpath) -> std::vector<dao::token> {
     std::vector<dao::token> tokens{};
@@ -35,25 +22,29 @@ namespace dao {
       lexeme.len += inside[state];
 
       switch (state) {
-      case lexical_state_next_char:
+      case lexical_state_next_char: {
         ++lexeme.col_num;
         break;
-      case lexical_state_identifier:
+      }
+      case lexical_state_identifier: {
         lexeme.token_kind = token_kind_identifier;
         break;
-      case lexical_state_numeral:
+      }
+      case lexical_state_numeral: {
         lexeme.token_kind = token_kind_numeral;
         break;
+      }
       case lexical_state_operator:
         lexeme.token_kind = token_kind_operator;
         [[fallthrough]];
       case lexical_state_identifier_end:
         [[fallthrough]];
-      case lexical_state_numeral_end:
+      case lexical_state_numeral_end: {
         lexeme.update_repr(src_ptr, 0);
         lexeme.reset();
         tokens.emplace_back(lexeme.as_token());
         break;
+      }
       default:
         break;
       }
