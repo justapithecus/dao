@@ -1,4 +1,4 @@
-#include "parser/parser.hpp"
+#include "parser.hpp"
 #include "ast.hpp"
 #include "state_machine.h"
 #include "token.hpp"
@@ -13,6 +13,8 @@ namespace dao {
       switch (tok->kind) {
       case token_kind_identifier:
         return parse_identifier_expr(ctx);
+      case token_kind_numeral:
+        return parse_numeral_expr(ctx);
       }
     }
 
@@ -25,10 +27,10 @@ namespace dao {
     return std::make_unique<dao::ast_node>(std::move(expr));
   }
 
-  // auto parse_number_expr(cursor *tok) {
-  //   auto val = std::stoi(tok->base()->repr);
-  //   tok++;
-  //   return std::make_unique<ast_node>(number_expr{val});
-  // }
+  auto parse_numeral_expr(parse_context &ctx) -> std::unique_ptr<dao::ast_node> {
+    auto val{std::stoi(ctx.peek()->repr)};
+    ctx.eat();
+    return std::make_unique<dao::ast_node>(numeral_expr{val});
+  }
 
 } // namespace dao

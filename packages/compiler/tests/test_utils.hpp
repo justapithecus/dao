@@ -1,9 +1,12 @@
 #pragma once
 
 #include <nlohmann/json.hpp>
+#include <type_traits>
+#include <variant>
 
 #include "fixtures.hpp"
 #include "parser/ast.hpp"
+#include "parser/state_machine.h"
 #include "parser/token.hpp"
 
 using json = nlohmann::json;
@@ -12,6 +15,7 @@ namespace dao {
 
   inline std::unordered_map<std::string, token_kind> str_to_kind = {
     {"identifier", token_kind_identifier},
+    {"numeral", token_kind_numeral},
   };
 
   inline auto to_json(json &j, dao::token const &tok) {
@@ -27,24 +31,23 @@ namespace dao {
   }
 
   inline auto to_json(json &j, dao::ast_node const &node) {
-    switch (node.index()) {
-    case 0: // std::monostate
-      break;
-    case 1: {
-      j = json{
-        {"type", "identifier_expr"},
-        {"value", std::get<dao::identifier_expr>(node).name},
-      };
-      break;
-    }
-    case 2: {
-      j = json{
-        {"type", "number_expre"},
-        {"value", std::get<dao::number_expr>(node).val},
-      };
-      break;
-    }
-    }
+    std::visit(
+      [&](auto &&arg) {
+        using T = std::decay_t<decltype(arg)>;
+
+        if constexpr (std::is_same_v<dao::identifier_expr, T>) {
+          j = json{
+            {"type", "identifier_expr"},
+            {"value", std::get<dao::identifier_expr>(node).name},
+          };
+        } else if constexpr (std::is_same_v<dao::numeral_expr, T>) {
+          j = json{
+            {"type", "numeral_expr"},
+            {"value", std::get<dao::numeral_expr>(node).val},
+          };
+        }
+      },
+      node);
   }
 
   inline auto from_json(json const &j, dao::ast_node &node) {
@@ -67,11 +70,11 @@ namespace nlohmann {
 } // namespace nlohmann
 
 template <typename T>
-class JSONWriter : public ApprovalWriter {
+class json_writer : public ApprovalWriter {
   T contents_;
 
 public:
-  explicit JSONWriter(T contents)
+  explicit json_writer(T contents)
     : contents_{std::move(contents)} {
   }
 

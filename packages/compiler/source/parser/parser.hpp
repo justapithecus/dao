@@ -42,9 +42,15 @@ namespace dao {
 
   /// Parses a simple identifier expression
   ///
-  /// letter ::= [A-Za-z]
-  /// number ::= [0-9]
-  /// identifier_expr ::= letter ( letter | number | `_` )
+  /// <letter> ::= [A-Za-z]
+  /// <number> ::= [0-9]
+  /// <identifier_expr> ::= <letter> ( <letter> | <number> | [_] )*
   auto parse_identifier_expr(parse_context &ctx) -> std::unique_ptr<dao::ast_node>;
+
+  /// Parses a numeral expression
+  ///
+  /// <number> ::= [0-9]
+  /// <numeral_expr> ::= <number>*
+  auto parse_numeral_expr(parse_context &ctx) -> std::unique_ptr<dao::ast_node>;
 
 } // namespace dao
