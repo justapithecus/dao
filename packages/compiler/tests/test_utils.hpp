@@ -4,6 +4,7 @@
 
 #include "fixtures.hpp"
 #include "parser/ast.hpp"
+#include "parser/state_machine.h"
 #include "parser/token.hpp"
 
 using json = nlohmann::json;
@@ -12,6 +13,7 @@ namespace dao {
 
   inline std::unordered_map<std::string, token_kind> str_to_kind = {
     {"identifier", token_kind_identifier},
+    {"numeral", token_kind_numeral},
   };
 
   inline auto to_json(json &j, dao::token const &tok) {
@@ -39,8 +41,8 @@ namespace dao {
     }
     case 2: {
       j = json{
-        {"type", "number_expre"},
-        {"value", std::get<dao::number_expr>(node).val},
+        {"type", "numeral_expr"},
+        {"value", std::get<dao::numeral_expr>(node).val},
       };
       break;
     }
@@ -67,11 +69,11 @@ namespace nlohmann {
 } // namespace nlohmann
 
 template <typename T>
-class JSONWriter : public ApprovalWriter {
+class json_writer : public ApprovalWriter {
   T contents_;
 
 public:
-  explicit JSONWriter(T contents)
+  explicit json_writer(T contents)
     : contents_{std::move(contents)} {
   }
 

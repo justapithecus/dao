@@ -7,24 +7,24 @@
 
 namespace dao {
 
-  struct number_expr;
   struct identifier_expr;
+  struct numeral_expr;
   struct binary_expr;
   struct call_expr;
   struct prototype;
   struct function_def;
 
-  using ast_node = std::variant<number_expr, identifier_expr>;
+  using ast_node = std::variant<numeral_expr, identifier_expr>;
 
   // using ast_node = std::variant<number_expr, variable_expr, binary_expr, call_expr,
   //   prototype, function_def>;
 
-  struct number_expr {
-    int val;
-  };
-
   struct identifier_expr {
     std::string name;
+  };
+
+  struct numeral_expr {
+    int val;
   };
 
   // struct binary_expr {
