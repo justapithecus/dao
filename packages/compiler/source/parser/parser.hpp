@@ -10,14 +10,16 @@
 
 namespace dao {
 
-  using token_cursor = std::vector<dao::token>::const_iterator;
+  using token_cursor = std::vector<token>::const_iterator;
 
   class parse_context {
-    std::vector<dao::token> const &tokens_;
-    token_cursor                   cursor_;
+    std::vector<token> const &tokens_;
+    token_cursor              cursor_;
+
+    // TODO(andrew): errors
 
   public:
-    explicit parse_context(std::vector<dao::token> const &tokens)
+    explicit parse_context(std::vector<token> const &tokens)
       : tokens_{tokens}
       , cursor_{tokens.begin()} {
     }
@@ -38,19 +40,39 @@ namespace dao {
     }
   };
 
-  auto parse(std::vector<dao::token> const &tokens) -> std::unique_ptr<dao::ast_node>;
+  /// Parses tokens into an abstract syntax tree
+  auto parse(std::vector<token> const &tokens) -> ast_node;
+
+  /// Parses primary expression
+  ///
+  /// <primary_expr> ::= <identifier_expr> | <numeral_expr> | <binary_expr> | <parenthetical_expr>
+  auto parse_primary_expr(parse_context &ctx) -> ast_node;
 
   /// Parses a simple identifier expression
   ///
   /// <letter> ::= [A-Za-z]
-  /// <number> ::= [0-9]
-  /// <identifier_expr> ::= <letter> ( <letter> | <number> | [_] )*
-  auto parse_identifier_expr(parse_context &ctx) -> std::unique_ptr<dao::ast_node>;
+  /// <digit> ::= [0-9]
+  /// <identifier_expr> ::= <letter> { <letter> | <digit> | '_' }
+  auto parse_identifier_expr(parse_context &ctx) -> ast_node;
 
   /// Parses a numeral expression
   ///
-  /// <number> ::= [0-9]
-  /// <numeral_expr> ::= <number>*
-  auto parse_numeral_expr(parse_context &ctx) -> std::unique_ptr<dao::ast_node>;
+  /// <digit> ::= [0-9]
+  /// <numeral_expr> ::= { <digit> }
+  auto parse_numeral_expr(parse_context &ctx) -> ast_node;
+
+  /// Parses a binary expression, i.e. an expression that evaluates two expressions using
+  /// a binary operator.
+  ///
+  ///  TODO(andrew): support more binary operators
+  /// <binary_op> ::= { '*' | '+' | '-' | '/' | '>' | '<' }
+  /// <binary_expr> ::= <primary_expr> <binary_op> <primary_expr>
+  auto parse_binary_expr(parse_context &ctx) -> ast_node;
+
+  /// Parses a parenthetical expression, i.e. an expression group with higher evaluation
+  /// precedence.
+  ///
+  /// <parenthetical_expr> ::= '(' <binary_expr> ')'
+  auto parse_parenthetical_expr(parse_context &ctx) -> ast_node;
 
 } // namespace dao

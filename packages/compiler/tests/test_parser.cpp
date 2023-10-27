@@ -22,4 +22,12 @@ auto main() -> int {
     json_writer writer{std::move(ast)};
     Approvals::verify(writer);
   };
+
+  "simple_binary_expression"_test = [] {
+    auto tokens = load_tokens("simple_binary_expression.json");
+    auto ast    = dao::parse(tokens);
+
+    json_writer writer{std::move(ast)};
+    Approvals::verify(writer);
+  };
 }

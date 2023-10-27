@@ -30,7 +30,7 @@ namespace dao {
     tok.kind = str_to_kind.at(kind);
   }
 
-  inline auto to_json(json &j, dao::ast_node const &node) {
+  inline auto to_json(json &j, dao::ast const &node) -> void {
     std::visit(
       [&](auto &&arg) {
         using T = std::decay_t<decltype(arg)>;
@@ -45,12 +45,29 @@ namespace dao {
             {"type", "numeral_expr"},
             {"value", std::get<dao::numeral_expr>(node).val},
           };
+        } else if constexpr (std::is_same_v<dao::binary_expr, T>) {
+          auto &expr{std::get<dao::binary_expr>(node)};
+          json  lhs{}, rhs{};
+
+          to_json(lhs, *(expr.lhs));
+          to_json(rhs, *(expr.rhs));
+
+          json value{
+            {"lhs", lhs},
+            {"rhs", rhs},
+            {"operand", expr.op},
+          };
+
+          j = json{
+            {"type", "binary_expr"},
+            {"value", value},
+          };
         }
       },
       node);
   }
 
-  inline auto from_json(json const &j, dao::ast_node &node) {
+  inline auto from_json(json const &j, dao::ast &node) {
     // j.at("number_expr").get_to(ast.val);
   }
 
@@ -97,8 +114,8 @@ public:
     out << j.dump(2) << "\n";
   }
 
-  auto cleanUpReceived(std::string receivedPath) const -> void override {
-    ::remove(receivedPath.c_str());
+  auto cleanUpReceived(std::string received_path) const -> void override {
+    ::remove(received_path.c_str());
   }
 };
 
