@@ -16,6 +16,7 @@ namespace dao {
   inline std::unordered_map<std::string, token_kind> str_to_kind = {
     {"identifier", token_kind_identifier},
     {"numeral", token_kind_numeral},
+    {"operator", token_kind_operator},
   };
 
   inline auto to_json(json &j, dao::token const &tok) {

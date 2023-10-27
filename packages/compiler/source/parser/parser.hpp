@@ -75,7 +75,7 @@ namespace dao {
   auto parse_binary_expr_rhs(parse_context &ctx, ast_node lhs, int op_precendence = 0)
     -> ast_node;
 
-  /// Parses a parenthetical expression, i.e. an expression group with higher evaluation
+  /// Parses a parenthetical expression, i.e. an expression group with highest evaluation
   /// precedence.
   ///
   /// <parenthetical_expr> ::= '(' <binary_expr> ')'
