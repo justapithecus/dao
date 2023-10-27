@@ -2,8 +2,14 @@
 #include "ast.hpp"
 #include "state_machine.h"
 #include "token.hpp"
+#include <memory>
 
 namespace dao {
+
+  std::unordered_map<char, int> binary_op_precedence = {
+    {'<', 10}, // lowest
+    {'*', 40}, // highest
+  };
 
   auto parse(std::vector<token> const &tokens) -> ast_node {
     parse_context ctx{tokens};
@@ -46,24 +52,60 @@ namespace dao {
   auto parse_parenthetical_expr(parse_context &ctx) -> ast_node {
     // eat '('
     ctx.eat();
-    auto node = parse_primary_expr(ctx);
+    auto node{parse_primary_expr(ctx)};
     // eat ')'
     ctx.eat();
     return node;
   }
 
   auto parse_binary_expr(parse_context &ctx) -> ast_node {
-    auto lhs = parse_primary_expr(ctx);
+    auto lhs{parse_primary_expr(ctx)};
     if (!lhs) {
       // TODO(andrew): add to ctx.errors
       return nullptr;
     }
 
-    auto rhs = parse_primary_expr(ctx);
-    char op{};
+    int constexpr default_op_precedence{0};
+    auto rhs{parse_binary_expr_rhs(ctx, std::move(lhs), default_op_precedence)};
 
-    binary_expr expr{std::move(lhs), std::move(rhs), op};
+    binary_expr expr{std::move(lhs)};
     return std::make_unique<ast>(std::move(expr));
+  }
+
+  auto parse_binary_expr_rhs(parse_context &ctx, ast_node lhs, int op_precendence)
+    -> ast_node {
+    for (auto tok{ctx.peek()}; not ctx.is_eof();) {
+      auto op{tok->repr[0]};
+      auto token_precedence{binary_op_precedence.at(op)};
+      if (token_precedence < op_precendence) {
+        return lhs;
+      }
+
+      // eat operand
+      ctx.eat();
+
+      auto rhs{parse_primary_expr(ctx)};
+      if (!rhs) {
+        // TODO(andrew): add to ctx.errors
+        return nullptr;
+      }
+
+      auto next_op{ctx.peek()->repr[0]};
+      auto next_precedence{binary_op_precedence.at(next_op)};
+      if (token_precedence < next_precedence) {
+        // current right-hand-side becomes the left-hand-side of the inner expression
+        rhs = parse_binary_expr_rhs(ctx, std::move(rhs), token_precedence + 1);
+        if (!rhs) {
+          // TODO(andrew): add to ctx.errors
+          return nullptr;
+        }
+      }
+
+      binary_expr expr{std::move(lhs), std::move(rhs), op};
+      lhs = std::make_unique<ast>(std::move(expr));
+    }
+
+    return nullptr;
   }
 
 } // namespace dao
