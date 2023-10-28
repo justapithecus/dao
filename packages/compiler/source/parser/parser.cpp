@@ -64,7 +64,7 @@ namespace dao {
       return nullptr;
     }
 
-    int constexpr default_op_precedence{0};
+    auto constexpr default_op_precedence{0};
     return parse_binary_expr_rhs(ctx, std::move(lhs), default_op_precedence);
   }
 
