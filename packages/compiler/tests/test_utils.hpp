@@ -16,6 +16,7 @@ namespace dao {
   inline std::unordered_map<std::string, token_kind> str_to_kind = {
     {"identifier", token_kind_identifier},
     {"numeral", token_kind_numeral},
+    {"operator", token_kind_operator},
   };
 
   inline auto to_json(json &j, dao::token const &tok) {
@@ -23,14 +24,14 @@ namespace dao {
   }
 
   inline auto from_json(json const &j, dao::token &tok) {
-    std::string kind;
+    std::string kind{};
     j.at("kind").get_to(kind);
     j.at("repr").get_to(tok.repr);
 
     tok.kind = str_to_kind.at(kind);
   }
 
-  inline auto to_json(json &j, dao::ast_node const &node) {
+  inline auto to_json(json &j, dao::ast const &node) -> void {
     std::visit(
       [&](auto &&arg) {
         using T = std::decay_t<decltype(arg)>;
@@ -45,12 +46,33 @@ namespace dao {
             {"type", "numeral_expr"},
             {"value", std::get<dao::numeral_expr>(node).val},
           };
+        } else if constexpr (std::is_same_v<dao::binary_expr, T>) {
+          auto &expr{std::get<dao::binary_expr>(node)};
+          json  lhs{}, rhs{};
+
+          to_json(lhs, *(expr.lhs));
+          if (expr.rhs) {
+            to_json(rhs, *(expr.rhs));
+          } else {
+            rhs = nullptr;
+          }
+
+          json value{
+            {"lhs", lhs},
+            {"rhs", rhs},
+            {"operand", std::string{expr.op}},
+          };
+
+          j = json{
+            {"type", "binary_expr"},
+            {"value", value},
+          };
         }
       },
       node);
   }
 
-  inline auto from_json(json const &j, dao::ast_node &node) {
+  inline auto from_json(json const &j, dao::ast &node) {
     // j.at("number_expr").get_to(ast.val);
   }
 
@@ -97,8 +119,8 @@ public:
     out << j.dump(2) << "\n";
   }
 
-  auto cleanUpReceived(std::string receivedPath) const -> void override {
-    ::remove(receivedPath.c_str());
+  auto cleanUpReceived(std::string received_path) const -> void override {
+    ::remove(received_path.c_str());
   }
 };
 

@@ -1,0 +1,16 @@
+{
+  "tokens": [
+    {
+      "kind": "identifier",
+      "repr": "x"
+    },
+    {
+      "kind": "operator",
+      "repr": "*"
+    },
+    {
+      "kind": "numeral",
+      "repr": "9"
+    }
+  ]
+}

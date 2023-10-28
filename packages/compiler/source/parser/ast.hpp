@@ -14,7 +14,8 @@ namespace dao {
   struct prototype;
   struct function_def;
 
-  using ast_node = std::variant<numeral_expr, identifier_expr>;
+  using ast      = std::variant<numeral_expr, identifier_expr, binary_expr>;
+  using ast_node = std::unique_ptr<ast>;
 
   // using ast_node = std::variant<number_expr, variable_expr, binary_expr, call_expr,
   //   prototype, function_def>;
@@ -27,11 +28,10 @@ namespace dao {
     int val;
   };
 
-  // struct binary_expr {
-  //   char                      op;
-  //   std::unique_ptr<ast_node> lhs;
-  //   std::unique_ptr<ast_node> rhs;
-  // };
+  struct binary_expr {
+    ast_node lhs, rhs;
+    char     op;
+  };
 
   // struct call_expr {
   //   std::string                            callee;
@@ -48,6 +48,6 @@ namespace dao {
   //   std::unique_ptr<ast_node>  body;
   // };
 
-  static_assert(sizeof(ast_node) <= 56);
+  static_assert(sizeof(ast_node) <= 24);
 
 } // namespace dao
