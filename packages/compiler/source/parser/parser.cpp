@@ -2,7 +2,6 @@
 #include "ast.hpp"
 #include "state_machine.h"
 #include "token.hpp"
-#include <memory>
 
 namespace dao {
 
@@ -66,10 +65,7 @@ namespace dao {
     }
 
     int constexpr default_op_precedence{0};
-    auto rhs{parse_binary_expr_rhs(ctx, std::move(lhs), default_op_precedence)};
-
-    binary_expr expr{std::move(lhs)};
-    return std::make_unique<ast>(std::move(expr));
+    return parse_binary_expr_rhs(ctx, std::move(lhs), default_op_precedence);
   }
 
   auto parse_binary_expr_rhs(parse_context &ctx, ast_node lhs, int op_precendence)
@@ -90,14 +86,19 @@ namespace dao {
         return nullptr;
       }
 
-      auto next_op{ctx.peek()->repr[0]};
-      auto next_precedence{binary_op_precedence.at(next_op)};
-      if (token_precedence < next_precedence) {
-        // current right-hand-side becomes the left-hand-side of the inner expression
-        rhs = parse_binary_expr_rhs(ctx, std::move(rhs), token_precedence + 1);
-        if (!rhs) {
-          // TODO(andrew): add to ctx.errors
-          return nullptr;
+      // eat operand
+      ctx.eat();
+
+      if (not ctx.is_eof()) {
+        auto next_op{ctx.peek()->repr[0]};
+        auto next_precedence{binary_op_precedence.at(next_op)};
+        if (token_precedence < next_precedence) {
+          // current right-hand-side becomes the left-hand-side of the inner expression
+          rhs = parse_binary_expr_rhs(ctx, std::move(rhs), token_precedence + 1);
+          if (!rhs) {
+            // TODO(andrew): add to ctx.errors
+            return nullptr;
+          }
         }
       }
 
@@ -105,7 +106,7 @@ namespace dao {
       lhs = std::make_unique<ast>(std::move(expr));
     }
 
-    return nullptr;
+    return lhs;
   }
 
 } // namespace dao

@@ -24,7 +24,7 @@ namespace dao {
   }
 
   inline auto from_json(json const &j, dao::token &tok) {
-    std::string kind;
+    std::string kind{};
     j.at("kind").get_to(kind);
     j.at("repr").get_to(tok.repr);
 
@@ -51,12 +51,16 @@ namespace dao {
           json  lhs{}, rhs{};
 
           to_json(lhs, *(expr.lhs));
-          to_json(rhs, *(expr.rhs));
+          if (expr.rhs) {
+            to_json(rhs, *(expr.rhs));
+          } else {
+            rhs = nullptr;
+          }
 
           json value{
             {"lhs", lhs},
             {"rhs", rhs},
-            {"operand", expr.op},
+            {"operand", std::string{expr.op}},
           };
 
           j = json{

@@ -48,6 +48,6 @@ namespace dao {
   //   std::unique_ptr<ast_node>  body;
   // };
 
-  static_assert(sizeof(ast_node) <= 32);
+  static_assert(sizeof(ast_node) <= 24);
 
 } // namespace dao

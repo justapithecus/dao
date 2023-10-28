@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <iterator>
 #include <memory>
 #include <type_traits>
@@ -21,7 +22,7 @@ namespace dao {
   public:
     explicit parse_context(std::vector<token> const &tokens)
       : tokens_{tokens}
-      , cursor_{tokens.begin()} {
+      , cursor_{tokens_.begin()} {
     }
 
     [[nodiscard]]
@@ -31,7 +32,7 @@ namespace dao {
 
     [[nodiscard]]
     auto is_eof() const {
-      return cursor_ == tokens_.end();
+      return (cursor_ - tokens_.begin()) > tokens_.size();
     }
 
     auto eat() {
