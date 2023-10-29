@@ -35,6 +35,11 @@ namespace dao {
       return (cursor_ - tokens_.begin()) > tokens_.size();
     }
 
+    auto rewind() {
+      cursor_ = std::prev(cursor_);
+      return cursor_;
+    }
+
     auto eat() {
       cursor_ = std::next(cursor_);
       return cursor_;
@@ -73,8 +78,8 @@ namespace dao {
   /// Parses the right-hand-side of a binary expression, which can nest deeply.
   ///
   /// <binary_expr_rhs> ::= { <binary_op> <primary_expr> }
-  auto parse_binary_expr_rhs(parse_context &ctx, ast_node lhs, int op_precendence = 0)
-    -> ast_node;
+  auto parse_binary_expr_rhs(
+    parse_context &ctx, ast_node lhs, int op_precedence = 0) -> ast_node;
 
   /// Parses a parenthetical expression, i.e. an expression group with highest evaluation
   /// precedence.

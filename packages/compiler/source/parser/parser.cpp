@@ -6,8 +6,7 @@
 namespace dao {
 
   std::unordered_map<char, int> binary_op_precedence = {
-    {'<', 10}, // lowest
-    {'*', 40}, // highest
+    {'>', 10}, {'<', 10}, {'+', 20}, {'-', 20}, {'*', 40}, {'/', 40}, // highest
   };
 
   auto parse(std::vector<token> const &tokens) -> ast_node {
@@ -49,6 +48,7 @@ namespace dao {
   }
 
   auto parse_parenthetical_expr(parse_context &ctx) -> ast_node {
+    // TODO(andrew): expected token error-checking
     // eat '('
     ctx.eat();
     auto node{parse_primary_expr(ctx)};
@@ -68,12 +68,15 @@ namespace dao {
     return parse_binary_expr_rhs(ctx, std::move(lhs), default_op_precedence);
   }
 
-  auto parse_binary_expr_rhs(parse_context &ctx, ast_node lhs, int op_precendence)
-    -> ast_node {
-    for (auto tok{ctx.peek()}; not ctx.is_eof();) {
+  auto parse_binary_expr_rhs(
+    parse_context &ctx, ast_node lhs, int op_precedence) -> ast_node {
+
+    for (auto tok{ctx.peek()};
+         not ctx.is_eof() and tok->kind == token_kind_operator;) {
+
       auto op{tok->repr[0]};
       auto token_precedence{binary_op_precedence.at(op)};
-      if (token_precedence < op_precendence) {
+      if (token_precedence < op_precedence) {
         return lhs;
       }
 
@@ -87,18 +90,22 @@ namespace dao {
       }
 
       // eat operand
+      auto next_op{ctx.peek()->repr[0]};
       ctx.eat();
 
       if (not ctx.is_eof()) {
-        auto next_op{ctx.peek()->repr[0]};
         auto next_precedence{binary_op_precedence.at(next_op)};
         if (token_precedence < next_precedence) {
           // current right-hand-side becomes the left-hand-side of the inner expression
-          rhs = parse_binary_expr_rhs(ctx, std::move(rhs), token_precedence + 1);
+          ctx.rewind();
+          rhs =
+            parse_binary_expr_rhs(ctx, std::move(rhs), token_precedence + 1);
           if (!rhs) {
             // TODO(andrew): add to ctx.errors
             return nullptr;
           }
+
+          std::swap(lhs, rhs);
         }
       }
 

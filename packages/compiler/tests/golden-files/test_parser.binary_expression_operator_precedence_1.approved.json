@@ -1,0 +1,26 @@
+{
+  "root": {
+    "type": "binary_expr",
+    "value": {
+      "lhs": {
+        "type": "binary_expr",
+        "value": {
+          "lhs": {
+            "type": "identifier_expr",
+            "value": "z"
+          },
+          "operand": "/",
+          "rhs": {
+            "type": "numeral_expr",
+            "value": 10
+          }
+        }
+      },
+      "operand": "+",
+      "rhs": {
+        "type": "identifier_expr",
+        "value": "y"
+      }
+    }
+  }
+}
