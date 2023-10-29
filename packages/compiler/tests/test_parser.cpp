@@ -7,8 +7,8 @@ auto directory{Approvals::useApprovalsSubdirectory("golden-files")};
 
 auto main() -> int {
 
-  "simple_identifier_expression"_test = [] {
-    auto tokens{load_tokens("simple_identifier_expression.json")};
+  "identifier_expression_simple"_test = [] {
+    auto tokens{load_tokens("identifier_expression_simple.json")};
     auto ast{dao::parse(tokens)};
 
     json_writer writer{std::move(ast)};
@@ -23,8 +23,17 @@ auto main() -> int {
     Approvals::verify(writer);
   };
 
-  "simple_binary_expression"_test = [] {
-    auto               tokens{load_tokens("simple_binary_expression.json")};
+  "binary_expression_simple"_test = [] {
+    auto               tokens{load_tokens("binary-expressions/simple.json")};
+    dao::parse_context ctx{tokens};
+    auto               ast{dao::parse_binary_expr(ctx)};
+
+    json_writer writer{std::move(ast)};
+    Approvals::verify(writer);
+  };
+
+  "binary_expression_operator_precedence_1"_test = [] {
+    auto tokens{load_tokens("binary-expressions/operator_precedence_1.json")};
     dao::parse_context ctx{tokens};
     auto               ast{dao::parse_binary_expr(ctx)};
 
