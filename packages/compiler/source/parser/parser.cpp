@@ -105,9 +105,7 @@ namespace dao {
             return nullptr;
           }
 
-          binary_expr expr{std::move(rhs), std::move(lhs), op};
-          lhs = std::make_unique<ast>(std::move(expr));
-          continue;
+          std::swap(lhs, rhs);
         }
       }
 
