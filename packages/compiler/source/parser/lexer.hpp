@@ -9,11 +9,10 @@
 namespace dao {
 
   struct lexeme {
-    std::string     repr;
-    dao::token_kind token_kind;
-    std::uint8_t    len;
-    std::uint8_t    line_num;
-    std::uint8_t    col_num;
+    std::string  repr;
+    std::uint8_t len;
+    std::uint8_t line_num;
+    std::uint8_t col_num;
 
     explicit lexeme()
       : len{0}
@@ -33,8 +32,9 @@ namespace dao {
       len = 0;
     }
 
-    auto as_token() {
-      return dao::token{repr, token_kind};
+    auto as_token(dao::token_kind kind) {
+      reset();
+      return dao::token{repr, kind};
     }
   };
 

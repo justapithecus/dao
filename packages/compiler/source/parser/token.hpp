@@ -11,6 +11,7 @@ namespace dao {
     e_numeral,
     e_separator,
     e_operator,
+    e_keyword,
   };
 
   struct token {
