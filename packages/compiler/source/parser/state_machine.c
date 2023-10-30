@@ -81,3 +81,12 @@ unsigned char const inside[lexical_state_count] = {
   [lexical_state_identifier] = 1,
   [lexical_state_numeral]    = 1,
 };
+
+unsigned char const binary_op_precedence[256] = {
+  ['>'] = 10, // lowest
+  ['<'] = 10,
+  ['+'] = 20,
+  ['-'] = 20,
+  ['*'] = 40,
+  ['/'] = 40, // highest
+};

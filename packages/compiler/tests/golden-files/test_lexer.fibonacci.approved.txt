@@ -1,18 +1,18 @@
 fibonacci.dao
 
 
-[0] =   Identifier | function |
+[0] =      Keyword | function |
 [1] =   Identifier | fibonacci |
 [2] =    Separator | ( |
 [3] =   Identifier | x |
 [4] =    Separator | ) |
-[5] =   Identifier | if |
+[5] =      Keyword | if |
 [6] =   Identifier | x |
 [7] =     Operator | < |
 [8] =      Numeral | 3 |
-[9] =   Identifier | then |
+[9] =      Keyword | then |
 [10] =      Numeral | 1 |
-[11] =   Identifier | else |
+[11] =      Keyword | else |
 [12] =   Identifier | fibonacci |
 [13] =    Separator | ( |
 [14] =   Identifier | x |

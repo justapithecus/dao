@@ -51,10 +51,4 @@ extern char const ch_rewind[lexical_state_count];
 // True if inside an identifier, value, or operator
 extern unsigned char const inside[lexical_state_count];
 
-typedef enum token_kind {
-  token_kind_identifier,
-  token_kind_numeral,
-  token_kind_separator,
-  token_kind_operator,
-  token_kind_count,
-} token_kind;
+extern unsigned char const binary_op_precedence[256];

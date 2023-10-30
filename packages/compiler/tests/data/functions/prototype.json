@@ -1,0 +1,32 @@
+{
+  "tokens": [
+    {
+      "kind": "keyword",
+      "repr": "function"
+    },
+    {
+      "kind": "identifier",
+      "repr": "pow"
+    },
+    {
+      "kind": "separator",
+      "repr": "("
+    },
+    {
+      "kind": "identifier",
+      "repr": "x"
+    },
+    {
+      "kind": "separator",
+      "repr": ","
+    },
+    {
+      "kind": "identifier",
+      "repr": "y"
+    },
+    {
+      "kind": "separator",
+      "repr": ")"
+    }
+  ]
+}

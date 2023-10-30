@@ -1,5 +1,6 @@
 #pragma once
 
+#include <ankerl/unordered_dense.h>
 #include <iomanip>
 #include <nlohmann/json.hpp>
 #include <type_traits>
@@ -26,11 +27,11 @@ namespace dao {
     os << std::setw(12);
 
     switch (tok.kind) {
-      token_desc(token_kind_identifier, "Identifier");
-      token_desc(token_kind_numeral, "Numeral");
-      token_desc(token_kind_operator, "Operator");
-      token_desc(token_kind_separator, "Separator");
-    default:
+      token_desc(token_kind::e_identifier, "Identifier");
+      token_desc(token_kind::e_numeral, "Numeral");
+      token_desc(token_kind::e_operator, "Operator");
+      token_desc(token_kind::e_separator, "Separator");
+      token_desc(token_kind::e_keyword, "Keyword");
       os << "Unknown";
       break;
     }
@@ -38,11 +39,13 @@ namespace dao {
     return os << " | " << tok.repr << " |";
   }
 
-  inline std::unordered_map<std::string, token_kind> str_to_kind = {
-    {"identifier", token_kind_identifier},
-    {"numeral", token_kind_numeral},
-    {"operator", token_kind_operator},
-    {"separator", token_kind_separator},
+  inline ankerl::unordered_dense::map<std::string, dao::token_kind>
+    str_to_kind = {
+      {"identifier", token_kind::e_identifier},
+      {"numeral", token_kind::e_numeral},
+      {"operator", token_kind::e_operator},
+      {"separator", token_kind::e_separator},
+      {"keyword", token_kind::e_keyword},
   };
 
   inline auto to_json(json &j, dao::token const &tok) {

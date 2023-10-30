@@ -78,14 +78,33 @@ namespace dao {
   ///  TODO(andrew): support more binary operators
   /// <binary_op> ::= { '*' | '+' | '-' | '/' | '>' | '<' }
   /// <binary_expr> ::= <primary_expr> { <binary_op> <primary_expr> }
-  auto parse_binary_expr(parse_context &ctx, int op_precedence = 0) -> ast_node;
-  auto parse_binary_expr(
-    parse_context &ctx, ast_node lhs, int op_precedence = 0) -> ast_node;
+  auto parse_binary_expr(parse_context &ctx, std::uint8_t op_precedence = 0)
+    -> ast_node;
+  auto parse_binary_expr(parse_context &ctx, ast_node lhs,
+    std::uint8_t op_precedence = 0) -> ast_node;
 
   /// Parses a parenthetical expression, i.e. an expression group with highest evaluation
   /// precedence.
   ///
   /// <parenthetical_expr> ::= '(' <binary_expr> ')'
   auto parse_parenthetical_expr(parse_context &ctx) -> ast_node;
+
+  /// Parses a function argument
+  ///
+  /// TODO(andrew): add type hints
+  /// <function_arg> ::= <identifier>
+  auto parse_function_arg(parse_context &ctx) -> ast_node;
+
+  /// Parses a function argument sequence
+  ///
+  /// <function_arg_seq_multi> ::= <function_arg> | ( <function_arg> , <function_arg_seq_multi> )
+  /// <function_arg_seq> ::= <empty> | <function_arg_seq_multi>
+  auto parse_function_arg_seq(parse_context &ctx) -> ast_node;
+
+  /// Parses a function prototype
+  ///
+  /// <function_arg> ::= <identifier_seq>
+  /// <function_proto> ::= 'function' <identifier_expr> '(' { <function_arg> } ')'
+  auto parse_function_proto(parse_context &ctx) -> ast_node;
 
 } // namespace dao
