@@ -1,6 +1,6 @@
 {
   "root": {
-    "type": "identifier_expr",
+    "type": "identifier_expression",
     "value": "my_function"
   }
 }
