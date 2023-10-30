@@ -58,7 +58,6 @@ namespace dao {
   auto ast_pretty_printer::operator()(dao::function_def const &expr) const
     -> json {
     auto body{std::visit(*this, *(expr.body))};
-
     return json{
       {"type", "function_definition"},
       {
@@ -66,6 +65,20 @@ namespace dao {
         {
           {"prototype", expr.proto},
           {"body", body},
+        },
+      },
+    };
+  }
+
+  auto ast_pretty_printer::operator()(dao::function_call const &expr) const
+    -> json {
+    return json{
+      {"type", "function_call"},
+      {
+        "value",
+        {
+          {"callee", expr.callee},
+          {"args", expr.args},
         },
       },
     };

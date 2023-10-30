@@ -1,0 +1,28 @@
+{
+  "tokens": [
+    {
+      "kind": "identifier",
+      "repr": "distance_euclidean"
+    },
+    {
+      "kind": "separator",
+      "repr": "("
+    },
+    {
+      "kind": "identifier",
+      "repr": "p"
+    },
+    {
+      "kind": "separator",
+      "repr": ","
+    },
+    {
+      "kind": "identifier",
+      "repr": "q"
+    },
+    {
+      "kind": "separator",
+      "repr": ")"
+    }
+  ]
+}

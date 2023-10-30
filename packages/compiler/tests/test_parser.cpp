@@ -70,4 +70,12 @@ auto main() -> int {
     json_writer writer{std::move(ast)};
     Approvals::verify(writer);
   };
+
+  "function_call"_test = [] {
+    auto tokens{load_tokens("functions/call.json")};
+    auto ast{dao::parse(tokens)};
+
+    json_writer writer{std::move(ast)};
+    Approvals::verify(writer);
+  };
 }

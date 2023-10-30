@@ -63,6 +63,11 @@ namespace dao {
   auto parse_identifier_expr(parse_context &ctx) -> ast_node {
     auto name{ctx.peek()->repr};
     ctx.eat();
+
+    if (not ctx.is_eof() and ctx.peek()->repr[0] == '(') {
+      return parse_function_call(ctx, std::move(name));
+    }
+
     return std::make_unique<ast>(identifier_expr{std::move(name)});
   }
 
@@ -153,6 +158,7 @@ namespace dao {
     // eat '('
     ctx.eat();
 
+    // TODO(andrew): maybe some kind of generic parse_sequence with separators
     while (not ctx.is_eof()) {
       args.emplace_back(parse_function_arg(ctx));
 
@@ -192,6 +198,36 @@ namespace dao {
 
     return std::make_unique<ast>(
       function_def{std::move(body), std::move(proto)});
+  }
+
+  auto parse_expr_seq(parse_context &ctx) -> std::vector<ast_node> {
+    std::vector<ast_node> args{};
+
+    // eat '('
+    ctx.eat();
+
+    // TODO(andrew): maybe some kind of generic parse_sequence with separators
+    while (not ctx.is_eof()) {
+      args.emplace_back(parse_primary_expr(ctx));
+
+      // eat ',' or ')'
+      if (auto sep{ctx.peek()->repr[0]}; sep == ')') {
+        ctx.eat();
+        return args;
+      } else if (sep == ',') {
+        ctx.eat();
+      } else {
+        // TODO(andrew): unexpected end of function call sequence
+        return args;
+      }
+    }
+
+    return args;
+  };
+
+  auto parse_function_call(parse_context &ctx, std::string callee) -> ast_node {
+    return std::make_unique<ast>(
+      function_call{std::move(callee), parse_expr_seq(ctx)});
   }
 
 } // namespace dao

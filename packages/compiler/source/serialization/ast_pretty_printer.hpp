@@ -13,6 +13,7 @@ namespace dao {
     auto operator()(dao::binary_expr const &expr) const -> json;
     auto operator()(dao::function_proto const &expr) const -> json;
     auto operator()(dao::function_def const &expr) const -> json;
+    auto operator()(dao::function_call const &expr) const -> json;
   };
 
   inline auto to_json(json &j, dao::function_arg const &arg) {
