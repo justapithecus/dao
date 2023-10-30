@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iomanip>
 #include <nlohmann/json.hpp>
 #include <type_traits>
 #include <variant>
@@ -11,7 +12,31 @@
 
 using json = nlohmann::json;
 
+#ifdef CTEST
+
+#define token_desc(kind, desc)                                                 \
+  case (kind):                                                                 \
+    os << (desc);                                                              \
+    break
+
 namespace dao {
+
+  inline auto operator<<(std::ostream &os, dao::token const &tok)
+    -> std::ostream & {
+    os << std::setw(12);
+
+    switch (tok.kind) {
+      token_desc(token_kind_identifier, "Identifier");
+      token_desc(token_kind_numeral, "Numeral");
+      token_desc(token_kind_operator, "Operator");
+      token_desc(token_kind_separator, "Separator");
+    default:
+      os << "Unknown";
+      break;
+    }
+
+    return os << " | " << tok.repr << " |";
+  }
 
   inline std::unordered_map<std::string, token_kind> str_to_kind = {
     {"identifier", token_kind_identifier},
@@ -134,3 +159,5 @@ inline auto load_tokens(std::string const &fname) {
 
   throw std::runtime_error{"failed to open data/" + fname};
 }
+
+#endif

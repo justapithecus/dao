@@ -1,3 +1,5 @@
+#include "test_utils.hpp"
+
 #include "fixtures.hpp"
 #include "parser/lexer.hpp"
 
