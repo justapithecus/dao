@@ -24,9 +24,8 @@ auto main() -> int {
   };
 
   "binary_expression_simple"_test = [] {
-    auto               tokens{load_tokens("binary-expressions/simple.json")};
-    dao::parse_context ctx{tokens};
-    auto               ast{dao::parse_binary_expr(ctx)};
+    auto tokens{load_tokens("binary-expressions/simple.json")};
+    auto ast{dao::parse(tokens)};
 
     json_writer writer{std::move(ast)};
     Approvals::verify(writer);
@@ -34,8 +33,23 @@ auto main() -> int {
 
   "binary_expression_operator_precedence_1"_test = [] {
     auto tokens{load_tokens("binary-expressions/operator_precedence_1.json")};
-    dao::parse_context ctx{tokens};
-    auto               ast{dao::parse_binary_expr(ctx)};
+    auto ast{dao::parse(tokens)};
+
+    json_writer writer{std::move(ast)};
+    Approvals::verify(writer);
+  };
+
+  "parenthetical_expression"_test = [] {
+    auto tokens{load_tokens("parenthetical_expression.json")};
+    auto ast{dao::parse(tokens)};
+
+    json_writer writer{std::move(ast)};
+    Approvals::verify(writer);
+  };
+
+  "binary_expression_operator_precedence_2"_test = [] {
+    auto tokens{load_tokens("binary-expressions/operator_precedence_2.json")};
+    auto ast{dao::parse(tokens)};
 
     json_writer writer{std::move(ast)};
     Approvals::verify(writer);

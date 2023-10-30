@@ -32,7 +32,7 @@ namespace dao {
 
     [[nodiscard]]
     auto is_eof() const {
-      return (cursor_ - tokens_.begin()) > tokens_.size();
+      return (cursor_ - tokens_.begin()) >= tokens_.size();
     }
 
     auto rewind() {
@@ -49,9 +49,14 @@ namespace dao {
   /// Parses tokens into an abstract syntax tree
   auto parse(std::vector<token> const &tokens) -> ast_node;
 
-  /// Parses primary expression
+  /// Parses top-level expressions
   ///
-  /// <primary_expr> ::= <identifier_expr> | <numeral_expr> | <binary_expr> | <parenthetical_expr>
+  /// <expr> ::= { <primary_expr> }
+  auto parse(parse_context &ctx) -> ast_node;
+
+  /// Parses a primary expression
+  ///
+  /// <primary_expr> ::= <identifier_expr> | <numeral_expr> | <parenthetical_expr> | <binary_expr>
   auto parse_primary_expr(parse_context &ctx) -> ast_node;
 
   /// Parses a simple identifier expression
@@ -73,12 +78,8 @@ namespace dao {
   ///  TODO(andrew): support more binary operators
   /// <binary_op> ::= { '*' | '+' | '-' | '/' | '>' | '<' }
   /// <binary_expr> ::= <primary_expr> { <binary_op> <primary_expr> }
-  auto parse_binary_expr(parse_context &ctx) -> ast_node;
-
-  /// Parses the right-hand-side of a binary expression, which can nest deeply.
-  ///
-  /// <binary_expr_rhs> ::= { <binary_op> <primary_expr> }
-  auto parse_binary_expr_rhs(
+  auto parse_binary_expr(parse_context &ctx, int op_precedence = 0) -> ast_node;
+  auto parse_binary_expr(
     parse_context &ctx, ast_node lhs, int op_precedence = 0) -> ast_node;
 
   /// Parses a parenthetical expression, i.e. an expression group with highest evaluation
