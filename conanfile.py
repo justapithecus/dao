@@ -4,7 +4,8 @@ from conan.tools.cmake import CMakeToolchain
 REQUIRES = (
   "approvaltests.cpp/10.12.2",
   "boost-ext-ut/2.0.0",
-  "nlohmann_json/3.11.2"
+  "nlohmann_json/3.11.2",
+  "unordered_dense/4.1.2"
 )
 
 

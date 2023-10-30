@@ -78,9 +78,10 @@ namespace dao {
   ///  TODO(andrew): support more binary operators
   /// <binary_op> ::= { '*' | '+' | '-' | '/' | '>' | '<' }
   /// <binary_expr> ::= <primary_expr> { <binary_op> <primary_expr> }
-  auto parse_binary_expr(parse_context &ctx, int op_precedence = 0) -> ast_node;
-  auto parse_binary_expr(
-    parse_context &ctx, ast_node lhs, int op_precedence = 0) -> ast_node;
+  auto parse_binary_expr(parse_context &ctx, std::uint8_t op_precedence = 0)
+    -> ast_node;
+  auto parse_binary_expr(parse_context &ctx, ast_node lhs,
+    std::uint8_t op_precedence = 0) -> ast_node;
 
   /// Parses a parenthetical expression, i.e. an expression group with highest evaluation
   /// precedence.

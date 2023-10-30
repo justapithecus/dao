@@ -46,11 +46,6 @@ namespace dao {
   //   std::vector<std::unique_ptr<ast_node>> args;
   // };
 
-  // struct prototype {
-  //   std::string              name;
-  //   std::vector<std::string> args;
-  // };
-
   // struct function_def {
   //   std::unique_ptr<prototype> proto;
   //   std::unique_ptr<ast_node>  body;

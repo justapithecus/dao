@@ -50,3 +50,5 @@ extern char const ch_rewind[lexical_state_count];
 
 // True if inside an identifier, value, or operator
 extern unsigned char const inside[lexical_state_count];
+
+extern unsigned char const binary_op_precedence[256];
