@@ -61,9 +61,9 @@ namespace dao {
   }
 
   auto parse_identifier_expr(parse_context &ctx) -> ast_node {
-    identifier_expr expr{ctx.peek()->repr};
+    auto name{ctx.peek()->repr};
     ctx.eat();
-    return std::make_unique<ast>(std::move(expr));
+    return std::make_unique<ast>(identifier_expr{std::move(name)});
   }
 
   auto parse_numeral_expr(parse_context &ctx) -> ast_node {
@@ -136,8 +136,8 @@ namespace dao {
         }
       }
 
-      binary_expr expr{std::move(lhs), std::move(rhs), op};
-      lhs = std::make_unique<ast>(std::move(expr));
+      lhs =
+        std::make_unique<ast>(binary_expr{std::move(lhs), std::move(rhs), op});
     }
 
     return lhs;
@@ -146,7 +146,7 @@ namespace dao {
   auto parse_function_arg(parse_context &ctx) -> function_arg {
     auto name{ctx.peek()->repr};
     ctx.eat();
-    return function_arg{name};
+    return function_arg{std::move(name)};
   }
 
   auto parse_function_arg_seq(parse_context &ctx) -> std::vector<function_arg> {
@@ -182,9 +182,8 @@ namespace dao {
     auto id{ctx.peek()->repr};
     ctx.eat();
 
-    auto           args{parse_function_arg_seq(ctx)};
-    function_proto proto{std::move(id), std::move(args)};
-    return std::make_unique<ast>(std::move(proto));
+    return std::make_unique<ast>(
+      function_proto{std::move(id), parse_function_arg_seq(ctx)});
   }
 
 } // namespace dao
