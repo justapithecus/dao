@@ -1,7 +1,5 @@
 #include "parser.hpp"
-#include "ast.hpp"
 #include "state_machine.h"
-#include "token.hpp"
 
 namespace dao {
 
@@ -25,7 +23,7 @@ namespace dao {
       return parse_identifier_expr(ctx);
     case token_kind_numeral:
       return parse_numeral_expr(ctx);
-    case token_kind_separator: // TODO(andrew): '(' as separator or special operator
+    case token_kind_separator:
       return parse_parenthetical_expr(ctx);
     case token_kind_operator:
       return parse_binary_expr(ctx);
