@@ -51,12 +51,12 @@ namespace dao {
 
   /// Parses top-level expressions
   ///
-  /// <expr> ::= { <primary_expr> | <binary_expr> }
+  /// <expr> ::= { <primary_expr> }
   auto parse(parse_context &ctx) -> ast_node;
 
   /// Parses a primary expression
   ///
-  /// <primary_expr> ::= <identifier_expr> | <numeral_expr> | <parenthetical_expr>
+  /// <primary_expr> ::= <identifier_expr> | <numeral_expr> | <parenthetical_expr> | <binary_expr>
   auto parse_primary_expr(parse_context &ctx) -> ast_node;
 
   /// Parses a simple identifier expression
@@ -78,6 +78,7 @@ namespace dao {
   ///  TODO(andrew): support more binary operators
   /// <binary_op> ::= { '*' | '+' | '-' | '/' | '>' | '<' }
   /// <binary_expr> ::= <primary_expr> { <binary_op> <primary_expr> }
+  auto parse_binary_expr(parse_context &ctx, int op_precedence = 0) -> ast_node;
   auto parse_binary_expr(
     parse_context &ctx, ast_node lhs, int op_precedence = 0) -> ast_node;
 

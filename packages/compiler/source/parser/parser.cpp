@@ -25,7 +25,8 @@ namespace dao {
         node = parse_numeral_expr(ctx);
         break;
       case token_kind_separator:
-        return parse_parenthetical_expr(ctx);
+        node = parse_parenthetical_expr(ctx);
+        break;
       case token_kind_operator:
         return parse_binary_expr(ctx, std::move(node));
       default:
@@ -50,6 +51,8 @@ namespace dao {
       return parse_numeral_expr(ctx);
     case token_kind_separator:
       return parse_parenthetical_expr(ctx);
+    case token_kind_operator:
+      return parse_binary_expr(ctx);
     default:
       // TODO(andrew): add to ctx.errors
       return nullptr;
@@ -72,12 +75,23 @@ namespace dao {
     // TODO(andrew): expected token error-checking
     // eat '('
     ctx.eat();
-    auto node{parse_primary_expr(ctx)};
+    auto node{parse(ctx)};
     // eat ')'
     ctx.eat();
     return node;
   }
 
+  auto parse_binary_expr(parse_context &ctx, int op_precedence) -> ast_node {
+    auto lhs{parse_primary_expr(ctx)};
+    if (!lhs) {
+      // TODO(andrew): add to ctx.errors
+      return nullptr;
+    }
+
+    return parse_binary_expr(ctx, std::move(lhs), op_precedence);
+  }
+
+  // TODO(andrew): simplify this such that binary_expr can be parsed as a primary_expr
   auto parse_binary_expr(parse_context &ctx, ast_node lhs, int op_precedence)
     -> ast_node {
 
@@ -99,22 +113,24 @@ namespace dao {
         return nullptr;
       }
 
-      // eat operand
-      auto next_op{ctx.peek()->repr[0]};
-      ctx.eat();
+      if (tok = {ctx.peek()}; tok->kind == token_kind_operator) {
+        // eat operand
+        auto next_op{tok->repr[0]};
+        ctx.eat();
 
-      if (not ctx.is_eof()) {
-        auto next_precedence{binary_op_precedence.at(next_op)};
-        if (token_precedence < next_precedence) {
-          // current right-hand-side becomes the left-hand-side of the inner expression
-          ctx.rewind();
-          rhs = parse_binary_expr(ctx, std::move(rhs), token_precedence + 1);
-          if (!rhs) {
-            // TODO(andrew): add to ctx.errors
-            return nullptr;
+        if (not ctx.is_eof()) {
+          auto next_precedence{binary_op_precedence.at(next_op)};
+          if (token_precedence < next_precedence) {
+            // current right-hand-side becomes the left-hand-side of the inner expression
+            ctx.rewind();
+            rhs = parse_binary_expr(ctx, std::move(rhs), token_precedence + 1);
+            if (!rhs) {
+              // TODO(andrew): add to ctx.errors
+              return nullptr;
+            }
+
+            std::swap(lhs, rhs);
           }
-
-          std::swap(lhs, rhs);
         }
       }
 
