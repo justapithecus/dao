@@ -1,6 +1,10 @@
 #include "parser.hpp"
 
+#include "ast.hpp"
 #include "state_machine.h"
+#include "token.hpp"
+#include <utility>
+#include <vector>
 
 namespace dao {
 
@@ -16,6 +20,9 @@ namespace dao {
     for (auto tok{ctx.peek()}; not ctx.is_eof();) {
 
       switch (ctx.peek()->kind) {
+      case token_kind::e_keyword:
+        node = parse_function_proto(ctx);
+        break;
       case token_kind::e_identifier:
         node = parse_identifier_expr(ctx);
         break;
@@ -138,6 +145,50 @@ namespace dao {
     }
 
     return lhs;
+  }
+
+  auto parse_function_arg(parse_context &ctx) -> function_arg {
+    auto name{ctx.peek()->repr};
+    ctx.eat();
+    return function_arg{name};
+  }
+
+  auto parse_function_arg_seq(parse_context &ctx) -> std::vector<function_arg> {
+    std::vector<function_arg> args{};
+
+    // eat '('
+    ctx.eat();
+
+    for (auto tok{ctx.peek()}; not ctx.is_eof();) {
+      args.emplace_back(parse_function_arg(ctx));
+
+      // eat ',' or ')'
+      switch (auto sep{ctx.peek()->repr[0]}; sep) {
+      case ')':
+        ctx.eat();
+        return args;
+      case ',':
+        ctx.eat();
+        break;
+      default:
+        // TODO(andrew): unexpected end of function arg sequence
+        return args;
+      }
+    }
+    return args;
+  }
+
+  auto parse_function_proto(parse_context &ctx) -> ast_node {
+    // eat 'function'
+    ctx.eat();
+
+    // eat function identifier
+    auto id{ctx.peek()->repr};
+    ctx.eat();
+
+    auto           args{parse_function_arg_seq(ctx)};
+    function_proto proto{std::move(id), std::move(args)};
+    return std::make_unique<ast>(std::move(proto));
   }
 
 } // namespace dao

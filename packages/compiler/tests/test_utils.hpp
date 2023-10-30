@@ -60,7 +60,23 @@ namespace dao {
     tok.kind = str_to_kind.at(kind);
   }
 
+  // inline auto to_json(json &j, dao::function_proto const &proto) {
+  //   j = json{{"id", proto.id}, {"args", proto.args}};
+  // }
+
+  // inline auto from_json(json const &j, dao::function_proto &proto) {
+  // }
+
+  inline auto to_json(json &j, dao::function_arg const &arg) {
+    j = json{{"name", arg.name}};
+  }
+
+  inline auto from_json(json const &j, dao::function_arg &arg) {
+  }
+
   inline auto to_json(json &j, dao::ast const &node) -> void {
+    // TODO(andrew): extract to visitor pattern
+
     std::visit(
       [&](auto &&arg) {
         using T = std::decay_t<decltype(arg)>;
@@ -94,6 +110,18 @@ namespace dao {
 
           j = json{
             {"type", "binary_expr"},
+            {"value", value},
+          };
+        } else if constexpr (std::is_same_v<dao::function_proto, T>) {
+          auto &proto{std::get<dao::function_proto>(node)};
+
+          json value{
+            {"id", proto.id},
+            {"args", proto.args},
+          };
+
+          j = json{
+            {"type", "function_proto"},
             {"value", value},
           };
         }
