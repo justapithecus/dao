@@ -13,7 +13,7 @@ namespace dao {
   auto parse(parse_context &ctx) -> ast_node {
     ast_node node{};
 
-    for (auto tok{ctx.peek()}; not ctx.is_eof();) {
+    while (not ctx.is_eof()) {
 
       switch (ctx.peek()->kind) {
       case token_kind::e_keyword:
@@ -97,10 +97,8 @@ namespace dao {
   auto parse_binary_expr(
     parse_context &ctx, ast_node lhs, std::uint8_t op_precedence) -> ast_node {
 
-    for (auto tok{ctx.peek()};
-         not ctx.is_eof() and tok->kind == token_kind::e_operator;) {
-
-      auto op{tok->repr[0]};
+    while (not ctx.is_eof() and ctx.peek()->kind == token_kind::e_operator) {
+      auto op{ctx.peek()->repr[0]};
       auto token_precedence{binary_op_precedence[op]};
       if (token_precedence < op_precedence) {
         return lhs;
@@ -115,9 +113,9 @@ namespace dao {
         return nullptr;
       }
 
-      if (tok = {ctx.peek()}; tok->kind == token_kind::e_operator) {
+      if (ctx.peek()->kind == token_kind::e_operator) {
         // eat operand
-        auto next_op{tok->repr[0]};
+        auto next_op{ctx.peek()->repr[0]};
         ctx.eat();
 
         if (not ctx.is_eof()) {
@@ -155,18 +153,16 @@ namespace dao {
     // eat '('
     ctx.eat();
 
-    for (auto tok{ctx.peek()}; not ctx.is_eof();) {
+    while (not ctx.is_eof()) {
       args.emplace_back(parse_function_arg(ctx));
 
       // eat ',' or ')'
-      switch (auto sep{ctx.peek()->repr[0]}; sep) {
-      case ')':
+      if (auto sep{ctx.peek()->repr[0]}; sep == ')') {
         ctx.eat();
         return args;
-      case ',':
+      } else if (sep == ',') {
         ctx.eat();
-        break;
-      default:
+      } else {
         // TODO(andrew): unexpected end of function arg sequence
         return args;
       }
