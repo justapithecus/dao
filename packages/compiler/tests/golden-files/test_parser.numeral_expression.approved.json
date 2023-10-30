@@ -1,6 +1,6 @@
 {
   "root": {
-    "type": "numeral_expr",
+    "type": "numeral_expression",
     "value": 3
   }
 }

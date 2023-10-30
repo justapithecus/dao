@@ -1,24 +1,24 @@
 {
   "root": {
-    "type": "binary_expr",
+    "type": "binary_expression",
     "value": {
       "lhs": {
-        "type": "binary_expr",
+        "type": "binary_expression",
         "value": {
           "lhs": {
-            "type": "identifier_expr",
+            "type": "identifier_expression",
             "value": "z"
           },
           "operand": "/",
           "rhs": {
-            "type": "numeral_expr",
+            "type": "numeral_expression",
             "value": 10
           }
         }
       },
       "operand": "+",
       "rhs": {
-        "type": "identifier_expr",
+        "type": "identifier_expression",
         "value": "y"
       }
     }

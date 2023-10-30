@@ -1,6 +1,6 @@
 {
   "root": {
-    "type": "function_proto",
+    "type": "function_prototype",
     "value": {
       "args": [
         {
