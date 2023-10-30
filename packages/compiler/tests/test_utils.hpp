@@ -15,6 +15,19 @@ using json = nlohmann::json;
 
 #ifdef CTEST
 
+namespace nlohmann {
+  template <typename T>
+  struct adl_serializer<std::unique_ptr<T>> {
+    static auto to_json(json &j, std::unique_ptr<T> const &opt) -> void {
+      if (opt.get()) {
+        j = *opt;
+      } else {
+        j = nullptr;
+      }
+    }
+  };
+} // namespace nlohmann
+
 #define token_desc(kind, desc)                                                 \
   case (kind):                                                                 \
     os << (desc);                                                              \
@@ -59,6 +72,10 @@ namespace dao {
 
     tok.kind = str_to_kind.at(kind);
   }
+
+  inline auto to_json(json &j, dao::ast_node const &node);
+
+  inline auto from_json(json const &j, dao::ast_node &node);
 
   inline auto to_json(json &j, dao::function_arg const &arg) {
     j = json{{"name", arg.name}};
@@ -139,6 +156,21 @@ namespace dao {
             {"type", "function_def"},
             {"value", value},
           };
+        } else if constexpr (std::is_same_v<dao::function_call, T>) {
+          auto &call{std::get<dao::function_call>(node)};
+
+          json args{};
+          to_json(args, call.args);
+
+          json value{
+            {"callee", call.callee},
+            {"args", args},
+          };
+
+          j = json{
+            {"type", "function_call"},
+            {"value", value},
+          };
         }
       },
       node);
@@ -149,19 +181,6 @@ namespace dao {
   }
 
 } // namespace dao
-
-namespace nlohmann {
-  template <typename T>
-  struct adl_serializer<std::unique_ptr<T>> {
-    static auto to_json(json &j, std::unique_ptr<T> const &opt) -> void {
-      if (opt.get()) {
-        j = *opt;
-      } else {
-        j = nullptr;
-      }
-    }
-  };
-} // namespace nlohmann
 
 template <typename T>
 class json_writer : public ApprovalWriter {
