@@ -11,7 +11,7 @@ namespace dao {
     parse_context ctx{tokens};
     ast_node      node{};
 
-    for (auto tok{ctx.peek()}; not ctx.is_eof();) {
+    for (auto tok{ctx.peek()}; not ctx.is_eof(); tok = ctx.eat()) {
       node = parse_primary_expr(ctx);
     }
 
