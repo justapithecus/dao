@@ -13,9 +13,12 @@ namespace dao {
   auto parse(parse_context &ctx) -> ast_node {
     ast_node node{};
 
-    for (auto tok{ctx.peek()}; not ctx.is_eof();) {
+    while (not ctx.is_eof()) {
 
       switch (ctx.peek()->kind) {
+      case token_kind::e_keyword:
+        node = parse_function_proto(ctx);
+        break;
       case token_kind::e_identifier:
         node = parse_identifier_expr(ctx);
         break;
@@ -58,9 +61,9 @@ namespace dao {
   }
 
   auto parse_identifier_expr(parse_context &ctx) -> ast_node {
-    identifier_expr expr{ctx.peek()->repr};
+    auto name{ctx.peek()->repr};
     ctx.eat();
-    return std::make_unique<ast>(std::move(expr));
+    return std::make_unique<ast>(identifier_expr{std::move(name)});
   }
 
   auto parse_numeral_expr(parse_context &ctx) -> ast_node {
@@ -94,10 +97,8 @@ namespace dao {
   auto parse_binary_expr(
     parse_context &ctx, ast_node lhs, std::uint8_t op_precedence) -> ast_node {
 
-    for (auto tok{ctx.peek()};
-         not ctx.is_eof() and tok->kind == token_kind::e_operator;) {
-
-      auto op{tok->repr[0]};
+    while (not ctx.is_eof() and ctx.peek()->kind == token_kind::e_operator) {
+      auto op{ctx.peek()->repr[0]};
       auto token_precedence{binary_op_precedence[op]};
       if (token_precedence < op_precedence) {
         return lhs;
@@ -112,9 +113,9 @@ namespace dao {
         return nullptr;
       }
 
-      if (tok = {ctx.peek()}; tok->kind == token_kind::e_operator) {
+      if (ctx.peek()->kind == token_kind::e_operator) {
         // eat operand
-        auto next_op{tok->repr[0]};
+        auto next_op{ctx.peek()->repr[0]};
         ctx.eat();
 
         if (not ctx.is_eof()) {
@@ -133,11 +134,52 @@ namespace dao {
         }
       }
 
-      binary_expr expr{std::move(lhs), std::move(rhs), op};
-      lhs = std::make_unique<ast>(std::move(expr));
+      lhs =
+        std::make_unique<ast>(binary_expr{std::move(lhs), std::move(rhs), op});
     }
 
     return lhs;
+  }
+
+  auto parse_function_arg(parse_context &ctx) -> function_arg {
+    auto name{ctx.peek()->repr};
+    ctx.eat();
+    return function_arg{std::move(name)};
+  }
+
+  auto parse_function_arg_seq(parse_context &ctx) -> std::vector<function_arg> {
+    std::vector<function_arg> args{};
+
+    // eat '('
+    ctx.eat();
+
+    while (not ctx.is_eof()) {
+      args.emplace_back(parse_function_arg(ctx));
+
+      // eat ',' or ')'
+      if (auto sep{ctx.peek()->repr[0]}; sep == ')') {
+        ctx.eat();
+        return args;
+      } else if (sep == ',') {
+        ctx.eat();
+      } else {
+        // TODO(andrew): unexpected end of function arg sequence
+        return args;
+      }
+    }
+    return args;
+  }
+
+  auto parse_function_proto(parse_context &ctx) -> ast_node {
+    // eat 'function'
+    ctx.eat();
+
+    // eat function identifier
+    auto id{ctx.peek()->repr};
+    ctx.eat();
+
+    return std::make_unique<ast>(
+      function_proto{std::move(id), parse_function_arg_seq(ctx)});
   }
 
 } // namespace dao

@@ -93,18 +93,18 @@ namespace dao {
   ///
   /// TODO(andrew): add type hints
   /// <function_arg> ::= <identifier>
-  auto parse_function_arg(parse_context &ctx) -> ast_node;
+  auto parse_function_arg(parse_context &ctx) -> function_arg;
 
   /// Parses a function argument sequence
   ///
   /// <function_arg_seq_multi> ::= <function_arg> | ( <function_arg> , <function_arg_seq_multi> )
   /// <function_arg_seq> ::= <empty> | <function_arg_seq_multi>
-  auto parse_function_arg_seq(parse_context &ctx) -> ast_node;
+  auto parse_function_arg_seq(parse_context &ctx) -> std::vector<function_arg>;
 
   /// Parses a function prototype
   ///
   /// <function_arg> ::= <identifier_seq>
-  /// <function_proto> ::= 'function' <identifier_expr> '(' { <function_arg> } ')'
+  /// <function_proto> ::= 'function' <identifier_expr> '(' <function_arg_seq> ')'
   auto parse_function_proto(parse_context &ctx) -> ast_node;
 
 } // namespace dao
