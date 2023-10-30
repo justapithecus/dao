@@ -12,22 +12,23 @@ namespace dao {
     return parse(ctx);
   }
 
+  // TODO(andrew): this top-level parse should carry a "Scope" ast_node
   auto parse(parse_context &ctx) -> ast_node {
     ast_node node{};
 
     for (auto tok{ctx.peek()}; not ctx.is_eof();) {
 
       switch (ctx.peek()->kind) {
-      case token_kind_identifier:
+      case token_kind::e_identifier:
         node = parse_identifier_expr(ctx);
         break;
-      case token_kind_numeral:
+      case token_kind::e_numeral:
         node = parse_numeral_expr(ctx);
         break;
-      case token_kind_separator:
+      case token_kind::e_separator:
         node = parse_parenthetical_expr(ctx);
         break;
-      case token_kind_operator:
+      case token_kind::e_operator:
         return parse_binary_expr(ctx, std::move(node));
       default:
         // TODO(andrew): add to ctx.errors, encountered unknown
@@ -45,13 +46,13 @@ namespace dao {
 
   auto parse_primary_expr(parse_context &ctx) -> ast_node {
     switch (ctx.peek()->kind) {
-    case token_kind_identifier:
+    case token_kind::e_identifier:
       return parse_identifier_expr(ctx);
-    case token_kind_numeral:
+    case token_kind::e_numeral:
       return parse_numeral_expr(ctx);
-    case token_kind_separator:
+    case token_kind::e_separator:
       return parse_parenthetical_expr(ctx);
-    case token_kind_operator:
+    case token_kind::e_operator:
       return parse_binary_expr(ctx);
     default:
       // TODO(andrew): add to ctx.errors
@@ -96,7 +97,7 @@ namespace dao {
     -> ast_node {
 
     for (auto tok{ctx.peek()};
-         not ctx.is_eof() and tok->kind == token_kind_operator;) {
+         not ctx.is_eof() and tok->kind == token_kind::e_operator;) {
 
       auto op{tok->repr[0]};
       auto token_precedence{binary_op_precedence.at(op)};
@@ -113,7 +114,7 @@ namespace dao {
         return nullptr;
       }
 
-      if (tok = {ctx.peek()}; tok->kind == token_kind_operator) {
+      if (tok = {ctx.peek()}; tok->kind == token_kind::e_operator) {
         // eat operand
         auto next_op{tok->repr[0]};
         ctx.eat();

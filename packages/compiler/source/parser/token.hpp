@@ -6,9 +6,16 @@
 
 namespace dao {
 
+  enum class token_kind : std::uint8_t {
+    e_identifier,
+    e_numeral,
+    e_separator,
+    e_operator,
+  };
+
   struct token {
-    std::string  repr;
-    std::uint8_t kind;
+    std::string     repr;
+    dao::token_kind kind;
   };
 
   static_assert(sizeof(dao::token) <= 32);

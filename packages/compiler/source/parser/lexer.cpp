@@ -27,21 +27,21 @@ namespace dao {
         break;
       }
       case lexical_state_identifier: {
-        lexeme.token_kind = token_kind_identifier;
+        lexeme.token_kind = token_kind::e_identifier;
         break;
       }
       case lexical_state_numeral: {
-        lexeme.token_kind = token_kind_numeral;
+        lexeme.token_kind = token_kind::e_numeral;
         break;
       }
       case lexical_state_separator:
-        lexeme.token_kind = token_kind_separator;
+        lexeme.token_kind = token_kind::e_separator;
         lexeme.update_repr(src_ptr, 0);
         lexeme.reset();
         tokens.emplace_back(lexeme.as_token());
         break;
       case lexical_state_operator:
-        lexeme.token_kind = token_kind_operator;
+        lexeme.token_kind = token_kind::e_operator;
         [[fallthrough]];
       case lexical_state_identifier_end:
         [[fallthrough]];
