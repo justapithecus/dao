@@ -13,8 +13,8 @@ unsigned char const equivalence_class[256] = {
   [' ']        = offset(glyph_white_space),
   // Special
   ['!']        = offset(glyph_operator),
-  ['(']        = offset(glyph_operator),
-  [')']        = offset(glyph_operator),
+  ['(']        = offset(glyph_separator),
+  [')']        = offset(glyph_separator),
   ['*']        = offset(glyph_operator),
   ['+']        = offset(glyph_operator),
   ['-']        = offset(glyph_operator),
@@ -45,7 +45,6 @@ unsigned char const equivalence_class[256] = {
 // reduce applies a state transition
 #define reduce(prev_state, transition, next_state) \
   [prev_state + offset(transition)] = next_state
-// clang-format on
 
 unsigned char const transition[LEX_TRANS_SIZE] = {
   initiating_states(lexical_state_next_char),
@@ -69,6 +68,7 @@ unsigned char const transition[LEX_TRANS_SIZE] = {
   reduce(lexical_state_numeral, glyph_operator, lexical_state_numeral_end),
   reduce(lexical_state_numeral, glyph_separator, lexical_state_numeral_end),
 };
+// clang-format on
 
 char const ch_rewind[lexical_state_count] = {
   [lexical_state_identifier_end] = -1,

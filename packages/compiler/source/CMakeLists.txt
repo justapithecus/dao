@@ -8,6 +8,6 @@ target_sources(daoc
   PRIVATE
     main.cpp
     parser/lexer.cpp
+    parser/parser.cpp
     parser/state_machine.c
-    parser/token.cpp
 )
