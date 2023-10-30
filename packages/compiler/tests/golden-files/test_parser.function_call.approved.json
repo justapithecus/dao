@@ -1,18 +1,27 @@
 {
   "root": {
-    "type": "function_call",
+    "type": "function_definition",
     "value": {
-      "args": [
-        {
-          "type": "identifier_expression",
-          "value": "p"
-        },
-        {
-          "type": "identifier_expression",
-          "value": "q"
+      "body": {
+        "type": "function_call",
+        "value": {
+          "args": [
+            {
+              "type": "identifier_expression",
+              "value": "p"
+            },
+            {
+              "type": "identifier_expression",
+              "value": "q"
+            }
+          ],
+          "callee": "distance_euclidean"
         }
-      ],
-      "callee": "distance_euclidean"
+      },
+      "prototype": {
+        "args": [],
+        "id": "main"
+      }
     }
   }
 }

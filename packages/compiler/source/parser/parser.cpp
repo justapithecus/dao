@@ -9,8 +9,39 @@ namespace dao {
     return parse(ctx);
   }
 
-  // TODO(andrew): this top-level parse should carry a "Scope" ast_node
   auto parse(parse_context &ctx) -> ast_node {
+    ast_node node{};
+
+    while (not ctx.is_eof()) {
+      switch (ctx.peek()->kind) {
+      case token_kind::e_keyword:
+        node = parse_function_def(ctx);
+        break;
+      default:
+        // TODO(andrew): this top-level parse could carry a "scope" ast
+        node = parse_top_level_expr(ctx);
+        break;
+      }
+
+      if (!node) {
+        // TODO(andrew): add to ctx.errors
+        return nullptr;
+      }
+    }
+
+    return node;
+  }
+
+  auto parse_top_level_expr(parse_context &ctx) -> ast_node {
+    if (auto body{parse_expr(ctx)}; body) {
+      return std::make_unique<ast>(function_def{
+        std::move(body), function_proto{"main", std::vector<function_arg>{}}});
+    }
+
+    return nullptr;
+  }
+
+  auto parse_expr(parse_context &ctx) -> ast_node {
     ast_node node{};
 
     while (not ctx.is_eof()) {
@@ -81,7 +112,7 @@ namespace dao {
     // TODO(andrew): expected token error-checking
     // eat '('
     ctx.eat();
-    auto node{parse(ctx)};
+    auto node{parse_expr(ctx)};
     // eat ')'
     ctx.eat();
     return node;
@@ -191,7 +222,7 @@ namespace dao {
     auto proto{parse_function_proto(ctx)};
 
     // TODO(andrew): introduce 'external' to distinguish proto-only vs. definition
-    auto body{parse(ctx)};
+    auto body{parse_expr(ctx)};
     if (!body) {
       return std::make_unique<ast>(std::move(proto));
     }

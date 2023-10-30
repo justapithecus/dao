@@ -1,15 +1,24 @@
 {
   "root": {
-    "type": "binary_expression",
+    "type": "function_definition",
     "value": {
-      "lhs": {
-        "type": "identifier_expression",
-        "value": "next_op_precedence"
+      "body": {
+        "type": "binary_expression",
+        "value": {
+          "lhs": {
+            "type": "identifier_expression",
+            "value": "next_op_precedence"
+          },
+          "operand": "<",
+          "rhs": {
+            "type": "identifier_expression",
+            "value": "default_op_precedence"
+          }
+        }
       },
-      "operand": "<",
-      "rhs": {
-        "type": "identifier_expression",
-        "value": "default_op_precedence"
+      "prototype": {
+        "args": [],
+        "id": "main"
       }
     }
   }
