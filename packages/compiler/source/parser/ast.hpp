@@ -13,10 +13,10 @@ namespace dao {
   struct call_expr;
   struct function_arg;
   struct function_proto;
-  // struct function_def;
+  struct function_def;
 
-  using ast =
-    std::variant<numeral_expr, identifier_expr, binary_expr, function_proto>;
+  using ast      = std::variant<numeral_expr, identifier_expr, binary_expr,
+    function_proto, function_def>;
   using ast_node = std::unique_ptr<ast>;
 
   struct identifier_expr {
@@ -41,14 +41,14 @@ namespace dao {
     std::vector<function_arg> args;
   };
 
+  struct function_def {
+    ast_node       body;
+    function_proto proto;
+  };
+
   // struct call_expr {
   //   std::string                            callee;
   //   std::vector<std::unique_ptr<ast_node>> args;
-  // };
-
-  // struct function_def {
-  //   std::unique_ptr<prototype> proto;
-  //   std::unique_ptr<ast_node>  body;
   // };
 
   static_assert(sizeof(ast_node) <= 24);

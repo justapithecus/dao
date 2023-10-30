@@ -17,7 +17,7 @@ namespace dao {
 
       switch (ctx.peek()->kind) {
       case token_kind::e_keyword:
-        node = parse_function_proto(ctx);
+        node = parse_function_def(ctx);
         break;
       case token_kind::e_identifier:
         node = parse_identifier_expr(ctx);
@@ -170,7 +170,7 @@ namespace dao {
     return args;
   }
 
-  auto parse_function_proto(parse_context &ctx) -> ast_node {
+  auto parse_function_proto(parse_context &ctx) -> function_proto {
     // eat 'function'
     ctx.eat();
 
@@ -178,8 +178,20 @@ namespace dao {
     auto id{ctx.peek()->repr};
     ctx.eat();
 
+    return function_proto{std::move(id), parse_function_arg_seq(ctx)};
+  }
+
+  auto parse_function_def(parse_context &ctx) -> ast_node {
+    auto proto{parse_function_proto(ctx)};
+
+    // TODO(andrew): introduce 'external' to distinguish proto-only vs. definition
+    auto body{parse(ctx)};
+    if (!body) {
+      return std::make_unique<ast>(std::move(proto));
+    }
+
     return std::make_unique<ast>(
-      function_proto{std::move(id), parse_function_arg_seq(ctx)});
+      function_def{std::move(body), std::move(proto)});
   }
 
 } // namespace dao

@@ -67,6 +67,13 @@ namespace dao {
   inline auto from_json(json const &j, dao::function_arg &arg) {
   }
 
+  inline auto to_json(json &j, dao::function_proto const &proto) {
+    j = json{{"id", proto.id}, {"args", proto.args}};
+  }
+
+  inline auto from_json(json const &j, dao::function_proto &proto) {
+  }
+
   inline auto to_json(json &j, dao::ast const &node) -> void {
     // TODO(andrew): extract to visitor pattern
 
@@ -115,6 +122,21 @@ namespace dao {
 
           j = json{
             {"type", "function_proto"},
+            {"value", value},
+          };
+        } else if constexpr (std::is_same_v<dao::function_def, T>) {
+          auto &def{std::get<dao::function_def>(node)};
+
+          json body{};
+          to_json(body, *(def.body));
+
+          json value{
+            {"prototype", def.proto},
+            {"body", body},
+          };
+
+          j = json{
+            {"type", "function_def"},
             {"value", value},
           };
         }
