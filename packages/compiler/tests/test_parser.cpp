@@ -54,4 +54,12 @@ auto main() -> int {
     json_writer writer{std::move(ast)};
     Approvals::verify(writer);
   };
+
+  "function_prototype"_test = [] {
+    auto tokens{load_tokens("functions/prototype.json")};
+    auto ast{dao::parse(tokens)};
+
+    json_writer writer{std::move(ast)};
+    Approvals::verify(writer);
+  };
 }

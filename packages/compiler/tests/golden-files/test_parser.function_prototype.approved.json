@@ -1,0 +1,16 @@
+{
+  "root": {
+    "type": "function_proto",
+    "value": {
+      "id": "pow",
+      "args": [
+        {
+          "name": "x"
+        },
+        {
+          "name": "y"
+        }
+      ]
+    }
+  }
+}
