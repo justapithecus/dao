@@ -1,0 +1,29 @@
+{
+  "root": {
+    "type": "function_def",
+    "value": {
+      "body": {
+        "type": "binary_expr",
+        "value": {
+          "lhs": {
+            "type": "identifier_expr",
+            "value": "x"
+          },
+          "operand": "*",
+          "rhs": {
+            "type": "numeral_expr",
+            "value": 2
+          }
+        }
+      },
+      "prototype": {
+        "args": [
+          {
+            "name": "x"
+          }
+        ],
+        "id": "double"
+      }
+    }
+  }
+}

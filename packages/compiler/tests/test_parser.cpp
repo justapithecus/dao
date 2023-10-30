@@ -62,4 +62,12 @@ auto main() -> int {
     json_writer writer{std::move(ast)};
     Approvals::verify(writer);
   };
+
+  "function_definition"_test = [] {
+    auto tokens{load_tokens("functions/definition.json")};
+    auto ast{dao::parse(tokens)};
+
+    json_writer writer{std::move(ast)};
+    Approvals::verify(writer);
+  };
 }
