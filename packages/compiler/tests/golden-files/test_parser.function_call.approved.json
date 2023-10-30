@@ -1,0 +1,21 @@
+{
+  "root": {
+    "type": "function_call",
+    "value": {
+      "args": [
+        {
+          "type": "identifier_expr",
+          "value": "p"
+        },
+        {
+          "type": "identifier_expr",
+          "value": "q"
+        }
+      ],
+      "callee": {
+        "type": "identifier_expr",
+        "value": "distance_euclidean"
+      }
+    }
+  }
+}

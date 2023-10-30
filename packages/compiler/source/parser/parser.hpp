@@ -112,4 +112,15 @@ namespace dao {
   /// <function_def> ::= <function_proto> <primary_expr>
   auto parse_function_def(parse_context &ctx) -> ast_node;
 
+  /// Parses an expression sequence
+  ///
+  /// <expr_seq_multi> ::= <primary_expr> | ( <primary_expr> ',' <expr_seq_multi> )
+  /// <expr_seq> ::= <empty> | <expr_seq_multi>
+  auto parse_expr_seq(parse_context &ctx) -> std::vector<ast_node>;
+
+  /// Parses a function call
+  ///
+  /// <function_call> ::= <identifier_expr> '(' <expr_seq> ')'
+  auto parse_function_call(parse_context &ctx, std::string callee) -> ast_node;
+
 } // namespace dao
