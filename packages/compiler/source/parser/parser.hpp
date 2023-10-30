@@ -6,8 +6,8 @@
 #include <type_traits>
 #include <vector>
 
-#include "parser/ast.hpp"
-#include "parser/token.hpp"
+#include "ast.hpp"
+#include "token.hpp"
 
 namespace dao {
 
