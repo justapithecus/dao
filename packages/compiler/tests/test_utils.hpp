@@ -17,6 +17,7 @@ namespace dao {
     {"identifier", token_kind_identifier},
     {"numeral", token_kind_numeral},
     {"operator", token_kind_operator},
+    {"separator", token_kind_separator},
   };
 
   inline auto to_json(json &j, dao::token const &tok) {
