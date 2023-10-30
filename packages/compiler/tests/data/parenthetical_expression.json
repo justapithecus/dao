@@ -1,0 +1,24 @@
+{
+  "tokens": [
+    {
+      "kind": "separator",
+      "repr": "("
+    },
+    {
+      "kind": "identifier",
+      "repr": "next_op_precedence"
+    },
+    {
+      "kind": "operator",
+      "repr": "<"
+    },
+    {
+      "kind": "identifier",
+      "repr": "default_op_precedence"
+    },
+    {
+      "kind": "separator",
+      "repr": ")"
+    }
+  ]
+}

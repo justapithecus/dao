@@ -1,0 +1,16 @@
+{
+  "root": {
+    "type": "binary_expr",
+    "value": {
+      "lhs": {
+        "type": "identifier_expr",
+        "value": "next_op_precedence"
+      },
+      "operand": "<",
+      "rhs": {
+        "type": "identifier_expr",
+        "value": "default_op_precedence"
+      }
+    }
+  }
+}

@@ -9,12 +9,13 @@ namespace dao {
 
   auto parse(std::vector<token> const &tokens) -> ast_node {
     parse_context ctx{tokens};
+    ast_node      node{};
 
     for (auto tok{ctx.peek()}; not ctx.is_eof();) {
-      return parse_primary_expr(ctx);
+      node = parse_primary_expr(ctx);
     }
 
-    return nullptr;
+    return node;
   }
 
   auto parse_primary_expr(parse_context &ctx) -> ast_node {

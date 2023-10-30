@@ -40,4 +40,12 @@ auto main() -> int {
     json_writer writer{std::move(ast)};
     Approvals::verify(writer);
   };
+
+  "parenthetical_expression"_test = [] {
+    auto tokens{load_tokens("parenthetical_expression.json")};
+    auto ast{dao::parse(tokens)};
+
+    json_writer writer{std::move(ast)};
+    Approvals::verify(writer);
+  };
 }
