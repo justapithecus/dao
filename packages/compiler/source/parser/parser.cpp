@@ -1,10 +1,6 @@
 #include "parser.hpp"
 
-#include "ast.hpp"
 #include "state_machine.h"
-#include "token.hpp"
-#include <utility>
-#include <vector>
 
 namespace dao {
 
