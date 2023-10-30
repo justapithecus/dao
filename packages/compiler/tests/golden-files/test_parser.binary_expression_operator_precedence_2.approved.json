@@ -1,25 +1,34 @@
 {
   "root": {
-    "type": "binary_expression",
+    "type": "function_definition",
     "value": {
-      "lhs": {
+      "body": {
         "type": "binary_expression",
         "value": {
           "lhs": {
-            "type": "identifier_expression",
-            "value": "y"
+            "type": "binary_expression",
+            "value": {
+              "lhs": {
+                "type": "identifier_expression",
+                "value": "y"
+              },
+              "operand": "+",
+              "rhs": {
+                "type": "identifier_expression",
+                "value": "z"
+              }
+            }
           },
-          "operand": "+",
+          "operand": "/",
           "rhs": {
-            "type": "identifier_expression",
-            "value": "z"
+            "type": "numeral_expression",
+            "value": 10
           }
         }
       },
-      "operand": "/",
-      "rhs": {
-        "type": "numeral_expression",
-        "value": 10
+      "prototype": {
+        "args": [],
+        "id": "main"
       }
     }
   }
