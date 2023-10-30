@@ -60,13 +60,6 @@ namespace dao {
     tok.kind = str_to_kind.at(kind);
   }
 
-  // inline auto to_json(json &j, dao::function_proto const &proto) {
-  //   j = json{{"id", proto.id}, {"args", proto.args}};
-  // }
-
-  // inline auto from_json(json const &j, dao::function_proto &proto) {
-  // }
-
   inline auto to_json(json &j, dao::function_arg const &arg) {
     j = json{{"name", arg.name}};
   }
