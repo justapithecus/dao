@@ -46,6 +46,8 @@ namespace dao {
 
   auto parse_primary_expr(parse_context &ctx) -> ast_node {
     switch (ctx.peek()->kind) {
+    case token_kind::e_keyword:
+      return parse_function_def(ctx);
     case token_kind::e_identifier:
       return parse_identifier_expr(ctx);
     case token_kind::e_numeral:

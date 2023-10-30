@@ -56,7 +56,9 @@ namespace dao {
 
   /// Parses a primary expression
   ///
-  /// <primary_expr> ::= <identifier_expr> | <numeral_expr> | <parenthetical_expr> | <binary_expr>
+  /// <primary_expr> ::=
+  ///   <identifier_expr> | <numeral_expr> | <parenthetical_expr> | <binary_expr> |
+  ///   <function_def>
   auto parse_primary_expr(parse_context &ctx) -> ast_node;
 
   /// Parses a simple identifier expression
