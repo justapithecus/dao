@@ -9,10 +9,34 @@ namespace dao {
 
   auto parse(std::vector<token> const &tokens) -> ast_node {
     parse_context ctx{tokens};
-    ast_node      node{};
+    return parse(ctx);
+  }
 
-    for (auto tok{ctx.peek()}; not ctx.is_eof(); tok = ctx.eat()) {
-      node = parse_primary_expr(ctx);
+  auto parse(parse_context &ctx) -> ast_node {
+    ast_node node{};
+
+    for (auto tok{ctx.peek()}; not ctx.is_eof();) {
+
+      switch (ctx.peek()->kind) {
+      case token_kind_identifier:
+        node = parse_identifier_expr(ctx);
+        break;
+      case token_kind_numeral:
+        node = parse_numeral_expr(ctx);
+        break;
+      case token_kind_separator:
+        return parse_parenthetical_expr(ctx);
+      case token_kind_operator:
+        return parse_binary_expr(ctx, std::move(node));
+      default:
+        // TODO(andrew): add to ctx.errors, encountered unknown
+        break;
+      }
+
+      if (!node) {
+        // TODO(andrew): add to ctx.errors
+        return nullptr;
+      }
     }
 
     return node;
@@ -26,8 +50,6 @@ namespace dao {
       return parse_numeral_expr(ctx);
     case token_kind_separator:
       return parse_parenthetical_expr(ctx);
-    case token_kind_operator:
-      return parse_binary_expr(ctx);
     default:
       // TODO(andrew): add to ctx.errors
       return nullptr;
@@ -56,19 +78,8 @@ namespace dao {
     return node;
   }
 
-  auto parse_binary_expr(parse_context &ctx) -> ast_node {
-    auto lhs{parse_primary_expr(ctx)};
-    if (!lhs) {
-      // TODO(andrew): add to ctx.errors
-      return nullptr;
-    }
-
-    auto constexpr default_op_precedence{0};
-    return parse_binary_expr_rhs(ctx, std::move(lhs), default_op_precedence);
-  }
-
-  auto parse_binary_expr_rhs(
-    parse_context &ctx, ast_node lhs, int op_precedence) -> ast_node {
+  auto parse_binary_expr(parse_context &ctx, ast_node lhs, int op_precedence)
+    -> ast_node {
 
     for (auto tok{ctx.peek()};
          not ctx.is_eof() and tok->kind == token_kind_operator;) {
@@ -97,8 +108,7 @@ namespace dao {
         if (token_precedence < next_precedence) {
           // current right-hand-side becomes the left-hand-side of the inner expression
           ctx.rewind();
-          rhs =
-            parse_binary_expr_rhs(ctx, std::move(rhs), token_precedence + 1);
+          rhs = parse_binary_expr(ctx, std::move(rhs), token_precedence + 1);
           if (!rhs) {
             // TODO(andrew): add to ctx.errors
             return nullptr;

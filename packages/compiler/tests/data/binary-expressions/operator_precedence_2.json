@@ -1,0 +1,32 @@
+{
+  "tokens": [
+    {
+      "kind": "separator",
+      "repr": "("
+    },
+    {
+      "kind": "identifier",
+      "repr": "y"
+    },
+    {
+      "kind": "operator",
+      "repr": "+"
+    },
+    {
+      "kind": "identifier",
+      "repr": "z"
+    },
+    {
+      "kind": "separator",
+      "repr": ")"
+    },
+    {
+      "kind": "operator",
+      "repr": "/"
+    },
+    {
+      "kind": "numeral",
+      "repr": "10"
+    }
+  ]
+}
