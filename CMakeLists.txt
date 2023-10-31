@@ -11,6 +11,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_COMPILER_LAUNCHER "ccache")
+set(CMAKE_EXE_LINKER_FLAGS "-fuse-ld=lld")
 
 # TODO(andrew): figure out why conan cmake presets / toolchain is setting this variable, but
 #               not getting picked up automatically...

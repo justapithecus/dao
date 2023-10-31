@@ -40,7 +40,10 @@ extern unsigned char const equivalence_class[256];
 // Index using the current state offset by a a character-equivalence class, to lookup
 // the next lexical state.
 #define LEX_TRANS_SIZE ((glyph_count) * (lexical_state_count))
+#pragma clang diagnostic   push
+#pragma clang diagnostic   ignored "-Wdeprecated-enum-enum-conversion"
 extern unsigned char const transition[LEX_TRANS_SIZE];
+#pragma clang diagnostic   pop
 
 // Character rewind
 //
