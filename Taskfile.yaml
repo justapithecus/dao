@@ -5,6 +5,8 @@ env:
   BUILDKIT_PROGRESS: "plain"
 
 tasks:
+  clean: rm -rf build
+
   lock: conan lock create .
 
   install:

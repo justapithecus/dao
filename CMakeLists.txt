@@ -12,6 +12,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_COMPILER_LAUNCHER "ccache")
 
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  set(CMAKE_EXE_LINKER_FLAGS "-fuse-ld=lld")
+endif()
+
 # TODO(andrew): figure out why conan cmake presets / toolchain is setting this variable, but
 #               not getting picked up automatically...
 include_directories(${CMAKE_INCLUDE_PATH})

@@ -22,6 +22,7 @@ RUN wget -nv -O - https://apt.llvm.org/llvm-snapshot.gpg.key \
 RUN apt-get install -y \
   --no-install-recommends \
   clang-16 \
+  lld-16 \
   libc++-16-dev \
   libc++abi-16-dev \
   clangd-16 \
