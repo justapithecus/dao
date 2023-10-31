@@ -3,6 +3,9 @@ version: "3"
 env:
   DOCKER_BUILDKIT: 1
   BUILDKIT_PROGRESS: "plain"
+  BUILD_OS: "ubuntu-22.04"
+  BUILD_COMPILER: "clang"
+  BUILD_TYPE: "debug"
 
 tasks:
   clean: rm -rf build
@@ -13,12 +16,12 @@ tasks:
     cmds:
       - |
         conan install . \
-          --profile="profiles/clang.ini" \
+          --profile="profiles/${BUILD_OS}.${BUILD_COMPILER}.${BUILD_TYPE}.ini" \
           --output-folder="build" \
           --build=missing
 
-  gen:
-    label: generate
+  generate:
+    aliases: [gen]
     cmds:
       - |
         cmake . --preset default \

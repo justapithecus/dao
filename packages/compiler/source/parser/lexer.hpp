@@ -38,7 +38,13 @@ namespace dao {
     }
   };
 
+#ifdef _LIBCPP_VERSION
+  // libc++
   static_assert(sizeof(dao::lexeme) <= 32);
+#else
+  // libstdc++
+  static_assert(sizeof(dao::lexeme) <= 40);
+#endif
 
   auto lex(std::string_view fpath) -> std::vector<token>;
 } // namespace dao
