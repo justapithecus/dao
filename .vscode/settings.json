@@ -6,5 +6,8 @@
     "*.h": "${capture}.c",
   },
   "C_Cpp.intelliSenseEngine": "disabled",
-  "clang-format.executable": "clang-format-16"
+  "clang-format.executable": "clang-format-16",
+  "clangd.arguments": [
+    "--header-insertion=never"
+  ]
 }

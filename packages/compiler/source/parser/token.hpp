@@ -19,6 +19,12 @@ namespace dao {
     dao::token_kind kind;
   };
 
+#ifdef _LIBCPP_VERSION
+  // libc++
   static_assert(sizeof(dao::token) <= 32);
+#else
+  // libstdc++
+  static_assert(sizeof(dao::token) <= 40);
+#endif
 
 } // namespace dao

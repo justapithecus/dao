@@ -27,7 +27,10 @@ RUN apt-get install -y \
   libc++abi-16-dev \
   clangd-16 \
   clang-format-16 \
-  clang-tidy-16
+  clang-tidy-16 \
+  libllvm16 \
+  llvm-16 \
+  llvm-16-dev
 
 RUN apt-get clean && rm -rf "/var/lib/apt/lists/*"
 

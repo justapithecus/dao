@@ -12,13 +12,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_COMPILER_LAUNCHER "ccache")
 
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-  set(CMAKE_EXE_LINKER_FLAGS "-fuse-ld=lld")
-endif()
+include(cmake/llvm.cmake)
 
-# TODO(andrew): figure out why conan cmake presets / toolchain is setting this variable, but
-#               not getting picked up automatically...
-include_directories(${CMAKE_INCLUDE_PATH})
+include_directories(${CMAKE_INCLUDE_PATH} ${LLVM_INCLUDE_DIRS})
 link_directories(${CMAKE_LIBRARY_PATH})
+link_libraries(${LLVM_LIBS})
 
 add_subdirectory(packages/compiler)
