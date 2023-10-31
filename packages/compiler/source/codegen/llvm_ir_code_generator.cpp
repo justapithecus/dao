@@ -1,6 +1,7 @@
 #include "llvm_ir_code_generator.hpp"
 
 #include <iostream>
+#include <llvm/IR/LegacyPassManager.h>
 #include <llvm/MC/TargetRegistry.h>
 #include <llvm/Support/CodeGen.h>
 #include <llvm/Support/Host.h>
@@ -47,6 +48,63 @@ namespace dao {
     , machine_{set_target_machine(mod_)} {
 
     mod_.setSourceFileName(std::move(source_fname));
+  }
+
+  auto llvm_ir_code_generator::dumps() const -> std::string {
+    std::string              str{};
+    llvm::raw_string_ostream ss{str};
+    mod_.print(ss, nullptr);
+    return ss.str();
+  }
+
+  auto llvm_ir_code_generator::emit_object_code() {
+    auto            obj_fname{mod_.getSourceFileName() + ".o"};
+    std::error_code ec;
+
+    llvm::raw_fd_ostream dest{obj_fname, ec};
+
+    // TODO(andrew): see new pass managers
+    llvm::legacy::PassManager pass{};
+
+    auto file_type{llvm::CodeGenFileType::CGFT_ObjectFile};
+    if (machine_->addPassesToEmitFile(pass, dest, nullptr, file_type)) {
+      std::exit(1); // TODO(andrew): exceptions
+    }
+
+    pass.run(mod_);
+    dest.flush();
+  }
+
+  //---------------------------------------------------------------------------
+  // Visitors
+  //---------------------------------------------------------------------------
+  auto llvm_ir_code_generator::operator()(dao::identifier_expr const &expr) {
+  }
+  auto llvm_ir_code_generator::operator()(dao::numeral_expr const &expr) {
+  }
+  auto llvm_ir_code_generator::operator()(dao::binary_expr const &expr) {
+  }
+  auto llvm_ir_code_generator::operator()(dao::function_proto const &proto) {
+  }
+
+  auto llvm_ir_code_generator::operator()(dao::function_def const &def) {
+    if (def.proto.id == "main") {
+      auto main_ft{llvm::FunctionType::get(builder_.getInt32Ty(), false)};
+      auto main{llvm::Function::Create(
+        main_ft, llvm::Function::ExternalLinkage, "main", mod_)};
+
+      builder_.SetInsertPoint(llvm::BasicBlock::Create(ctx_, "entry", main));
+
+      std::visit(*this, *(def.body));
+
+      auto constexpr int_size{32};
+      auto constexpr is_signed{true};
+      auto ret{llvm::APInt{int_size, 0, is_signed}};
+      builder_.CreateRet(llvm::ConstantInt::get(ctx_, ret));
+    }
+  }
+
+  auto llvm_ir_code_generator::operator()(dao::function_call const &call) {
   }
 
 } // namespace dao
