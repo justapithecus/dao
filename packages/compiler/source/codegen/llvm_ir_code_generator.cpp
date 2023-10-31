@@ -78,16 +78,24 @@ namespace dao {
   //---------------------------------------------------------------------------
   // Visitors
   //---------------------------------------------------------------------------
-  auto llvm_ir_code_generator::operator()(dao::identifier_expr const &expr) {
-  }
-  auto llvm_ir_code_generator::operator()(dao::numeral_expr const &expr) {
-  }
-  auto llvm_ir_code_generator::operator()(dao::binary_expr const &expr) {
-  }
-  auto llvm_ir_code_generator::operator()(dao::function_proto const &proto) {
+  auto llvm_ir_code_generator::operator()(dao::identifier_expr const &expr)
+    -> void {
   }
 
-  auto llvm_ir_code_generator::operator()(dao::function_def const &def) {
+  auto llvm_ir_code_generator::operator()(dao::numeral_expr const &expr)
+    -> void {
+  }
+
+  auto llvm_ir_code_generator::operator()(dao::binary_expr const &expr)
+    -> void {
+  }
+
+  auto llvm_ir_code_generator::operator()(dao::function_proto const &proto)
+    -> void {
+  }
+
+  auto llvm_ir_code_generator::operator()(dao::function_def const &def)
+    -> void {
     if (def.proto.id == "main") {
       auto main_ft{llvm::FunctionType::get(builder_.getInt32Ty(), false)};
       auto main{llvm::Function::Create(
@@ -104,7 +112,8 @@ namespace dao {
     }
   }
 
-  auto llvm_ir_code_generator::operator()(dao::function_call const &call) {
+  auto llvm_ir_code_generator::operator()(dao::function_call const &call)
+    -> void {
   }
 
 } // namespace dao

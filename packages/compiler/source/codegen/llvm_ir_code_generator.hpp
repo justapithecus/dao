@@ -22,11 +22,11 @@ namespace dao {
     auto emit_object_code();
 
     // Visitors
-    auto operator()(dao::identifier_expr const &expr);
-    auto operator()(dao::numeral_expr const &expr);
-    auto operator()(dao::binary_expr const &expr);
-    auto operator()(dao::function_proto const &proto);
-    auto operator()(dao::function_def const &def);
-    auto operator()(dao::function_call const &call);
+    auto operator()(dao::identifier_expr const &expr) -> void;
+    auto operator()(dao::numeral_expr const &expr) -> void;
+    auto operator()(dao::binary_expr const &expr) -> void;
+    auto operator()(dao::function_proto const &proto) -> void;
+    auto operator()(dao::function_def const &def) -> void;
+    auto operator()(dao::function_call const &call) -> void;
   };
 } // namespace dao
