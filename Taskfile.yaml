@@ -17,7 +17,8 @@ tasks:
           --output-folder="build" \
           --build=missing
 
-  generate:
+  gen:
+    label: generate
     cmds:
       - |
         cmake . --preset default \
@@ -27,4 +28,4 @@ tasks:
 
   run: ./build/packages/compiler/daoc
 
-  test: ctest --test-dir build --preset conan-debug
+  test: ctest --test-dir build --preset conan-debug --parallel 4 --output-on-failure --verbose
