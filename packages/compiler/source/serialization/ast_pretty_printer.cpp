@@ -1,6 +1,12 @@
 #include "ast_pretty_printer.hpp"
 
 namespace dao {
+  auto ast_pretty_printer::operator()(dao::program const &prog) const -> json {
+    return json{
+      {"type", "program"},
+      {"value", std::visit(*this, *(prog.entry))},
+    };
+  };
 
   auto ast_pretty_printer::operator()(dao::identifier_expr const &expr) const
     -> json {
@@ -70,15 +76,15 @@ namespace dao {
     };
   }
 
-  auto ast_pretty_printer::operator()(dao::function_call const &expr) const
+  auto ast_pretty_printer::operator()(dao::function_call const &call) const
     -> json {
     return json{
       {"type", "function_call"},
       {
         "value",
         {
-          {"callee", expr.callee},
-          {"args", expr.args},
+          {"callee", call.callee},
+          {"args", call.args},
         },
       },
     };

@@ -1,24 +1,16 @@
 {
-  "root": {
-    "type": "function_definition",
+  "type": "program",
+  "value": {
+    "type": "binary_expression",
     "value": {
-      "body": {
-        "type": "binary_expression",
-        "value": {
-          "lhs": {
-            "type": "identifier_expression",
-            "value": "x"
-          },
-          "operand": "*",
-          "rhs": {
-            "type": "numeral_expression",
-            "value": 9
-          }
-        }
+      "lhs": {
+        "type": "identifier_expression",
+        "value": "x"
       },
-      "prototype": {
-        "args": [],
-        "id": "main"
+      "operand": "*",
+      "rhs": {
+        "type": "numeral_expression",
+        "value": "9"
       }
     }
   }

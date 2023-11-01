@@ -14,17 +14,22 @@ namespace dao {
   struct function_proto;
   struct function_def;
   struct function_call;
+  struct program;
 
   using ast      = std::variant<numeral_expr, identifier_expr, binary_expr,
-    function_proto, function_def, function_call>;
+    function_proto, function_def, function_call, program>;
   using ast_node = std::unique_ptr<ast>;
+
+  struct program {
+    ast_node entry;
+  };
 
   struct identifier_expr {
     std::string name;
   };
 
   struct numeral_expr {
-    int val;
+    std::string val;
   };
 
   struct binary_expr {

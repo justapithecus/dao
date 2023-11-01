@@ -34,8 +34,7 @@ namespace dao {
 
   auto parse_top_level_expr(parse_context &ctx) -> ast_node {
     if (auto body{parse_expr(ctx)}; body) {
-      return std::make_unique<ast>(function_def{
-        std::move(body), function_proto{"main", std::vector<function_arg>{}}});
+      return std::make_unique<ast>(program{std::move(body)});
     }
 
     return nullptr;
@@ -103,7 +102,7 @@ namespace dao {
   }
 
   auto parse_numeral_expr(parse_context &ctx) -> ast_node {
-    auto val{std::stoi(ctx.peek()->repr)};
+    auto val{ctx.peek()->repr};
     ctx.eat();
     return std::make_unique<ast>(numeral_expr{val});
   }

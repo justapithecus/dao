@@ -29,7 +29,7 @@ public:
   }
 
   auto write(std::ostream &out) const {
-    json j{{"root", contents_}};
+    json j(contents_);
     out << j.dump(2) << "\n";
   }
 

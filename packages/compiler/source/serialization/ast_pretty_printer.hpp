@@ -7,13 +7,13 @@
 namespace dao {
 
   struct ast_pretty_printer {
-
-    auto operator()(dao::identifier_expr const &expr) const -> json;
-    auto operator()(dao::numeral_expr const &expr) const -> json;
-    auto operator()(dao::binary_expr const &expr) const -> json;
-    auto operator()(dao::function_proto const &expr) const -> json;
-    auto operator()(dao::function_def const &expr) const -> json;
-    auto operator()(dao::function_call const &expr) const -> json;
+    auto operator()(dao::program const &) const -> json;
+    auto operator()(dao::identifier_expr const &) const -> json;
+    auto operator()(dao::numeral_expr const &) const -> json;
+    auto operator()(dao::binary_expr const &) const -> json;
+    auto operator()(dao::function_proto const &) const -> json;
+    auto operator()(dao::function_def const &) const -> json;
+    auto operator()(dao::function_call const &) const -> json;
   };
 
   inline auto to_json(json &j, dao::function_arg const &arg) {

@@ -20,6 +20,7 @@ function (add_compiler_test TARGET ENTRY)
   # TODO(andrew): clean this up
   target_sources(${TEST_EXE}
     PRIVATE
+      ${CMAKE_CURRENT_SOURCE_DIR}/../source/codegen/llvm_ir_code_generator.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/../source/parser/lexer.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/../source/parser/parser.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/../source/parser/state_machine.c
@@ -30,3 +31,4 @@ endfunction()
 
 add_compiler_test(lexer test_lexer.cpp)
 add_compiler_test(parser test_parser.cpp)
+add_compiler_test(code_generator test_code_generator.cpp)

@@ -1,15 +1,7 @@
 {
-  "root": {
-    "type": "function_definition",
-    "value": {
-      "body": {
-        "type": "identifier_expression",
-        "value": "my_function"
-      },
-      "prototype": {
-        "args": [],
-        "id": "main"
-      }
-    }
+  "type": "program",
+  "value": {
+    "type": "identifier_expression",
+    "value": "my_function"
   }
 }
