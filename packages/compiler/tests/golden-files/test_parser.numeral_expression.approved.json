@@ -2,6 +2,6 @@
   "type": "program",
   "value": {
     "type": "numeral_expression",
-    "value": 3
+    "value": "3"
   }
 }

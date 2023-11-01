@@ -101,7 +101,8 @@ namespace dao {
 
   auto llvm_ir_code_generator::operator()(dao::numeral_expr const &expr)
     -> llvm::Value * {
-    return nullptr;
+    return llvm::ConstantFP::get(
+      ctx_, llvm::APFloat(llvm::APFloat::IEEEsingle(), expr.val));
   }
 
   auto llvm_ir_code_generator::operator()(dao::binary_expr const &expr)

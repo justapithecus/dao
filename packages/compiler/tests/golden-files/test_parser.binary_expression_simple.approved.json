@@ -10,7 +10,7 @@
       "operand": "*",
       "rhs": {
         "type": "numeral_expression",
-        "value": 9
+        "value": "9"
       }
     }
   }

@@ -102,7 +102,7 @@ namespace dao {
   }
 
   auto parse_numeral_expr(parse_context &ctx) -> ast_node {
-    auto val{std::stoi(ctx.peek()->repr)};
+    auto val{ctx.peek()->repr};
     ctx.eat();
     return std::make_unique<ast>(numeral_expr{val});
   }

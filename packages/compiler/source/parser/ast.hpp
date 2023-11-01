@@ -29,7 +29,7 @@ namespace dao {
   };
 
   struct numeral_expr {
-    int val;
+    std::string val;
   };
 
   struct binary_expr {
