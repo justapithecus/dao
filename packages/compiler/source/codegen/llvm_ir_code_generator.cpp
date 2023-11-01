@@ -105,6 +105,7 @@ namespace dao {
 
   auto llvm_ir_code_generator::operator()(dao::identifier_expr const &expr)
     -> llvm::Value * {
+    // TODO(andrew): lookup needs to be scoped!
     if (auto val{identifiers_.find(expr.name)}; val != identifiers_.end()) {
       return val->second;
     }
@@ -115,7 +116,7 @@ namespace dao {
   auto llvm_ir_code_generator::operator()(dao::numeral_expr const &expr)
     -> llvm::Value * {
     return llvm::ConstantFP::get(
-      ctx_, llvm::APFloat(llvm::APFloat::IEEEsingle(), expr.val));
+      ctx_, llvm::APFloat(llvm::APFloat::IEEEdouble(), expr.val));
   }
 
   auto llvm_ir_code_generator::operator()(dao::binary_expr const &expr)
@@ -123,6 +124,7 @@ namespace dao {
     auto lhs{std::visit(*this, *(expr.lhs))};
     auto rhs{std::visit(*this, *(expr.rhs))};
 
+    // TODO(andrew): lhs vs. rhs type checking
     switch (expr.op) {
     case '+':
       return builder_.CreateFAdd(lhs, rhs, "addtmp");
@@ -155,9 +157,8 @@ namespace dao {
 
     // TODO(andrew): ranges
     unsigned int i{0};
-    for (auto const &arg : proto.args) {
-      fn->setName(arg.name);
-      identifiers_[arg.name] = fn->getArg(i++);
+    for (auto &arg : fn->args()) {
+      arg.setName(proto.args[i++].name);
     }
     return fn;
   }
@@ -169,6 +170,12 @@ namespace dao {
 
     auto basic_block{llvm::BasicBlock::Create(ctx_, "entry", fn_decl)};
     builder_.SetInsertPoint(basic_block);
+
+    // TODO(andrew): identifiers_ should be scoped, instead of being reset each time
+    identifiers_.clear();
+    for (auto &arg : fn_decl->args()) {
+      identifiers_[std::string{arg.getName()}] = &arg;
+    }
 
     if (auto ret{std::visit(*this, *(def.body))}; ret) {
       builder_.CreateRet(ret);
@@ -184,7 +191,28 @@ namespace dao {
 
   auto llvm_ir_code_generator::operator()(dao::function_call const &call)
     -> llvm::Value * {
-    return nullptr;
+    auto callee{mod_.getFunction(call.callee)};
+    if (!callee) {
+      // TODO(andrew): errors, referencing undefined function
+      return nullptr;
+    }
+
+    if (callee->arg_size() != call.args.size()) {
+      // TODO(andrew): errors, mismatched number of args
+      return nullptr;
+    }
+
+    std::vector<llvm::Value *> args{};
+    args.reserve(callee->arg_size());
+    std::for_each(
+      call.args.begin(), call.args.end(), [this, &args](auto &&arg) {
+        if (auto node{std::visit(*this, *arg)}; node) {
+          args.emplace_back(std::move(node));
+        } else {
+          // TODO(andrew): collect errors
+        }
+      });
+    return builder_.CreateCall(callee, args, "calltmp");
   }
 
 } // namespace dao
