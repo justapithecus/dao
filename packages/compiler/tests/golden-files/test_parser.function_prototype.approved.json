@@ -1,14 +1,22 @@
 {
-  "type": "function_prototype",
+  "type": "program",
   "value": {
-    "args": [
+    "entry": [],
+    "nodes": [
       {
-        "name": "x"
-      },
-      {
-        "name": "y"
+        "type": "function_prototype",
+        "value": {
+          "args": [
+            {
+              "name": "x"
+            },
+            {
+              "name": "y"
+            }
+          ],
+          "id": "pow"
+        }
       }
-    ],
-    "id": "pow"
+    ]
   }
 }

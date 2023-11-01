@@ -1,7 +1,12 @@
 {
   "type": "program",
   "value": {
-    "type": "identifier_expression",
-    "value": "my_function"
+    "entry": [
+      {
+        "type": "identifier_expression",
+        "value": "my_function"
+      }
+    ],
+    "nodes": []
   }
 }

@@ -21,7 +21,8 @@ namespace dao {
   using ast_node = std::unique_ptr<ast>;
 
   struct program {
-    ast_node entry;
+    std::vector<ast_node> entry;
+    std::vector<ast_node> nodes;
   };
 
   struct identifier_expr {

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <ankerl/unordered_dense.h>
 #include <llvm/IR/IRBuilder.h>
 #include <llvm/IR/LLVMContext.h>
 #include <llvm/IR/Module.h>
@@ -15,6 +16,8 @@ namespace dao {
     llvm::Module                         mod_;
     llvm::IRBuilder<>                    builder_;
     std::unique_ptr<llvm::TargetMachine> machine_;
+
+    ankerl::unordered_dense::map<std::string, llvm::Value *> identifiers_;
 
   public:
     explicit llvm_ir_code_generator(std::string source_fname);

@@ -4,40 +4,35 @@
 
 namespace dao {
 
-  auto parse(std::vector<token> const &tokens) -> ast_node {
+  auto parse(std::vector<token> const &tokens) -> ast {
     parse_context ctx{tokens};
     return parse(ctx);
   }
 
-  auto parse(parse_context &ctx) -> ast_node {
-    ast_node node{};
+  auto parse(parse_context &ctx) -> ast {
+    program prog{};
 
     while (not ctx.is_eof()) {
       switch (ctx.peek()->kind) {
       case token_kind::e_keyword:
-        node = parse_function_def(ctx);
-        break;
+        if (auto node{parse_function_def(ctx)}; node) {
+          prog.nodes.emplace_back(std::move(node));
+        } else {
+          // TODO(andrew): add to ctx.errors
+          return prog;
+        }
+
       default:
-        // TODO(andrew): this top-level parse could carry a "scope" ast
-        node = parse_top_level_expr(ctx);
-        break;
-      }
-
-      if (!node) {
-        // TODO(andrew): add to ctx.errors
-        return nullptr;
+        if (auto node{parse_expr(ctx)}; node) {
+          prog.entry.emplace_back(std::move(node));
+        } else {
+          // TODO(andrew): add to ctx.errors
+          return prog;
+        }
       }
     }
 
-    return node;
-  }
-
-  auto parse_top_level_expr(parse_context &ctx) -> ast_node {
-    if (auto body{parse_expr(ctx)}; body) {
-      return std::make_unique<ast>(program{std::move(body)});
-    }
-
-    return nullptr;
+    return std::move(prog);
   }
 
   auto parse_expr(parse_context &ctx) -> ast_node {

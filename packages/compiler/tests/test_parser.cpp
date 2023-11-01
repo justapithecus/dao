@@ -9,73 +9,51 @@ auto main() -> int {
 
   "identifier_expression_simple"_test = [] {
     auto tokens{load_tokens("identifier_expression_simple.json")};
-    auto ast{dao::parse(tokens)};
-
-    json_writer writer{std::move(ast)};
-    Approvals::verify(writer);
+    Approvals::verify(json_writer{dao::parse(tokens)});
   };
 
   "numeral_expression"_test = [] {
     auto tokens{load_tokens("numeral_expression.json")};
-    auto ast{dao::parse(tokens)};
-
-    json_writer writer{std::move(ast)};
-    Approvals::verify(writer);
+    Approvals::verify(json_writer{dao::parse(tokens)});
   };
 
   "binary_expression_simple"_test = [] {
     auto tokens{load_tokens("binary-expressions/simple.json")};
-    auto ast{dao::parse(tokens)};
-
-    json_writer writer{std::move(ast)};
-    Approvals::verify(writer);
+    Approvals::verify(json_writer{dao::parse(tokens)});
   };
 
   "binary_expression_operator_precedence_1"_test = [] {
     auto tokens{load_tokens("binary-expressions/operator_precedence_1.json")};
-    auto ast{dao::parse(tokens)};
-
-    json_writer writer{std::move(ast)};
-    Approvals::verify(writer);
+    Approvals::verify(json_writer{dao::parse(tokens)});
   };
 
   "parenthetical_expression"_test = [] {
     auto tokens{load_tokens("parenthetical_expression.json")};
-    auto ast{dao::parse(tokens)};
-
-    json_writer writer{std::move(ast)};
-    Approvals::verify(writer);
+    Approvals::verify(json_writer{dao::parse(tokens)});
   };
 
   "binary_expression_operator_precedence_2"_test = [] {
     auto tokens{load_tokens("binary-expressions/operator_precedence_2.json")};
-    auto ast{dao::parse(tokens)};
-
-    json_writer writer{std::move(ast)};
-    Approvals::verify(writer);
+    Approvals::verify(json_writer{dao::parse(tokens)});
   };
 
   "function_prototype"_test = [] {
     auto tokens{load_tokens("functions/prototype.json")};
-    auto ast{dao::parse(tokens)};
-
-    json_writer writer{std::move(ast)};
-    Approvals::verify(writer);
+    Approvals::verify(json_writer{dao::parse(tokens)});
   };
 
   "function_definition"_test = [] {
     auto tokens{load_tokens("functions/definition.json")};
-    auto ast{dao::parse(tokens)};
-
-    json_writer writer{std::move(ast)};
-    Approvals::verify(writer);
+    Approvals::verify(json_writer{dao::parse(tokens)});
   };
 
   "function_call"_test = [] {
     auto tokens{load_tokens("functions/call.json")};
-    auto ast{dao::parse(tokens)};
+    Approvals::verify(json_writer{dao::parse(tokens)});
+  };
 
-    json_writer writer{std::move(ast)};
-    Approvals::verify(writer);
+  "program"_test = [] {
+    auto tokens{load_tokens("program.json")};
+    Approvals::verify(json_writer{dao::parse(tokens)});
   };
 }

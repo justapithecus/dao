@@ -1,7 +1,20 @@
 {
   "type": "program",
   "value": {
-    "entry": [],
+    "entry": [
+      {
+        "type": "function_call",
+        "value": {
+          "args": [
+            {
+              "type": "numeral_expression",
+              "value": "4"
+            }
+          ],
+          "callee": "double"
+        }
+      }
+    ],
     "nodes": [
       {
         "type": "function_definition",
