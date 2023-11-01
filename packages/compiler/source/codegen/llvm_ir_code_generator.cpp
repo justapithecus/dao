@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <llvm/IR/LegacyPassManager.h>
+#include <llvm/IR/Verifier.h>
 #include <llvm/MC/TargetRegistry.h>
 #include <llvm/Support/CodeGen.h>
 #include <llvm/Support/Host.h>
@@ -45,7 +46,8 @@ namespace dao {
     : ctx_{}
     , mod_{"main", ctx_}
     , builder_{ctx_}
-    , machine_{set_target_machine(mod_)} {
+    , machine_{set_target_machine(mod_)}
+    , identifiers_{} {
 
     mod_.setSourceFileName(std::move(source_fname));
   }
@@ -80,13 +82,20 @@ namespace dao {
   //---------------------------------------------------------------------------
   auto llvm_ir_code_generator::operator()(dao::program const &prog)
     -> llvm::Value * {
-    auto main_ft{llvm::FunctionType::get(builder_.getInt32Ty(), false)};
-    auto main{llvm::Function::Create(
-      main_ft, llvm::Function::ExternalLinkage, "main", mod_)};
+    // build program definitions
+    std::for_each(prog.nodes.begin(), prog.nodes.end(),
+      [this](auto &&node) { std::visit(*this, *node); });
 
-    builder_.SetInsertPoint(llvm::BasicBlock::Create(ctx_, "entry", main));
+    // build program entrypoint
+    auto ft{llvm::FunctionType::get(builder_.getInt32Ty(), false)};
+    auto fn_decl{llvm::Function::Create(
+      ft, llvm::Function::ExternalLinkage, "main", mod_)};
 
-    std::visit(*this, *(prog.entry));
+    auto basic_block{llvm::BasicBlock::Create(ctx_, "entry", fn_decl)};
+    builder_.SetInsertPoint(basic_block);
+
+    std::for_each(prog.entry.begin(), prog.entry.end(),
+      [this](auto &&node) { std::visit(*this, *node); });
 
     auto constexpr int_size{32};
     auto constexpr is_signed{true};
@@ -96,6 +105,10 @@ namespace dao {
 
   auto llvm_ir_code_generator::operator()(dao::identifier_expr const &expr)
     -> llvm::Value * {
+    if (auto val{identifiers_.find(expr.name)}; val != identifiers_.end()) {
+      return val->second;
+    }
+    // TODO(andrew): errors
     return nullptr;
   }
 
@@ -107,16 +120,65 @@ namespace dao {
 
   auto llvm_ir_code_generator::operator()(dao::binary_expr const &expr)
     -> llvm::Value * {
-    return nullptr;
+    auto lhs{std::visit(*this, *(expr.lhs))};
+    auto rhs{std::visit(*this, *(expr.rhs))};
+
+    switch (expr.op) {
+    case '+':
+      return builder_.CreateFAdd(lhs, rhs, "addtmp");
+    case '-':
+      return builder_.CreateFSub(lhs, rhs, "subtmp");
+    case '*':
+      return builder_.CreateFMul(lhs, rhs, "multmp");
+    case '/':
+      return builder_.CreateFDiv(lhs, rhs, "divtmp");
+    case '<':
+      return builder_.CreateFCmpULT(lhs, rhs, "lttmp");
+    case '>':
+      return builder_.CreateFCmpUGT(lhs, rhs, "gttmp");
+    default:
+      // TODO(andrew): errors
+      return nullptr;
+    }
   }
 
   auto llvm_ir_code_generator::operator()(dao::function_proto const &proto)
     -> llvm::Value * {
-    return nullptr;
+    std::vector<llvm::Type *> arg_types{
+      proto.args.size(), builder_.getDoubleTy()};
+
+    auto constexpr is_var_arg{false};
+    auto ft{
+      llvm::FunctionType::get(builder_.getDoubleTy(), arg_types, is_var_arg)};
+    auto fn{llvm::Function::Create(
+      ft, llvm::Function::ExternalLinkage, proto.id, mod_)};
+
+    // TODO(andrew): ranges
+    unsigned int i{0};
+    for (auto const &arg : proto.args) {
+      fn->setName(arg.name);
+      identifiers_[arg.name] = fn->getArg(i++);
+    }
+    return fn;
   }
 
   auto llvm_ir_code_generator::operator()(dao::function_def const &def)
     -> llvm::Value * {
+    auto fn_decl{static_cast<llvm::Function *>(
+      std::visit(*this, static_cast<ast>(def.proto)))};
+
+    auto basic_block{llvm::BasicBlock::Create(ctx_, "entry", fn_decl)};
+    builder_.SetInsertPoint(basic_block);
+
+    if (auto ret{std::visit(*this, *(def.body))}; ret) {
+      builder_.CreateRet(ret);
+
+      llvm::verifyFunction(*fn_decl, &llvm::errs());
+      return fn_decl;
+    }
+
+    // TODO(andrew): errors
+    fn_decl->eraseFromParent();
     return nullptr;
   }
 

@@ -1,19 +1,24 @@
 {
   "type": "program",
   "value": {
-    "type": "function_call",
-    "value": {
-      "args": [
-        {
-          "type": "identifier_expression",
-          "value": "p"
-        },
-        {
-          "type": "identifier_expression",
-          "value": "q"
+    "entry": [
+      {
+        "type": "function_call",
+        "value": {
+          "args": [
+            {
+              "type": "identifier_expression",
+              "value": "p"
+            },
+            {
+              "type": "identifier_expression",
+              "value": "q"
+            }
+          ],
+          "callee": "distance_euclidean"
         }
-      ],
-      "callee": "distance_euclidean"
-    }
+      }
+    ],
+    "nodes": []
   }
 }

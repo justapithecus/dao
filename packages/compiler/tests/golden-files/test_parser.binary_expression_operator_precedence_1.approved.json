@@ -1,27 +1,32 @@
 {
   "type": "program",
   "value": {
-    "type": "binary_expression",
-    "value": {
-      "lhs": {
+    "entry": [
+      {
         "type": "binary_expression",
         "value": {
           "lhs": {
-            "type": "identifier_expression",
-            "value": "z"
+            "type": "binary_expression",
+            "value": {
+              "lhs": {
+                "type": "identifier_expression",
+                "value": "z"
+              },
+              "operand": "/",
+              "rhs": {
+                "type": "numeral_expression",
+                "value": "10"
+              }
+            }
           },
-          "operand": "/",
+          "operand": "+",
           "rhs": {
-            "type": "numeral_expression",
-            "value": "10"
+            "type": "identifier_expression",
+            "value": "y"
           }
         }
-      },
-      "operand": "+",
-      "rhs": {
-        "type": "identifier_expression",
-        "value": "y"
       }
-    }
+    ],
+    "nodes": []
   }
 }

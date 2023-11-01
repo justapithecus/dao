@@ -4,7 +4,13 @@ namespace dao {
   auto ast_pretty_printer::operator()(dao::program const &prog) const -> json {
     return json{
       {"type", "program"},
-      {"value", std::visit(*this, *(prog.entry))},
+      {
+        "value",
+        {
+          {"entry", prog.entry},
+          {"nodes", prog.nodes},
+        },
+      },
     };
   };
 

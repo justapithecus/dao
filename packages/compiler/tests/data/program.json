@@ -1,0 +1,52 @@
+{
+  "tokens": [
+    {
+      "kind": "keyword",
+      "repr": "function"
+    },
+    {
+      "kind": "identifier",
+      "repr": "double"
+    },
+    {
+      "kind": "separator",
+      "repr": "("
+    },
+    {
+      "kind": "identifier",
+      "repr": "x"
+    },
+    {
+      "kind": "separator",
+      "repr": ")"
+    },
+    {
+      "kind": "identifier",
+      "repr": "x"
+    },
+    {
+      "kind": "operator",
+      "repr": "*"
+    },
+    {
+      "kind": "numeral",
+      "repr": "2"
+    },
+    {
+      "kind": "identifier",
+      "repr": "double"
+    },
+    {
+      "kind": "separator",
+      "repr": "("
+    },
+    {
+      "kind": "numeral",
+      "repr": "4"
+    },
+    {
+      "kind": "separator",
+      "repr": ")"
+    }
+  ]
+}

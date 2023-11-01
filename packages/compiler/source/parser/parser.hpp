@@ -47,18 +47,12 @@ namespace dao {
   };
 
   /// Parses tokens into an abstract syntax tree
-  auto parse(std::vector<token> const &tokens) -> ast_node;
-  auto parse(parse_context &ctx) -> ast_node;
-
-  /// Parses top-level expressions
-  ///
-  /// <top_level_expr> ::= { <function_def> | <primary_expr> }
-  auto parse_top_level_expr(parse_context &ctx) -> ast_node;
+  auto parse(std::vector<token> const &tokens) -> ast;
+  auto parse(parse_context &ctx) -> ast;
 
   /// Parses any expression
   ///
   /// <expr> ::= { <function_def> | <primary_expr> }
-  // TODO(andrew): can be combined with parse_top_level_expr, if a "scope" ast is suitable
   auto parse_expr(parse_context &ctx) -> ast_node;
 
   /// Parses a primary expression
