@@ -78,42 +78,50 @@ namespace dao {
   //---------------------------------------------------------------------------
   // Visitors
   //---------------------------------------------------------------------------
+  auto llvm_ir_code_generator::operator()(dao::program const &prog)
+    -> llvm::Value * {
+    auto main_ft{llvm::FunctionType::get(builder_.getInt32Ty(), false)};
+    auto main{llvm::Function::Create(
+      main_ft, llvm::Function::ExternalLinkage, "main", mod_)};
+
+    builder_.SetInsertPoint(llvm::BasicBlock::Create(ctx_, "entry", main));
+
+    std::visit(*this, *(prog.entry));
+
+    auto constexpr int_size{32};
+    auto constexpr is_signed{true};
+    auto ret{llvm::APInt{int_size, 0, is_signed}};
+    return builder_.CreateRet(llvm::ConstantInt::get(ctx_, ret));
+  }
+
   auto llvm_ir_code_generator::operator()(dao::identifier_expr const &expr)
-    -> void {
+    -> llvm::Value * {
+    return nullptr;
   }
 
   auto llvm_ir_code_generator::operator()(dao::numeral_expr const &expr)
-    -> void {
+    -> llvm::Value * {
+    return nullptr;
   }
 
   auto llvm_ir_code_generator::operator()(dao::binary_expr const &expr)
-    -> void {
+    -> llvm::Value * {
+    return nullptr;
   }
 
   auto llvm_ir_code_generator::operator()(dao::function_proto const &proto)
-    -> void {
+    -> llvm::Value * {
+    return nullptr;
   }
 
   auto llvm_ir_code_generator::operator()(dao::function_def const &def)
-    -> void {
-    if (def.proto.id == "main") {
-      auto main_ft{llvm::FunctionType::get(builder_.getInt32Ty(), false)};
-      auto main{llvm::Function::Create(
-        main_ft, llvm::Function::ExternalLinkage, "main", mod_)};
-
-      builder_.SetInsertPoint(llvm::BasicBlock::Create(ctx_, "entry", main));
-
-      std::visit(*this, *(def.body));
-
-      auto constexpr int_size{32};
-      auto constexpr is_signed{true};
-      auto ret{llvm::APInt{int_size, 0, is_signed}};
-      builder_.CreateRet(llvm::ConstantInt::get(ctx_, ret));
-    }
+    -> llvm::Value * {
+    return nullptr;
   }
 
   auto llvm_ir_code_generator::operator()(dao::function_call const &call)
-    -> void {
+    -> llvm::Value * {
+    return nullptr;
   }
 
 } // namespace dao

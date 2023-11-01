@@ -1,15 +1,7 @@
 {
-  "root": {
-    "type": "function_definition",
-    "value": {
-      "body": {
-        "type": "numeral_expression",
-        "value": 3
-      },
-      "prototype": {
-        "args": [],
-        "id": "main"
-      }
-    }
+  "type": "program",
+  "value": {
+    "type": "numeral_expression",
+    "value": 3
   }
 }

@@ -1,16 +1,14 @@
 {
-  "root": {
-    "type": "function_prototype",
-    "value": {
-      "args": [
-        {
-          "name": "x"
-        },
-        {
-          "name": "y"
-        }
-      ],
-      "id": "pow"
-    }
+  "type": "function_prototype",
+  "value": {
+    "args": [
+      {
+        "name": "x"
+      },
+      {
+        "name": "y"
+      }
+    ],
+    "id": "pow"
   }
 }
