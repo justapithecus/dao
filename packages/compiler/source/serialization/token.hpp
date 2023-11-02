@@ -23,7 +23,12 @@ namespace dao {
       token_desc(token_kind::e_numeral, "Numeral");
       token_desc(token_kind::e_operator, "Operator");
       token_desc(token_kind::e_separator, "Separator");
-      token_desc(token_kind::e_keyword, "Keyword");
+      token_desc(token_kind::e_literal, "String Literal");
+      token_desc(token_kind::e_keyword_external, "Keyword");
+      token_desc(token_kind::e_keyword_function, "Keyword");
+      token_desc(token_kind::e_keyword_if, "Keyword");
+      token_desc(token_kind::e_keyword_then, "Keyword");
+      token_desc(token_kind::e_keyword_else, "Keyword");
       os << "Unknown";
       break;
     }
@@ -37,7 +42,7 @@ namespace dao {
       {"numeral", token_kind::e_numeral},
       {"operator", token_kind::e_operator},
       {"separator", token_kind::e_separator},
-      {"keyword", token_kind::e_keyword},
+      {"literal", token_kind::e_literal},
   };
 
   inline auto to_json(json &j, dao::token const &tok) {
@@ -49,7 +54,11 @@ namespace dao {
     j.at("kind").get_to(kind);
     j.at("repr").get_to(tok.repr);
 
-    tok.kind = str_to_kind.at(kind);
+    if (auto it{keywords.find(tok.repr)}; it != keywords.end()) {
+      tok.kind = it->second;
+    } else {
+      tok.kind = str_to_kind.at(kind);
+    }
   }
 
 } // namespace dao

@@ -14,9 +14,15 @@ namespace dao {
 
     while (not ctx.is_eof()) {
       switch (ctx.peek()->kind) {
-      case token_kind::e_keyword:
+      case token_kind::e_keyword_function:
+      case token_kind::e_keyword_external:
+      case token_kind::e_keyword_if:
+      case token_kind::e_keyword_then:
+      case token_kind::e_keyword_else:
+        // TODO(andrew): implement control flow, keep existing erroneous behavior for now
         if (auto node{parse_function_def(ctx)}; node) {
           prog.nodes.emplace_back(std::move(node));
+          break;
         } else {
           // TODO(andrew): add to ctx.errors
           return prog;
@@ -41,7 +47,12 @@ namespace dao {
     while (not ctx.is_eof()) {
 
       switch (ctx.peek()->kind) {
-      case token_kind::e_keyword:
+      case token_kind::e_keyword_function:
+      case token_kind::e_keyword_external:
+      // TODO(andrew): implement control flow, but keep this existing erroneous behavior for now
+      case token_kind::e_keyword_then:
+      case token_kind::e_keyword_if:
+      case token_kind::e_keyword_else:
         node = parse_function_def(ctx);
         break;
       case token_kind::e_identifier:
@@ -55,6 +66,9 @@ namespace dao {
         break;
       case token_kind::e_operator:
         return parse_binary_expr(ctx, std::move(node));
+      case token_kind::e_literal:
+        ctx.eat(); // TODO(andrew): skip for now
+        continue;
       default:
         // TODO(andrew): add to ctx.errors, encountered unknown
         break;

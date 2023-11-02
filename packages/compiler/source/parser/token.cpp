@@ -1,0 +1,11 @@
+#include "token.hpp"
+
+namespace dao {
+  ankerl::unordered_dense::map<std::string, dao::token_kind> const keywords{
+    {"external", token_kind::e_keyword_external},
+    {"function", token_kind::e_keyword_function},
+    {"if", token_kind::e_keyword_if},
+    {"then", token_kind::e_keyword_then},
+    {"else", token_kind::e_keyword_else},
+  };
+}
