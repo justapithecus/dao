@@ -6,7 +6,7 @@
 #include <type_traits>
 #include <vector>
 
-#include "../ast/ast.hpp"
+#include "../ast/index.hpp"
 #include "token.hpp"
 
 namespace dao {

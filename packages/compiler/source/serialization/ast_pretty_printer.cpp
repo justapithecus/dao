@@ -15,6 +15,20 @@ namespace dao {
     };
   };
 
+  auto ast_pretty_printer::operator()(
+    dao::external_linkage_ast const &link) const -> json {
+    return json{
+      {"type", "external_linkage"},
+      {
+        "value",
+        {
+          {"linkage_kind", link.kind},
+          {"prototype", link.proto},
+        },
+      },
+    };
+  }
+
   auto ast_pretty_printer::operator()(dao::identifier_expr const &expr) const
     -> json {
     return json{

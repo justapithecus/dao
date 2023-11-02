@@ -92,6 +92,11 @@ namespace dao {
     return builder_.CreateRet(llvm::ConstantInt::get(ctx_, ret));
   }
 
+  auto llvm_ir_code_generator::operator()(dao::external_linkage_ast const &link)
+    -> llvm::Value * {
+    return nullptr;
+  }
+
   auto llvm_ir_code_generator::operator()(dao::identifier_expr const &expr)
     -> llvm::Value * {
     // TODO(andrew): lookup needs to be scoped!
