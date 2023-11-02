@@ -6,7 +6,7 @@
 #include <llvm/IR/Module.h>
 #include <llvm/Target/TargetMachine.h>
 
-#include "../parser/ast.hpp"
+#include "../ast/index.hpp"
 
 namespace dao {
 
@@ -25,7 +25,8 @@ namespace dao {
     auto dumps() const -> std::string;
 
     // Visitors
-    auto operator()(dao::program const &) -> llvm::Value *;
+    auto operator()(dao::program_ast const &) -> llvm::Value *;
+    auto operator()(dao::external_linkage_ast const &) -> llvm::Value *;
     auto operator()(dao::identifier_expr const &) -> llvm::Value *;
     auto operator()(dao::numeral_expr const &) -> llvm::Value *;
     auto operator()(dao::binary_expr const &) -> llvm::Value *;

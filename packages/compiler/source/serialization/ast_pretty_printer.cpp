@@ -1,7 +1,8 @@
 #include "ast_pretty_printer.hpp"
 
 namespace dao {
-  auto ast_pretty_printer::operator()(dao::program const &prog) const -> json {
+  auto ast_pretty_printer::operator()(dao::program_ast const &prog) const
+    -> json {
     return json{
       {"type", "program"},
       {

@@ -10,7 +10,7 @@ namespace dao {
   }
 
   auto parse(parse_context &ctx) -> ast {
-    program prog{};
+    program_ast prog{};
 
     while (not ctx.is_eof()) {
       switch (ctx.peek()->kind) {

@@ -69,7 +69,7 @@ namespace dao {
   //---------------------------------------------------------------------------
   // Visitors
   //---------------------------------------------------------------------------
-  auto llvm_ir_code_generator::operator()(dao::program const &prog)
+  auto llvm_ir_code_generator::operator()(dao::program_ast const &prog)
     -> llvm::Value * {
     // build program definitions
     std::for_each(prog.nodes.begin(), prog.nodes.end(),
