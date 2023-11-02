@@ -94,7 +94,8 @@ namespace dao {
 
   auto llvm_ir_code_generator::operator()(dao::external_linkage_ast const &link)
     -> llvm::Value * {
-    return nullptr;
+    // TODO(andrew): name mangler depending on linkage type
+    return std::visit(*this, static_cast<ast>(link.proto));
   }
 
   auto llvm_ir_code_generator::operator()(dao::identifier_expr const &expr)
@@ -145,6 +146,7 @@ namespace dao {
 
   auto llvm_ir_code_generator::operator()(dao::function_proto const &proto)
     -> llvm::Value * {
+    // TODO(andrew): arg and ret type resolution
     std::vector<llvm::Type *> arg_types{
       proto.args.size(), builder_.getDoubleTy()};
 
