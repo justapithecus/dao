@@ -235,6 +235,11 @@ namespace dao {
     return builder_.CreateCall(callee, args, "calltmp");
   }
 
+  auto llvm_ir_code_generator::operator()(dao::if_expr const &expr)
+    -> llvm::Value * {
+    return nullptr;
+  }
+
   //---------------------------------------------------------------------------
   // Private Methods
   //---------------------------------------------------------------------------

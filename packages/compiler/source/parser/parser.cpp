@@ -18,9 +18,6 @@ namespace dao {
         prog.nodes.emplace_back(parse_external_linkage(ctx));
         break;
       case token_kind::e_keyword_function:
-      case token_kind::e_keyword_if:
-      case token_kind::e_keyword_then:
-      case token_kind::e_keyword_else:
         // TODO(andrew): implement control flow, keep existing erroneous behavior for now
         if (auto node{parse_function_def(ctx)}) {
           prog.nodes.emplace_back(std::move(node));
@@ -54,12 +51,10 @@ namespace dao {
         // TODO(andrew): errors, external can only be at program/module scope
         return nullptr;
       case token_kind::e_keyword_function:
-      // TODO(andrew): implement control flow, but keep this existing erroneous behavior for now
-      case token_kind::e_keyword_then:
-      case token_kind::e_keyword_if:
-      case token_kind::e_keyword_else:
         node = parse_function_def(ctx);
         break;
+      case token_kind::e_keyword_if:
+        return parse_if_expr(ctx);
       case token_kind::e_identifier:
         node = parse_identifier_expr(ctx);
         if (auto call{std::get_if<function_call>(node.get())}) {
@@ -312,6 +307,44 @@ namespace dao {
       //               eventually also support symbols to other values
       return nullptr;
     }
+  }
+
+  auto parse_if_expr(parse_context &ctx) -> ast_node {
+    // eat 'this'
+    ctx.eat();
+
+    auto condition{parse_primary_expr(ctx)};
+    if (!condition) {
+      // TODO(andrew): ctx.errors
+      return nullptr;
+    }
+
+    if (ctx.peek()->kind != token_kind::e_keyword_then) {
+      // TODO(andrew): expected 'then'
+      return nullptr;
+    }
+
+    // eat 'then'
+    ctx.eat();
+
+    auto then{parse_primary_expr(ctx)};
+    if (!then) {
+      // TODO(andrew): ctx.errors
+      return nullptr;
+    }
+
+    ast_node else_{};
+    if (ctx.peek()->kind == token_kind::e_keyword_else) {
+      // eat 'else'
+      ctx.eat();
+      if (else_ = parse_primary_expr(ctx); !else_) {
+        // TODO(andrew): ctx.errors
+        return nullptr;
+      }
+    }
+
+    return std::make_unique<ast>(
+      if_expr{std::move(condition), std::move(then), std::move(else_)});
   }
 
 } // namespace dao

@@ -34,6 +34,7 @@ namespace dao {
     auto operator()(dao::function_proto const &) -> llvm::Value *;
     auto operator()(dao::function_def const &) -> llvm::Value *;
     auto operator()(dao::function_call const &) -> llvm::Value *;
+    auto operator()(dao::if_expr const &) -> llvm::Value *;
 
   private:
     auto emit_object_code() -> void;

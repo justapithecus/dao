@@ -15,11 +15,12 @@ namespace dao {
   struct function_proto;
   struct function_def;
   struct function_call;
+  struct if_expr;
   struct external_linkage_ast;
   struct program_ast;
 
   using ast      = std::variant<numeral_expr, string_literal, identifier_expr,
-    binary_expr, function_proto, function_def, function_call,
+    binary_expr, function_proto, function_def, function_call, if_expr,
     external_linkage_ast, program_ast>;
   using ast_node = std::unique_ptr<ast>;
 
