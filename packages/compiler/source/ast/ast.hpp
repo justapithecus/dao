@@ -9,6 +9,7 @@ namespace dao {
 
   struct identifier_expr;
   struct numeral_expr;
+  struct string_literal;
   struct binary_expr;
   struct function_arg;
   struct function_proto;
@@ -17,9 +18,9 @@ namespace dao {
   struct external_linkage_ast;
   struct program_ast;
 
-  using ast =
-    std::variant<numeral_expr, identifier_expr, binary_expr, function_proto,
-      function_def, function_call, external_linkage_ast, program_ast>;
+  using ast      = std::variant<numeral_expr, string_literal, identifier_expr,
+    binary_expr, function_proto, function_def, function_call,
+    external_linkage_ast, program_ast>;
   using ast_node = std::unique_ptr<ast>;
 
   struct program_ast {

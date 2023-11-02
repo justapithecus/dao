@@ -113,6 +113,11 @@ namespace dao {
       ctx_, llvm::APFloat(llvm::APFloat::IEEEdouble(), expr.val));
   }
 
+  auto llvm_ir_code_generator::operator()(dao::string_literal const &litr)
+    -> llvm::Value * {
+    return llvm::ConstantDataArray::getString(ctx_, litr.val);
+  }
+
   auto llvm_ir_code_generator::operator()(dao::binary_expr const &expr)
     -> llvm::Value * {
     auto lhs{std::visit(*this, *(expr.lhs))};

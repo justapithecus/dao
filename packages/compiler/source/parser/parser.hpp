@@ -69,11 +69,22 @@ namespace dao {
   /// <identifier_expr> ::= <letter> { <letter> | <digit> | '_' }
   auto parse_identifier_expr(parse_context &ctx) -> ast_node;
 
+  /// Parses a literal
+  ///
+  /// <literal> ::= <numeral_expr> | <string_literal>
+  template <typename T>
+  auto parse_literal(parse_context &ctx) -> ast_node;
+
   /// Parses a numeral expression
   ///
   /// <digit> ::= [0-9]
   /// <numeral_expr> ::= { <digit> }
-  auto parse_numeral_expr(parse_context &ctx) -> ast_node;
+  auto constexpr parse_numeral_expr = parse_literal<numeral_expr>;
+
+  /// Parses a string literal
+  ///
+  /// <string_literal> ::= '"' { <letter> | <digit> | <special_char> } '"'
+  auto constexpr parse_string_literal = parse_literal<string_literal>;
 
   /// Parses a binary expression, i.e. an expression that evaluates two expressions using
   /// a binary operator.

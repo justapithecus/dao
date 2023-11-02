@@ -11,6 +11,7 @@ namespace dao {
     auto operator()(dao::external_linkage_ast const &) const -> json;
     auto operator()(dao::identifier_expr const &) const -> json;
     auto operator()(dao::numeral_expr const &) const -> json;
+    auto operator()(dao::string_literal const &) const -> json;
     auto operator()(dao::binary_expr const &) const -> json;
     auto operator()(dao::function_proto const &) const -> json;
     auto operator()(dao::function_def const &) const -> json;

@@ -12,6 +12,10 @@ namespace dao {
     std::string val;
   };
 
+  struct string_literal {
+    std::string val;
+  };
+
   struct binary_expr {
     ast_node lhs, rhs;
     char     op;
