@@ -6,3 +6,6 @@ build/
 
 # ApprovalTests
 *.received.*
+
+# daoc output
+*.o

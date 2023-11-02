@@ -1,0 +1,6 @@
+function triple(x)
+  x * 3
+
+
+puts("Hello world from dao!")
+puts(triple(7))
