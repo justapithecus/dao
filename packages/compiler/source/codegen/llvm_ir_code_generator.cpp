@@ -52,8 +52,6 @@ namespace dao {
     , machine_{set_target_machine(mod_)}
     , identifiers_{} {
 
-    ctx_.setOpaquePointers(false);
-
     mod_.setSourceFileName(std::move(source_fname));
   }
 
