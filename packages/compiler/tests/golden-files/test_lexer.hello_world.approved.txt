@@ -1,0 +1,36 @@
+hello_world.dao
+
+
+[0] =      Keyword | external |
+[1] =    Separator | ( |
+[2] =   Identifier | C |
+[3] =    Separator | ) |
+[4] =      Keyword | function |
+[5] =   Identifier | puts |
+[6] =    Separator | ( |
+[7] =   Identifier | str |
+[8] =    Separator | ) |
+[9] =      Keyword | function |
+[10] =   Identifier | triple |
+[11] =    Separator | ( |
+[12] =   Identifier | x |
+[13] =    Separator | ) |
+[14] =   Identifier | x |
+[15] =     Operator | * |
+[16] =      Numeral | 3 |
+[17] =   Identifier | puts |
+[18] =    Separator | ( |
+[19] =   Identifier | Hello |
+[20] =   Identifier | world |
+[21] =   Identifier | from |
+[22] =   Identifier | dao |
+[23] =     Operator | ! |
+[24] =    Separator | ) |
+[25] =   Identifier | puts |
+[26] =    Separator | ( |
+[27] =   Identifier | triple |
+[28] =    Separator | ( |
+[29] =      Numeral | 7 |
+[30] =    Separator | ) |
+[31] =    Separator | ) |
+

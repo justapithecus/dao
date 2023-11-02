@@ -1,13 +1,14 @@
 #pragma once
 #ifdef CTEST
 
-#include "../parser/ast.hpp"
+#include "../ast/index.hpp"
 #include "json.hpp"
 
 namespace dao {
 
   struct ast_pretty_printer {
-    auto operator()(dao::program const &) const -> json;
+    auto operator()(dao::program_ast const &) const -> json;
+    auto operator()(dao::external_linkage_ast const &) const -> json;
     auto operator()(dao::identifier_expr const &) const -> json;
     auto operator()(dao::numeral_expr const &) const -> json;
     auto operator()(dao::binary_expr const &) const -> json;

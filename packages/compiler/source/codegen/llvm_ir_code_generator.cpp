@@ -69,7 +69,7 @@ namespace dao {
   //---------------------------------------------------------------------------
   // Visitors
   //---------------------------------------------------------------------------
-  auto llvm_ir_code_generator::operator()(dao::program const &prog)
+  auto llvm_ir_code_generator::operator()(dao::program_ast const &prog)
     -> llvm::Value * {
     // build program definitions
     std::for_each(prog.nodes.begin(), prog.nodes.end(),
@@ -90,6 +90,11 @@ namespace dao {
     auto constexpr is_signed{true};
     auto ret{llvm::APInt{int_size, 0, is_signed}};
     return builder_.CreateRet(llvm::ConstantInt::get(ctx_, ret));
+  }
+
+  auto llvm_ir_code_generator::operator()(dao::external_linkage_ast const &link)
+    -> llvm::Value * {
+    return nullptr;
   }
 
   auto llvm_ir_code_generator::operator()(dao::identifier_expr const &expr)

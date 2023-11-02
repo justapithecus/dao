@@ -1,7 +1,8 @@
 #include "ast_pretty_printer.hpp"
 
 namespace dao {
-  auto ast_pretty_printer::operator()(dao::program const &prog) const -> json {
+  auto ast_pretty_printer::operator()(dao::program_ast const &prog) const
+    -> json {
     return json{
       {"type", "program"},
       {
@@ -13,6 +14,22 @@ namespace dao {
       },
     };
   };
+
+  std::string const linkage_kinds[]{"C"};
+
+  auto ast_pretty_printer::operator()(
+    dao::external_linkage_ast const &link) const -> json {
+    return json{
+      {"type", "external_linkage"},
+      {
+        "value",
+        {
+          {"kind", linkage_kinds[static_cast<int>(link.kind)]},
+          {"prototype", link.proto},
+        },
+      },
+    };
+  }
 
   auto ast_pretty_printer::operator()(dao::identifier_expr const &expr) const
     -> json {

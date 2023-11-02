@@ -56,4 +56,9 @@ auto main() -> int {
     auto tokens{load_tokens("program.json")};
     Approvals::verify(json_writer{dao::parse(tokens)});
   };
+
+  "hello_world"_test = [] {
+    auto tokens{load_tokens("hello_world.json")};
+    Approvals::verify(json_writer{dao::parse(tokens)});
+  };
 }

@@ -1,18 +1,9 @@
 #include "lexer.hpp"
 
-#include <ankerl/unordered_dense.h>
-
 #include "../utils.hpp"
 #include "state_machine.h"
 
 namespace dao {
-
-  ankerl::unordered_dense::set<std::string> keywords = {
-    "function",
-    "if",
-    "then",
-    "else",
-  };
 
   auto lex(std::string_view fpath) -> std::vector<dao::token> {
     std::vector<dao::token> tokens{};
@@ -52,10 +43,10 @@ namespace dao {
       }
       case lexical_state_identifier_end: {
         lexeme.update_repr(src_ptr, 0);
-        if (not keywords.contains(lexeme.repr)) {
-          tokens.emplace_back(lexeme.as_token(token_kind::e_identifier));
+        if (auto it{keywords.find(lexeme.repr)}; it != keywords.end()) {
+          tokens.emplace_back(lexeme.as_token(it->second));
         } else {
-          tokens.emplace_back(lexeme.as_token(token_kind::e_keyword));
+          tokens.emplace_back(lexeme.as_token(token_kind::e_identifier));
         }
       }
       default:

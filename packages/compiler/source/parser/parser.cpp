@@ -10,13 +10,21 @@ namespace dao {
   }
 
   auto parse(parse_context &ctx) -> ast {
-    program prog{};
+    program_ast prog{};
 
     while (not ctx.is_eof()) {
       switch (ctx.peek()->kind) {
-      case token_kind::e_keyword:
+      case token_kind::e_keyword_external:
+        prog.nodes.emplace_back(parse_external_linkage(ctx));
+        break;
+      case token_kind::e_keyword_function:
+      case token_kind::e_keyword_if:
+      case token_kind::e_keyword_then:
+      case token_kind::e_keyword_else:
+        // TODO(andrew): implement control flow, keep existing erroneous behavior for now
         if (auto node{parse_function_def(ctx)}; node) {
           prog.nodes.emplace_back(std::move(node));
+          break;
         } else {
           // TODO(andrew): add to ctx.errors
           return prog;
@@ -41,7 +49,14 @@ namespace dao {
     while (not ctx.is_eof()) {
 
       switch (ctx.peek()->kind) {
-      case token_kind::e_keyword:
+      case token_kind::e_keyword_external:
+        // TODO(andrew): errors, external can only be at program/module scope
+        return nullptr;
+      case token_kind::e_keyword_function:
+      // TODO(andrew): implement control flow, but keep this existing erroneous behavior for now
+      case token_kind::e_keyword_then:
+      case token_kind::e_keyword_if:
+      case token_kind::e_keyword_else:
         node = parse_function_def(ctx);
         break;
       case token_kind::e_identifier:
@@ -55,6 +70,9 @@ namespace dao {
         break;
       case token_kind::e_operator:
         return parse_binary_expr(ctx, std::move(node));
+      case token_kind::e_literal:
+        ctx.eat(); // TODO(andrew): skip for now
+        continue;
       default:
         // TODO(andrew): add to ctx.errors, encountered unknown
         break;
@@ -184,6 +202,7 @@ namespace dao {
     ctx.eat();
 
     // TODO(andrew): maybe some kind of generic parse_sequence with separators
+    // TODO(andrew): fix no arg sequence
     while (not ctx.is_eof()) {
       args.emplace_back(parse_function_arg(ctx));
 
@@ -232,6 +251,7 @@ namespace dao {
     ctx.eat();
 
     // TODO(andrew): maybe some kind of generic parse_sequence with separators
+    // TODO(andrew): fix no arg sequence
     while (not ctx.is_eof()) {
       args.emplace_back(parse_primary_expr(ctx));
 
@@ -253,6 +273,38 @@ namespace dao {
   auto parse_function_call(parse_context &ctx, std::string callee) -> ast_node {
     return std::make_unique<ast>(
       function_call{std::move(callee), parse_expr_seq(ctx)});
+  }
+
+  ankerl::unordered_dense::map<std::string, linkage_kind> const
+    supported_linkages{
+      {"C", linkage_kind::e_c_linkage},
+    };
+
+  auto parse_external_linkage(parse_context &ctx) -> ast_node {
+    // eat 'external'
+    ctx.eat();
+    // eat '('
+    ctx.eat();
+
+    auto it{supported_linkages.find(ctx.peek()->repr)};
+    if (it == supported_linkages.end()) {
+      // TODO(andrew): ctx.errors, unsupported linkage kind
+      return nullptr;
+    }
+    // eat <external_linkage_kind>, e.g.: "C"
+    ctx.eat();
+    // eat ')'
+    ctx.eat();
+
+    switch (ctx.peek()->kind) {
+    case token_kind::e_keyword_function:
+      return std::make_unique<ast>(
+        external_linkage_ast{it->second, parse_function_proto(ctx)});
+    default:
+      // TODO(andrew): ctx.errors, external linkage only supports function declarations
+      //               eventually also support symbols to other values
+      return nullptr;
+    }
   }
 
 } // namespace dao

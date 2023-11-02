@@ -6,7 +6,7 @@
 #include <type_traits>
 #include <vector>
 
-#include "ast.hpp"
+#include "../ast/index.hpp"
 #include "token.hpp"
 
 namespace dao {
@@ -47,12 +47,14 @@ namespace dao {
   };
 
   /// Parses tokens into an abstract syntax tree
+  ///
+  /// <program_ast> ::= { <expr> }
   auto parse(std::vector<token> const &tokens) -> ast;
   auto parse(parse_context &ctx) -> ast;
 
   /// Parses any expression
   ///
-  /// <expr> ::= { <function_def> | <primary_expr> }
+  /// <expr> ::= { <external_linkage> | <function_def> | <primary_expr> }
   auto parse_expr(parse_context &ctx) -> ast_node;
 
   /// Parses a primary expression
@@ -123,5 +125,11 @@ namespace dao {
   ///
   /// <function_call> ::= <identifier_expr> '(' <expr_seq> ')'
   auto parse_function_call(parse_context &ctx, std::string callee) -> ast_node;
+
+  /// Parses an external linkage declaration
+  ///
+  /// <external_linkage_kind> ::= 'C'
+  /// <external_linkage> ::= 'external' '(' <external_linkage_kind> ')' <function_proto>
+  auto parse_external_linkage(parse_context &ctx) -> ast_node;
 
 } // namespace dao
