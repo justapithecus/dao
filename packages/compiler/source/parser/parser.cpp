@@ -14,8 +14,10 @@ namespace dao {
 
     while (not ctx.is_eof()) {
       switch (ctx.peek()->kind) {
-      case token_kind::e_keyword_function:
       case token_kind::e_keyword_external:
+        prog.nodes.emplace_back(parse_external_linkage(ctx));
+        break;
+      case token_kind::e_keyword_function:
       case token_kind::e_keyword_if:
       case token_kind::e_keyword_then:
       case token_kind::e_keyword_else:
@@ -47,8 +49,10 @@ namespace dao {
     while (not ctx.is_eof()) {
 
       switch (ctx.peek()->kind) {
-      case token_kind::e_keyword_function:
       case token_kind::e_keyword_external:
+        // TODO(andrew): errors, external can only be at program/module scope
+        return nullptr;
+      case token_kind::e_keyword_function:
       // TODO(andrew): implement control flow, but keep this existing erroneous behavior for now
       case token_kind::e_keyword_then:
       case token_kind::e_keyword_if:
@@ -269,8 +273,36 @@ namespace dao {
       function_call{std::move(callee), parse_expr_seq(ctx)});
   }
 
+  ankerl::unordered_dense::map<std::string, linkage_kind> const
+    supported_linkages{
+      {"C", linkage_kind::e_c_linkage},
+    };
+
   auto parse_external_linkage(parse_context &ctx) -> ast_node {
-    return nullptr;
+    // eat 'external'
+    ctx.eat();
+    // eat '('
+    ctx.eat();
+
+    auto it{supported_linkages.find(ctx.peek()->repr)};
+    if (it == supported_linkages.end()) {
+      // TODO(andrew): ctx.errors, unsupported linkage kind
+      return nullptr;
+    }
+    // eat <external_linkage_kind>, e.g.: "C"
+    ctx.eat();
+    // eat ')'
+    ctx.eat();
+
+    switch (ctx.peek()->kind) {
+    case token_kind::e_keyword_function:
+      return std::make_unique<ast>(
+        external_linkage_ast{it->second, parse_function_proto(ctx)});
+    default:
+      // TODO(andrew): ctx.errors, external linkage only supports function declarations
+      //               eventually also support symbols to other values
+      return nullptr;
+    }
   }
 
 } // namespace dao
