@@ -22,7 +22,7 @@ namespace dao {
       case token_kind::e_keyword_then:
       case token_kind::e_keyword_else:
         // TODO(andrew): implement control flow, keep existing erroneous behavior for now
-        if (auto node{parse_function_def(ctx)}; node) {
+        if (auto node{parse_function_def(ctx)}) {
           prog.nodes.emplace_back(std::move(node));
           break;
         } else {
@@ -31,8 +31,9 @@ namespace dao {
         }
 
       default:
-        if (auto node{parse_expr(ctx)}; node) {
+        if (auto node{parse_expr(ctx)}) {
           prog.entry.emplace_back(std::move(node));
+          break;
         } else {
           // TODO(andrew): add to ctx.errors
           return prog;
@@ -40,7 +41,7 @@ namespace dao {
       }
     }
 
-    return std::move(prog);
+    return prog;
   }
 
   auto parse_expr(parse_context &ctx) -> ast_node {
@@ -61,6 +62,9 @@ namespace dao {
         break;
       case token_kind::e_identifier:
         node = parse_identifier_expr(ctx);
+        if (auto call{std::get_if<function_call>(node.get())}) {
+          return node;
+        }
         break;
       case token_kind::e_numeral:
         node = parse_numeral_expr(ctx);

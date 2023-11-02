@@ -1,0 +1,52 @@
+{
+  "tokens": [
+    {
+      "kind": "identifier",
+      "repr": "distance_euclidean"
+    },
+    {
+      "kind": "separator",
+      "repr": "("
+    },
+    {
+      "kind": "identifier",
+      "repr": "p2"
+    },
+    {
+      "kind": "separator",
+      "repr": ","
+    },
+    {
+      "kind": "identifier",
+      "repr": "q2"
+    },
+    {
+      "kind": "separator",
+      "repr": ")"
+    },
+    {
+      "kind": "identifier",
+      "repr": "distance_euclidean"
+    },
+    {
+      "kind": "separator",
+      "repr": "("
+    },
+    {
+      "kind": "identifier",
+      "repr": "p1"
+    },
+    {
+      "kind": "separator",
+      "repr": ","
+    },
+    {
+      "kind": "identifier",
+      "repr": "q1"
+    },
+    {
+      "kind": "separator",
+      "repr": ")"
+    }
+  ]
+}
