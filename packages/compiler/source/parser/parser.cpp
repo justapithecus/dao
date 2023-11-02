@@ -202,6 +202,7 @@ namespace dao {
     ctx.eat();
 
     // TODO(andrew): maybe some kind of generic parse_sequence with separators
+    // TODO(andrew): fix no arg sequence
     while (not ctx.is_eof()) {
       args.emplace_back(parse_function_arg(ctx));
 
@@ -250,6 +251,7 @@ namespace dao {
     ctx.eat();
 
     // TODO(andrew): maybe some kind of generic parse_sequence with separators
+    // TODO(andrew): fix no arg sequence
     while (not ctx.is_eof()) {
       args.emplace_back(parse_primary_expr(ctx));
 

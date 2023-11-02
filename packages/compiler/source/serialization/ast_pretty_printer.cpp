@@ -15,6 +15,8 @@ namespace dao {
     };
   };
 
+  std::string const linkage_kinds[]{"C"};
+
   auto ast_pretty_printer::operator()(
     dao::external_linkage_ast const &link) const -> json {
     return json{
@@ -22,7 +24,7 @@ namespace dao {
       {
         "value",
         {
-          {"kind", link.kind},
+          {"kind", linkage_kinds[static_cast<int>(link.kind)]},
           {"prototype", link.proto},
         },
       },
