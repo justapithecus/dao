@@ -39,6 +39,8 @@ namespace dao {
     auto target_machine{target->createTargetMachine(
       target_triple, cpu, features, options, reloc_model)};
 
+    mod.setTargetTriple(target_triple);
+    mod.setDataLayout(target_machine->createDataLayout());
     return std::unique_ptr<llvm::TargetMachine>(target_machine);
   }
 
@@ -52,29 +54,16 @@ namespace dao {
     mod_.setSourceFileName(std::move(source_fname));
   }
 
+  auto llvm_ir_code_generator::generate(dao::ast const &ast) -> void {
+    std::visit(*this, ast);
+    emit_object_code();
+  }
+
   auto llvm_ir_code_generator::dumps() const -> std::string {
     std::string              str{};
     llvm::raw_string_ostream ss{str};
     mod_.print(ss, nullptr);
     return ss.str();
-  }
-
-  auto llvm_ir_code_generator::emit_object_code() {
-    auto            obj_fname{mod_.getSourceFileName() + ".o"};
-    std::error_code ec;
-
-    llvm::raw_fd_ostream dest{obj_fname, ec};
-
-    // TODO(andrew): see new pass managers
-    llvm::legacy::PassManager pass{};
-
-    auto file_type{llvm::CodeGenFileType::CGFT_ObjectFile};
-    if (machine_->addPassesToEmitFile(pass, dest, nullptr, file_type)) {
-      std::exit(1); // TODO(andrew): exceptions
-    }
-
-    pass.run(mod_);
-    dest.flush();
   }
 
   //---------------------------------------------------------------------------
@@ -213,6 +202,28 @@ namespace dao {
         }
       });
     return builder_.CreateCall(callee, args, "calltmp");
+  }
+
+  //---------------------------------------------------------------------------
+  // Private Methods
+  //---------------------------------------------------------------------------
+  auto llvm_ir_code_generator::emit_object_code() -> void {
+    auto            obj_fname{mod_.getSourceFileName() + ".o"};
+    std::error_code ec;
+
+    // TODO(andrew): emit to any ostream and let caller decide type of sink
+    llvm::raw_fd_ostream dest{obj_fname, ec};
+
+    // TODO(andrew): see new pass managers
+    llvm::legacy::PassManager pass{};
+
+    auto file_type{llvm::CodeGenFileType::CGFT_ObjectFile};
+    if (machine_->addPassesToEmitFile(pass, dest, nullptr, file_type)) {
+      std::exit(1); // TODO(andrew): exceptions
+    }
+
+    pass.run(mod_);
+    dest.flush();
   }
 
 } // namespace dao

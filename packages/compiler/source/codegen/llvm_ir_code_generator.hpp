@@ -21,8 +21,8 @@ namespace dao {
 
   public:
     explicit llvm_ir_code_generator(std::string source_fname);
+    auto generate(dao::ast const &) -> void;
     auto dumps() const -> std::string;
-    auto emit_object_code();
 
     // Visitors
     auto operator()(dao::program const &) -> llvm::Value *;
@@ -32,5 +32,8 @@ namespace dao {
     auto operator()(dao::function_proto const &) -> llvm::Value *;
     auto operator()(dao::function_def const &) -> llvm::Value *;
     auto operator()(dao::function_call const &) -> llvm::Value *;
+
+  private:
+    auto emit_object_code() -> void;
   };
 } // namespace dao

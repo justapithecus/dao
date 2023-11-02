@@ -29,6 +29,6 @@ tasks:
 
   build: time cmake --build --preset default
 
-  run: ./build/packages/compiler/daoc
+  run: ./build/packages/compiler/source/daoc
 
   test: ctest --test-dir build --preset conan-debug --parallel 4 --output-on-failure --verbose
