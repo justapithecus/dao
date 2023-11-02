@@ -3,6 +3,8 @@
 #include "parser/parser.hpp"
 
 auto main() -> int {
+  // TODO(andrew): pre-compile modules
+
   auto constexpr source_fname{"examples/hello_world.dao"};
 
   auto tokens{dao::lex(source_fname)};

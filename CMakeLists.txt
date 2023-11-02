@@ -19,3 +19,4 @@ link_directories(${CMAKE_LIBRARY_PATH})
 link_libraries(${LLVM_LIBS})
 
 add_subdirectory(packages/compiler)
+add_subdirectory(apps/daoc)
