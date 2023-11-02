@@ -5,6 +5,7 @@
 #include <llvm/IR/Verifier.h>
 #include <llvm/MC/TargetRegistry.h>
 #include <llvm/Support/CodeGen.h>
+#include <llvm/Support/FileSystem.h>
 #include <llvm/Support/Host.h>
 #include <llvm/Support/TargetSelect.h>
 
@@ -50,6 +51,8 @@ namespace dao {
     , builder_{ctx_}
     , machine_{set_target_machine(mod_)}
     , identifiers_{} {
+
+    ctx_.setOpaquePointers(false);
 
     mod_.setSourceFileName(std::move(source_fname));
   }
@@ -116,7 +119,7 @@ namespace dao {
 
   auto llvm_ir_code_generator::operator()(dao::string_literal const &litr)
     -> llvm::Value * {
-    return llvm::ConstantDataArray::getString(ctx_, litr.val);
+    return builder_.CreateGlobalString(litr.val);
   }
 
   auto llvm_ir_code_generator::operator()(dao::binary_expr const &expr)
@@ -242,7 +245,7 @@ namespace dao {
     std::error_code ec;
 
     // TODO(andrew): emit to any ostream and let caller decide type of sink
-    llvm::raw_fd_ostream dest{obj_fname, ec};
+    llvm::raw_fd_ostream dest{obj_fname, ec, llvm::sys::fs::OF_None};
 
     // TODO(andrew): see new pass managers
     llvm::legacy::PassManager pass{};
