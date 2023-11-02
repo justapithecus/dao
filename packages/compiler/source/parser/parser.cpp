@@ -62,6 +62,9 @@ namespace dao {
         break;
       case token_kind::e_identifier:
         node = parse_identifier_expr(ctx);
+        if (auto call{std::get_if<function_call>(node.get())}) {
+          return node;
+        }
         break;
       case token_kind::e_numeral:
         node = parse_numeral_expr(ctx);
