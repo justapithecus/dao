@@ -94,7 +94,8 @@ namespace dao {
 
   auto llvm_ir_code_generator::operator()(dao::external_linkage_ast const &link)
     -> llvm::Value * {
-    return nullptr;
+    // TODO(andrew): name mangler depending on linkage type
+    return std::visit(*this, static_cast<ast>(link.proto));
   }
 
   auto llvm_ir_code_generator::operator()(dao::identifier_expr const &expr)
@@ -145,21 +146,40 @@ namespace dao {
 
   auto llvm_ir_code_generator::operator()(dao::function_proto const &proto)
     -> llvm::Value * {
-    std::vector<llvm::Type *> arg_types{
-      proto.args.size(), builder_.getDoubleTy()};
+    // TODO(andrew): arg and ret type resolution
+    if (proto.id == "puts") {
+      std::vector<llvm::Type *> arg_types{
+        proto.args.size(), builder_.getInt8PtrTy()};
 
-    auto constexpr is_var_arg{false};
-    auto ft{
-      llvm::FunctionType::get(builder_.getDoubleTy(), arg_types, is_var_arg)};
-    auto fn{llvm::Function::Create(
-      ft, llvm::Function::ExternalLinkage, proto.id, mod_)};
+      auto constexpr is_var_arg{false};
+      auto ft{
+        llvm::FunctionType::get(builder_.getInt32Ty(), arg_types, is_var_arg)};
+      auto fn{llvm::Function::Create(
+        ft, llvm::Function::ExternalLinkage, proto.id, mod_)};
 
-    // TODO(andrew): ranges
-    unsigned int i{0};
-    for (auto &arg : fn->args()) {
-      arg.setName(proto.args[i++].name);
+      // TODO(andrew): ranges
+      unsigned int i{0};
+      for (auto &arg : fn->args()) {
+        arg.setName(proto.args[i++].name);
+      }
+      return fn;
+    } else {
+      std::vector<llvm::Type *> arg_types{
+        proto.args.size(), builder_.getDoubleTy()};
+
+      auto constexpr is_var_arg{false};
+      auto ft{
+        llvm::FunctionType::get(builder_.getDoubleTy(), arg_types, is_var_arg)};
+      auto fn{llvm::Function::Create(
+        ft, llvm::Function::ExternalLinkage, proto.id, mod_)};
+
+      // TODO(andrew): ranges
+      unsigned int i{0};
+      for (auto &arg : fn->args()) {
+        arg.setName(proto.args[i++].name);
+      }
+      return fn;
     }
-    return fn;
   }
 
   auto llvm_ir_code_generator::operator()(dao::function_def const &def)
