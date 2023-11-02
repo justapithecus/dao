@@ -47,6 +47,14 @@ namespace dao {
     };
   }
 
+  auto ast_pretty_printer::operator()(dao::string_literal const &litr) const
+    -> json {
+    return json{
+      {"type", "string_literal"},
+      {"value", litr.val},
+    };
+  }
+
   auto ast_pretty_printer::operator()(dao::binary_expr const &expr) const
     -> json {
     auto lhs{std::visit(*this, *(expr.lhs))};

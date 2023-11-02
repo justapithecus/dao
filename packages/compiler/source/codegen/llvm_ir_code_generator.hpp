@@ -29,6 +29,7 @@ namespace dao {
     auto operator()(dao::external_linkage_ast const &) -> llvm::Value *;
     auto operator()(dao::identifier_expr const &) -> llvm::Value *;
     auto operator()(dao::numeral_expr const &) -> llvm::Value *;
+    auto operator()(dao::string_literal const &) -> llvm::Value *;
     auto operator()(dao::binary_expr const &) -> llvm::Value *;
     auto operator()(dao::function_proto const &) -> llvm::Value *;
     auto operator()(dao::function_def const &) -> llvm::Value *;

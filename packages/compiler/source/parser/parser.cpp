@@ -65,14 +65,14 @@ namespace dao {
       case token_kind::e_numeral:
         node = parse_numeral_expr(ctx);
         break;
+      case token_kind::e_literal:
+        node = parse_string_literal(ctx);
+        break;
       case token_kind::e_separator:
         node = parse_parenthetical_expr(ctx);
         break;
       case token_kind::e_operator:
         return parse_binary_expr(ctx, std::move(node));
-      case token_kind::e_literal:
-        ctx.eat(); // TODO(andrew): skip for now
-        continue;
       default:
         // TODO(andrew): add to ctx.errors, encountered unknown
         break;
@@ -93,6 +93,8 @@ namespace dao {
       return parse_identifier_expr(ctx);
     case token_kind::e_numeral:
       return parse_numeral_expr(ctx);
+    case token_kind::e_literal:
+      return parse_string_literal(ctx);
     case token_kind::e_separator:
       return parse_parenthetical_expr(ctx);
     case token_kind::e_operator:
@@ -114,10 +116,11 @@ namespace dao {
     return std::make_unique<ast>(identifier_expr{std::move(name)});
   }
 
-  auto parse_numeral_expr(parse_context &ctx) -> ast_node {
+  template <typename T>
+  auto parse_literal(parse_context &ctx) -> ast_node {
     auto val{ctx.peek()->repr};
     ctx.eat();
-    return std::make_unique<ast>(numeral_expr{val});
+    return std::make_unique<ast>(T{val});
   }
 
   auto parse_parenthetical_expr(parse_context &ctx) -> ast_node {

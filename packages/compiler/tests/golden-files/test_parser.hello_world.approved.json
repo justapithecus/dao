@@ -1,0 +1,35 @@
+{
+  "type": "program",
+  "value": {
+    "entry": [
+      {
+        "type": "function_call",
+        "value": {
+          "args": [
+            {
+              "type": "string_literal",
+              "value": "Hello world from dao!"
+            }
+          ],
+          "callee": "puts"
+        }
+      }
+    ],
+    "nodes": [
+      {
+        "type": "external_linkage",
+        "value": {
+          "kind": "C",
+          "prototype": {
+            "args": [
+              {
+                "name": "str"
+              }
+            ],
+            "id": "puts"
+          }
+        }
+      }
+    ]
+  }
+}
