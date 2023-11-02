@@ -255,4 +255,8 @@ namespace dao {
       function_call{std::move(callee), parse_expr_seq(ctx)});
   }
 
+  auto parse_external_linkage(parse_context &ctx) -> ast_node {
+    return nullptr;
+  }
+
 } // namespace dao

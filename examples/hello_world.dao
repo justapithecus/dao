@@ -1,4 +1,4 @@
-external(C) puts(str)
+external(C) function puts(str)
 
 function triple(x)
   x * 3

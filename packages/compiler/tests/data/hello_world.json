@@ -17,6 +17,10 @@
       "repr": ")"
     },
     {
+      "kind": "keyword",
+      "repr": "function"
+    },
+    {
       "kind": "identifier",
       "repr": "puts"
     },

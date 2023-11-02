@@ -22,7 +22,7 @@ namespace dao {
       {
         "value",
         {
-          {"linkage_kind", link.kind},
+          {"kind", link.kind},
           {"prototype", link.proto},
         },
       },

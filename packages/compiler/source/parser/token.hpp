@@ -11,6 +11,7 @@ namespace dao {
     e_numeral,
     e_separator,
     e_operator,
+    e_literal, // TODO(andrew): distinguish string_literal vs. numeral_literal eventually
     e_keyword,
   };
 
