@@ -20,17 +20,13 @@ hello_world.dao
 [16] =      Numeral | 3 |
 [17] =   Identifier | puts |
 [18] =    Separator | ( |
-[19] =   Identifier | Hello |
-[20] =   Identifier | world |
-[21] =   Identifier | from |
-[22] =   Identifier | dao |
-[23] =     Operator | ! |
-[24] =    Separator | ) |
-[25] =   Identifier | puts |
-[26] =    Separator | ( |
-[27] =   Identifier | triple |
-[28] =    Separator | ( |
-[29] =      Numeral | 7 |
-[30] =    Separator | ) |
-[31] =    Separator | ) |
+[19] = String Literal | Hello world from dao! |
+[20] =    Separator | ) |
+[21] =   Identifier | puts |
+[22] =    Separator | ( |
+[23] =   Identifier | triple |
+[24] =    Separator | ( |
+[25] =      Numeral | 7 |
+[26] =    Separator | ) |
+[27] =    Separator | ) |
 

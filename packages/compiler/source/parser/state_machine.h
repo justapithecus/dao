@@ -10,6 +10,7 @@ typedef enum glyph {
   glyph_number,
   glyph_separator,
   glyph_operator,
+  glyph_double_quote,
   glyph_eof,
   glyph_count,
 } glyph;
@@ -23,6 +24,8 @@ typedef enum lexical_state {
   lexical_state_numeral,
   lexical_state_numeral_end,
   lexical_state_operator,
+  lexical_state_string_literal,
+  lexical_state_string_literal_end,
   lexical_state_new_line,
   lexical_state_eof,
   lexical_state_error,

@@ -48,6 +48,12 @@ namespace dao {
         } else {
           tokens.emplace_back(lexeme.as_token(token_kind::e_identifier));
         }
+        break;
+      }
+      case lexical_state_string_literal_end: {
+        lexeme.update_repr(src_ptr, -1);
+        tokens.emplace_back(lexeme.as_token(token_kind::e_literal));
+        break;
       }
       default:
         break;
