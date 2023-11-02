@@ -1,0 +1,52 @@
+{
+  "tokens": [
+    {
+      "kind": "keyword",
+      "repr": "external"
+    },
+    {
+      "kind": "separator",
+      "repr": "("
+    },
+    {
+      "kind": "identifier",
+      "repr": "C"
+    },
+    {
+      "kind": "separator",
+      "repr": ")"
+    },
+    {
+      "kind": "identifier",
+      "repr": "puts"
+    },
+    {
+      "kind": "separator",
+      "repr": "("
+    },
+    {
+      "kind": "identifier",
+      "repr": "str"
+    },
+    {
+      "kind": "separator",
+      "repr": ")"
+    },
+    {
+      "kind": "identifier",
+      "repr": "puts"
+    },
+    {
+      "kind": "separator",
+      "repr": "("
+    },
+    {
+      "kind": "literal",
+      "repr": "Hello world from dao!"
+    },
+    {
+      "kind": "separator",
+      "repr": ")"
+    }
+  ]
+}
