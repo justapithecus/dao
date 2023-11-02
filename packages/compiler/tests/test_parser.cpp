@@ -47,8 +47,13 @@ auto main() -> int {
     Approvals::verify(json_writer{dao::parse(tokens)});
   };
 
-  "function_call"_test = [] {
-    auto tokens{load_tokens("functions/call.json")};
+  "function_call_1"_test = [] {
+    auto tokens{load_tokens("functions/call_1.json")};
+    Approvals::verify(json_writer{dao::parse(tokens)});
+  };
+
+  "function_call_2"_test = [] {
+    auto tokens{load_tokens("functions/call_2.json")};
     Approvals::verify(json_writer{dao::parse(tokens)});
   };
 
