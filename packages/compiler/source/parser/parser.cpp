@@ -245,6 +245,11 @@ namespace dao {
   auto parse_function_def(parse_context &ctx) -> ast_node {
     auto proto{parse_function_proto(ctx)};
 
+    // skip new-lines
+    while (ctx.peek()->kind == token_kind::e_new_line) {
+      ctx.eat();
+    }
+
     // TODO(andrew): introduce 'external' to distinguish proto-only vs. definition
     auto body{parse_expr(ctx)};
     if (!body) {
