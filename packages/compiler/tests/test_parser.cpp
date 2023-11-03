@@ -76,4 +76,9 @@ auto main() -> int {
     auto tokens{load_tokens("hello_world.json")};
     Approvals::verify(json_writer{dao::parse(tokens)});
   };
+
+  "fibonacci"_test = [] {
+    auto tokens{load_tokens("fibonacci.json")};
+    Approvals::verify(json_writer{dao::parse(tokens)});
+  };
 }

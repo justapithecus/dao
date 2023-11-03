@@ -3,6 +3,7 @@ external(C) function puts(str)
 function triple(x)
   x * 3
 
-
-puts("Hello world from dao!")
-puts(triple(7))
+if triple(7) > 20 then
+  puts("Hello world from dao!")
+else
+  puts(triple(7))

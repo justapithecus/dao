@@ -6,6 +6,7 @@
 auto directory = Approvals::useApprovalsSubdirectory("golden-files");
 
 auto main() -> int {
+  // TODO(andrew): output json instead of txt
   "hello_world"_test = [] {
     auto lexemes{dao::lex("examples/hello_world.dao")};
     Approvals::verifyAll("hello_world.dao", lexemes);
