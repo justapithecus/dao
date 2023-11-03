@@ -1,0 +1,60 @@
+{
+  "tokens": [
+    {
+      "kind": "keyword",
+      "repr": "if"
+    },
+    {
+      "kind": "identifier",
+      "repr": "x"
+    },
+    {
+      "kind": "operator",
+      "repr": "<"
+    },
+    {
+      "kind": "numeral",
+      "repr": "3"
+    },
+    {
+      "kind": "keyword",
+      "repr": "then"
+    },
+    {
+      "kind": "identifier",
+      "repr": "puts"
+    },
+    {
+      "kind": "separator",
+      "repr": "("
+    },
+    {
+      "kind": "identifier",
+      "repr": "x"
+    },
+    {
+      "kind": "separator",
+      "repr": ")"
+    },
+    {
+      "kind": "keyword",
+      "repr": "else"
+    },
+    {
+      "kind": "identifier",
+      "repr": "puts"
+    },
+    {
+      "kind": "separator",
+      "repr": "("
+    },
+    {
+      "kind": "literal",
+      "repr": "x is greater than or equal to 3"
+    },
+    {
+      "kind": "separator",
+      "repr": ")"
+    }
+  ]
+}

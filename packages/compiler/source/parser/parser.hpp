@@ -143,4 +143,10 @@ namespace dao {
   /// <external_linkage> ::= 'external' '(' <external_linkage_kind> ')' <function_proto>
   auto parse_external_linkage(parse_context &ctx) -> ast_node;
 
+  /// Parses an if/then/else expression
+  ///
+  /// <else_expr> ::= 'else' <primary_expr>
+  /// <if_expr> ::= 'if' <primary_expr> 'then' { <expr> } [ <else_expr> ]
+  auto parse_if_expr(parse_context &ctx) -> ast_node;
+
 } // namespace dao

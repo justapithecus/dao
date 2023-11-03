@@ -57,6 +57,16 @@ auto main() -> int {
     Approvals::verify(json_writer{dao::parse(tokens)});
   };
 
+  "control_flow_if_then_expression"_test = [] {
+    auto tokens{load_tokens("control-flow/if_then_expression.json")};
+    Approvals::verify(json_writer{dao::parse(tokens)});
+  };
+
+  "control_flow_if_then_else_expression"_test = [] {
+    auto tokens{load_tokens("control-flow/if_then_else_expression.json")};
+    Approvals::verify(json_writer{dao::parse(tokens)});
+  };
+
   "program"_test = [] {
     auto tokens{load_tokens("program.json")};
     Approvals::verify(json_writer{dao::parse(tokens)});

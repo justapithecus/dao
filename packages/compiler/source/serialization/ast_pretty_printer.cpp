@@ -121,4 +121,18 @@ namespace dao {
     };
   }
 
+  auto ast_pretty_printer::operator()(dao::if_expr const &expr) const -> json {
+    return json{
+      {"type", "if_then_else_expression"},
+      {
+        "value",
+        {
+          {"condition", expr.cond_},
+          {"then", expr.then_},
+          {"else", expr.else_},
+        },
+      },
+    };
+  }
+
 } // namespace dao

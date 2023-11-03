@@ -52,8 +52,6 @@ namespace dao {
     , machine_{set_target_machine(mod_)}
     , identifiers_{} {
 
-    ctx_.setOpaquePointers(false);
-
     mod_.setSourceFileName(std::move(source_fname));
   }
 
@@ -235,6 +233,11 @@ namespace dao {
         }
       });
     return builder_.CreateCall(callee, args, "calltmp");
+  }
+
+  auto llvm_ir_code_generator::operator()(dao::if_expr const &expr)
+    -> llvm::Value * {
+    return nullptr;
   }
 
   //---------------------------------------------------------------------------

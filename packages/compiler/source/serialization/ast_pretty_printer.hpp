@@ -16,6 +16,7 @@ namespace dao {
     auto operator()(dao::function_proto const &) const -> json;
     auto operator()(dao::function_def const &) const -> json;
     auto operator()(dao::function_call const &) const -> json;
+    auto operator()(dao::if_expr const &) const -> json;
   };
 
   inline auto to_json(json &j, dao::function_arg const &arg) {

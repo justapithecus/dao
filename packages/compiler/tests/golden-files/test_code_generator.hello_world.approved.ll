@@ -5,7 +5,7 @@ target triple = "x86_64-pc-linux-gnu"
 
 @0 = private unnamed_addr constant [22 x i8] c"Hello world from dao!\00", align 1
 
-declare i32 @puts(i8*)
+declare i32 @puts(ptr)
 
 define double @triple(double %x) {
 entry:
@@ -15,7 +15,7 @@ entry:
 
 define i32 @main() {
 entry:
-  %calltmp = call i32 @puts([22 x i8]* @0)
+  %calltmp = call i32 @puts(ptr @0)
   %calltmp1 = call double @triple(double 7.000000e+00)
   %calltmp2 = call i32 @puts(double %calltmp1)
   ret i32 0
