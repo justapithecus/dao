@@ -237,7 +237,62 @@ namespace dao {
 
   auto llvm_ir_code_generator::operator()(dao::if_expr const &expr)
     -> llvm::Value * {
-    return nullptr;
+    auto cond_value{std::visit(*this, *(expr.cond_))};
+    if (not cond_value) {
+      // TODO(andrew): ctx.errors
+      return nullptr;
+    }
+
+    // convert condition to bool by comparing neq to 0.0
+    cond_value = builder_.CreateFCmpONE(
+      cond_value, llvm::ConstantFP::get(ctx_, llvm::APFloat(0.0)), "ifcond");
+
+    auto then_value{std::visit(*this, *(expr.then_))};
+    if (not then_value) {
+      // TODO(andrew): ctx.errors
+      return nullptr;
+    }
+
+    auto function{builder_.GetInsertBlock()->getParent()};
+    auto then_bb{llvm::BasicBlock::Create(ctx_, "then", function)};
+    builder_.SetInsertPoint(then_bb);
+
+    auto merge_bb{llvm::BasicBlock::Create(ctx_, "ifcont")};
+    builder_.CreateBr(merge_bb);
+    then_bb = builder_.GetInsertBlock();
+
+    llvm::Value      *else_value{};
+    llvm::BasicBlock *else_bb{};
+    if (expr.else_) {
+      else_bb = llvm::BasicBlock::Create(ctx_, "else");
+      builder_.CreateCondBr(cond_value, then_bb, else_bb);
+
+      function->insert(function->end(), else_bb);
+      builder_.SetInsertPoint(else_bb);
+
+      else_value = std::visit(*this, *(expr.else_));
+      if (not else_value) {
+        // TODO(andrew): ctx.errors
+        return nullptr;
+      }
+
+      builder_.CreateBr(merge_bb);
+      else_bb = builder_.GetInsertBlock();
+
+    } else {
+      builder_.CreateCondBr(cond_value, then_bb, nullptr);
+    }
+
+    function->insert(function->end(), merge_bb);
+    builder_.SetInsertPoint(merge_bb);
+
+    auto phi_node{
+      builder_.CreatePHI(llvm::Type::getDoubleTy(ctx_), 2, "iftmp")};
+    phi_node->addIncoming(then_value, then_bb);
+    if (else_value and else_bb) {
+      phi_node->addIncoming(else_value, else_bb);
+    }
+    return phi_node;
   }
 
   //---------------------------------------------------------------------------
