@@ -310,10 +310,10 @@ namespace dao {
   }
 
   auto parse_if_expr(parse_context &ctx) -> ast_node {
-    // eat 'this'
+    // eat 'if'
     ctx.eat();
 
-    auto condition{parse_primary_expr(ctx)};
+    auto condition{parse_expr(ctx)};
     if (!condition) {
       // TODO(andrew): ctx.errors
       return nullptr;
@@ -327,7 +327,7 @@ namespace dao {
     // eat 'then'
     ctx.eat();
 
-    auto then{parse_primary_expr(ctx)};
+    auto then{parse_expr(ctx)};
     if (!then) {
       // TODO(andrew): ctx.errors
       return nullptr;
@@ -337,7 +337,7 @@ namespace dao {
     if (ctx.peek()->kind == token_kind::e_keyword_else) {
       // eat 'else'
       ctx.eat();
-      if (else_ = parse_primary_expr(ctx); !else_) {
+      if (else_ = parse_expr(ctx); not else_) {
         // TODO(andrew): ctx.errors
         return nullptr;
       }
