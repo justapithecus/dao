@@ -247,6 +247,7 @@ namespace dao {
     cond_value = builder_.CreateFCmpONE(
       cond_value, llvm::ConstantFP::get(ctx_, llvm::APFloat(0.0)), "ifcond");
 
+    // emit then value
     auto then_value{std::visit(*this, *(expr.then_))};
     if (not then_value) {
       // TODO(andrew): ctx.errors
@@ -261,6 +262,7 @@ namespace dao {
     builder_.CreateBr(merge_bb);
     then_bb = builder_.GetInsertBlock();
 
+    // emit else block
     llvm::Value      *else_value{};
     llvm::BasicBlock *else_bb{};
     if (expr.else_) {
@@ -283,6 +285,7 @@ namespace dao {
       builder_.CreateCondBr(cond_value, then_bb, nullptr);
     }
 
+    // emit merge block
     function->insert(function->end(), merge_bb);
     builder_.SetInsertPoint(merge_bb);
 

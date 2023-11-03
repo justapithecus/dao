@@ -21,6 +21,10 @@
       "repr": "then"
     },
     {
+      "kind": "new_line",
+      "repr": "\\n"
+    },
+    {
       "kind": "identifier",
       "repr": "puts"
     },
