@@ -5,7 +5,8 @@
 auto main() -> int {
   // TODO(andrew): pre-compile modules
 
-  auto constexpr source_fname{"examples/hello_world.dao"};
+  // auto constexpr source_fname{"examples/hello_world.dao"};
+  auto constexpr source_fname{"examples/if_else.dao"};
 
   auto tokens{dao::lex(source_fname)};
   auto ast{dao::parse(tokens)};
@@ -14,7 +15,9 @@ auto main() -> int {
   code_generator.generate(ast);
 
   // link with clang for now
-  std::system("clang++ examples/hello_world.dao.o -o hello_world");
+  // std::system(
+  // "clang++-16 -fuse-ld=lld examples/hello_world.dao.o -o hello_world.bin");
+  std::system("clang++-16 -fuse-ld=lld examples/if_else.dao.o -o if_else.bin");
 
   // std::system("/usr/lib/llvm-16/bin/ld.lld examples/hello_world.dao.o -o "
   //             "hello_world -lc -L/usr/lib/x86_64-linux-gnu --entry main");

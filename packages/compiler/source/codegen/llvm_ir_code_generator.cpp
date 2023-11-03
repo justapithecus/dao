@@ -57,6 +57,7 @@ namespace dao {
 
   auto llvm_ir_code_generator::generate(dao::ast const &ast) -> void {
     std::visit(*this, ast);
+    std::cout << dumps() << std::endl;
     emit_object_code();
   }
 
@@ -172,7 +173,7 @@ namespace dao {
       auto ft{
         llvm::FunctionType::get(builder_.getDoubleTy(), arg_types, is_var_arg)};
       auto fn{llvm::Function::Create(
-        ft, llvm::Function::ExternalLinkage, proto.id, mod_)};
+        ft, llvm::Function::InternalLinkage, proto.id, mod_)};
 
       // TODO(andrew): ranges
       unsigned int i{0};
@@ -289,8 +290,10 @@ namespace dao {
     function->insert(function->end(), merge_bb);
     builder_.SetInsertPoint(merge_bb);
 
-    auto phi_node{
-      builder_.CreatePHI(llvm::Type::getDoubleTy(ctx_), 2, "iftmp")};
+    // TODO(andrew): phi_node type and addIncoming type need to match,
+    //               so then_value.getType() must equal else_value.getType()?
+    auto phi_node{builder_.CreatePHI(then_value->getType(), 2, "iftmp")};
+
     phi_node->addIncoming(then_value, then_bb);
     if (else_value and else_bb) {
       phi_node->addIncoming(else_value, else_bb);
