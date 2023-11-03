@@ -14,6 +14,9 @@ namespace dao {
 
     while (not ctx.is_eof()) {
       switch (ctx.peek()->kind) {
+      case token_kind::e_new_line:
+        ctx.eat();
+        break;
       case token_kind::e_keyword_external:
         prog.nodes.emplace_back(parse_external_linkage(ctx));
         break;
@@ -47,6 +50,12 @@ namespace dao {
     while (not ctx.is_eof()) {
 
       switch (ctx.peek()->kind) {
+      case token_kind::e_new_line:
+        ctx.eat();
+        if (node) {
+          return node;
+        }
+        break;
       case token_kind::e_keyword_external:
         // TODO(andrew): errors, external can only be at program/module scope
         return nullptr;
@@ -61,9 +70,6 @@ namespace dao {
         return node;
       case token_kind::e_identifier:
         node = parse_identifier_expr(ctx);
-        if (auto call{std::get_if<function_call>(node.get())}) {
-          return node;
-        }
         break;
       case token_kind::e_numeral:
         node = parse_numeral_expr(ctx);

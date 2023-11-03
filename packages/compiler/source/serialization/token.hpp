@@ -19,6 +19,7 @@ namespace dao {
     os << std::setw(12);
 
     switch (tok.kind) {
+      token_desc(token_kind::e_new_line, "New Line");
       token_desc(token_kind::e_identifier, "Identifier");
       token_desc(token_kind::e_numeral, "Numeral");
       token_desc(token_kind::e_operator, "Operator");
@@ -38,6 +39,7 @@ namespace dao {
 
   inline ankerl::unordered_dense::map<std::string, dao::token_kind>
     str_to_kind = {
+      {"new_line", token_kind::e_new_line},
       {"identifier", token_kind::e_identifier},
       {"numeral", token_kind::e_numeral},
       {"operator", token_kind::e_operator},

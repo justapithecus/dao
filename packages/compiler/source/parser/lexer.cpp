@@ -22,6 +22,10 @@ namespace dao {
       lexeme.len += inside[state];
 
       switch (state) {
+      case lexical_state_new_line:
+        lexeme.repr = "\\n";
+        tokens.emplace_back(lexeme.as_token(token_kind::e_new_line));
+        [[fallthrough]];
       case lexical_state_next_char: {
         ++lexeme.col_num;
         break;
