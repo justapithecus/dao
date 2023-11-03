@@ -138,12 +138,12 @@ namespace dao {
 
   auto parse_binary_expr(parse_context &ctx, std::uint8_t op_precedence)
     -> ast_node {
-    auto lhs{parse_primary_expr(ctx)};
-    if (!lhs) {
-      // TODO(andrew): add to ctx.errors
-      return nullptr;
-    }
-
+    // auto lhs{parse_primary_expr(ctx)};
+    // if (!lhs) {
+    //   // TODO(andrew): add to ctx.errors
+    //   return nullptr;
+    // }
+    auto &lhs{ctx.prev_node_};
     return parse_binary_expr(ctx, std::move(lhs), op_precedence);
   }
 

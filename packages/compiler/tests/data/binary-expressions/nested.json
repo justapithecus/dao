@@ -1,0 +1,28 @@
+{
+  "tokens": [
+    {
+      "kind": "identifier",
+      "repr": "double"
+    },
+    {
+      "kind": "separator",
+      "repr": "("
+    },
+    {
+      "kind": "numeral",
+      "repr": "5"
+    },
+    {
+      "kind": "separator",
+      "repr": ")"
+    },
+    {
+      "kind": "operator",
+      "repr": ">"
+    },
+    {
+      "kind": "numeral",
+      "repr": "9"
+    }
+  ]
+}
