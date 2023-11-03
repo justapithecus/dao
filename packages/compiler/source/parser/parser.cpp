@@ -55,6 +55,10 @@ namespace dao {
         break;
       case token_kind::e_keyword_if:
         return parse_if_expr(ctx);
+      case token_kind::e_keyword_then:
+      case token_kind::e_keyword_else:
+        // TODO(andrew): may want to have semicolons...
+        return node;
       case token_kind::e_identifier:
         node = parse_identifier_expr(ctx);
         if (auto call{std::get_if<function_call>(node.get())}) {
