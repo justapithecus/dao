@@ -20,8 +20,6 @@ namespace dao {
     // TODO(andrew): errors
 
   public:
-    ast_node prev_node_;
-
     explicit parse_context(std::vector<token> const &tokens)
       : tokens_{tokens}
       , cursor_{tokens_.begin()} {
