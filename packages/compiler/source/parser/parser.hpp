@@ -50,7 +50,7 @@ namespace dao {
     auto eat() {
       auto tok{cursor_};
       seek();
-      return tok->repr;
+      return tok;
     }
 
     // rewind

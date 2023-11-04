@@ -118,9 +118,9 @@ namespace dao {
   }
 
   auto parse_identifier_expr(parse_context &ctx) -> ast_node {
-    auto name{ctx.eat()};
+    auto name{ctx.eat()->repr};
 
-    if (not ctx.is_eof() and ctx.peek()->repr[0] == '(') {
+    if (not ctx.is_eof() and ctx.peek()->as_operand() == '(') {
       return parse_function_call(ctx, std::move(name));
     }
 
@@ -129,7 +129,7 @@ namespace dao {
 
   template <typename T>
   auto parse_literal(parse_context &ctx) -> ast_node {
-    auto val{ctx.eat()};
+    auto val{ctx.eat()->repr};
     return std::make_unique<ast>(T{val});
   }
 
@@ -158,7 +158,7 @@ namespace dao {
     parse_context &ctx, ast_node lhs, std::uint8_t op_precedence) -> ast_node {
 
     while (not ctx.is_eof() and ctx.peek()->kind == token_kind::e_operator) {
-      auto op{ctx.peek()->repr[0]};
+      auto op{ctx.peek()->as_operand()};
       auto token_precedence{
         binary_op_precedence[static_cast<std::uint8_t>(op)]};
       if (token_precedence < op_precedence) {
@@ -176,7 +176,7 @@ namespace dao {
 
       if (ctx.peek()->kind == token_kind::e_operator) {
         // eat operand
-        auto next_op{ctx.eat()[0]};
+        auto next_op{ctx.eat()->as_operand()};
 
         if (not ctx.is_eof()) {
           auto next_precedence{
@@ -203,7 +203,7 @@ namespace dao {
   }
 
   auto parse_function_arg(parse_context &ctx) -> function_arg {
-    auto name{ctx.eat()};
+    auto name{ctx.eat()->repr};
     return function_arg{std::move(name)};
   }
 
@@ -219,7 +219,7 @@ namespace dao {
       args.emplace_back(parse_function_arg(ctx));
 
       // eat ',' or ')'
-      if (auto sep{ctx.peek()->repr[0]}; sep == ')') {
+      if (auto sep{ctx.peek()->as_operand()}; sep == ')') {
         ctx.seek();
         return args;
       } else if (sep == ',') {
@@ -237,7 +237,7 @@ namespace dao {
     ctx.seek();
 
     // eat function identifier
-    auto id{ctx.eat()};
+    auto id{ctx.eat()->repr};
     return function_proto{std::move(id), parse_function_arg_seq(ctx)};
   }
 
@@ -297,7 +297,7 @@ namespace dao {
     ctx.seek();
 
     // eat <external_linkage_kind>, e.g.: "C"
-    auto it{supported_linkages.find(ctx.eat())};
+    auto it{supported_linkages.find(ctx.eat()->repr)};
     if (it == supported_linkages.end()) {
       // TODO(andrew): ctx.errors, unsupported linkage kind
       return nullptr;

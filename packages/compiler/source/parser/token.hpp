@@ -24,6 +24,10 @@ namespace dao {
   struct token {
     std::string     repr;
     dao::token_kind kind;
+
+    auto as_operand() const noexcept {
+      return repr[0];
+    }
   };
 
   extern ankerl::unordered_dense::map<std::string, dao::token_kind> const
