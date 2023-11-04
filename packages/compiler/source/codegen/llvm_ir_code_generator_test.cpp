@@ -4,7 +4,8 @@
 #include "parser/lexer.hpp"
 #include "parser/parser.hpp"
 
-auto directory{Approvals::useApprovalsSubdirectory("../../tests")};
+auto directory{
+  Approvals::useApprovalsSubdirectory("../../tests/golden-files/ir")};
 
 auto main() -> int {
   "triple"_test = [] {

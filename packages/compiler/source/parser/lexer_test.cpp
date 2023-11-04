@@ -2,7 +2,8 @@
 
 #include "parser/lexer.hpp"
 
-auto directory{Approvals::useApprovalsSubdirectory("../../tests")};
+auto directory{
+  Approvals::useApprovalsSubdirectory("../../tests/golden-files/tokens")};
 
 auto main() -> int {
   // TODO(andrew): output json instead of txt
