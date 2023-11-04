@@ -12,8 +12,8 @@ auto main() -> int {
     auto name{path.stem().c_str()};
     auto filename{path.filename().c_str()};
     auto namer{TemplatedCustomNamer::create(
-      std::string{test_path} + "golden-files/tokens/" + std::string{name} +
-      ".{ApprovedOrReceived}.{FileExtension}")};
+      std::string{test_path} + "golden-files/" + std::string{name} +
+      ".tokens.{ApprovedOrReceived}.{FileExtension}")};
 
     test(name) = [&] {
       json contents{
