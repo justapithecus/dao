@@ -117,8 +117,7 @@ namespace dao {
   }
 
   auto parse_identifier_expr(parse_context &ctx) -> ast_node {
-    auto name{ctx.peek()->repr};
-    ctx.eat();
+    auto name{ctx.consume()};
 
     if (not ctx.is_eof() and ctx.peek()->repr[0] == '(') {
       return parse_function_call(ctx, std::move(name));
@@ -129,8 +128,7 @@ namespace dao {
 
   template <typename T>
   auto parse_literal(parse_context &ctx) -> ast_node {
-    auto val{ctx.peek()->repr};
-    ctx.eat();
+    auto val{ctx.consume()};
     return std::make_unique<ast>(T{val});
   }
 
@@ -205,8 +203,7 @@ namespace dao {
   }
 
   auto parse_function_arg(parse_context &ctx) -> function_arg {
-    auto name{ctx.peek()->repr};
-    ctx.eat();
+    auto name{ctx.consume()};
     return function_arg{std::move(name)};
   }
 
@@ -240,9 +237,7 @@ namespace dao {
     ctx.eat();
 
     // eat function identifier
-    auto id{ctx.peek()->repr};
-    ctx.eat();
-
+    auto id{ctx.consume()};
     return function_proto{std::move(id), parse_function_arg_seq(ctx)};
   }
 
@@ -301,13 +296,12 @@ namespace dao {
     // eat '('
     ctx.eat();
 
-    auto it{supported_linkages.find(ctx.peek()->repr)};
+    // eat <external_linkage_kind>, e.g.: "C"
+    auto it{supported_linkages.find(ctx.consume())};
     if (it == supported_linkages.end()) {
       // TODO(andrew): ctx.errors, unsupported linkage kind
       return nullptr;
     }
-    // eat <external_linkage_kind>, e.g.: "C"
-    ctx.eat();
     // eat ')'
     ctx.eat();
 

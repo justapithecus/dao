@@ -35,13 +35,29 @@ namespace dao {
       return cursor_;
     }
 
-    auto rewind() {
-      cursor_ = std::prev(cursor_);
+    // eat
+    //
+    // Eats token and returns a cursor to the newly advanced position
+    auto eat() {
+      cursor_ = std::next(cursor_);
       return cursor_;
     }
 
-    auto eat() {
+    // consume
+    //
+    // Eats and returns the value of that token
+    [[nodiscard]]
+    auto consume() {
+      auto tok{cursor_};
       cursor_ = std::next(cursor_);
+      return tok->repr;
+    }
+
+    // rewind
+    //
+    // Rewinds and returns a cursor to its previous position
+    auto rewind() {
+      cursor_ = std::prev(cursor_);
       return cursor_;
     }
 
