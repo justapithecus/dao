@@ -26,6 +26,6 @@ function (add_compiler_test TARGET ENTRY)
   )
 endfunction()
 
-add_compiler_test(lexer test_lexer.cpp)
+add_compiler_test(lexer ${CMAKE_SOURCE_DIR}/packages/compiler/source/parser/lexer_test.cpp)
 add_compiler_test(parser ${CMAKE_SOURCE_DIR}/packages/compiler/source/parser/parser_test.cpp)
-add_compiler_test(code_generator test_code_generator.cpp)
+add_compiler_test(llvm_ir_code_generator ${CMAKE_SOURCE_DIR}/packages/compiler/source/codegen/llvm_ir_code_generator_test.cpp)

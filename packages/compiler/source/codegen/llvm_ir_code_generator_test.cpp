@@ -1,10 +1,10 @@
-#include "test_utils.hpp"
+#include "../../tests/test_utils.hpp"
 
 #include "codegen/llvm_ir_code_generator.hpp"
 #include "parser/lexer.hpp"
 #include "parser/parser.hpp"
 
-auto directory{Approvals::useApprovalsSubdirectory("golden-files")};
+auto directory{Approvals::useApprovalsSubdirectory("../../tests")};
 
 auto main() -> int {
   "triple"_test = [] {
