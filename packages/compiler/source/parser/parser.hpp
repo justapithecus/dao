@@ -35,21 +35,21 @@ namespace dao {
       return cursor_;
     }
 
-    // eat
+    // seek
     //
-    // Eats token and returns a cursor to the newly advanced position
-    auto eat() {
+    // Seeks and returns a cursor to the newly advanced position
+    auto seek() {
       cursor_ = std::next(cursor_);
       return cursor_;
     }
 
-    // consume
+    // eat
     //
     // Eats and returns the value of that token
     [[nodiscard]]
-    auto consume() {
+    auto eat() {
       auto tok{cursor_};
-      cursor_ = std::next(cursor_);
+      seek();
       return tok->repr;
     }
 
@@ -61,9 +61,12 @@ namespace dao {
       return cursor_;
     }
 
+    // skip
+    //
+    // Skips consecutive ineffectual new-line tokens
     auto skip() {
       while (not is_eof() and cursor_->kind == token_kind::e_new_line) {
-        eat();
+        seek();
       }
     }
   };

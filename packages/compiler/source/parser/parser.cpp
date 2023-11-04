@@ -15,7 +15,7 @@ namespace dao {
     while (not ctx.is_eof()) {
       switch (ctx.peek()->kind) {
       case token_kind::e_new_line:
-        ctx.eat();
+        ctx.skip();
         break;
       case token_kind::e_keyword_external:
         prog.nodes.emplace_back(parse_external_linkage(ctx));
@@ -54,6 +54,7 @@ namespace dao {
       switch (ctx.peek()->kind) {
       case token_kind::e_new_line:
         ctx.skip();
+        // new-line tokens act as terminators
         if (node) {
           return node;
         }
@@ -117,7 +118,7 @@ namespace dao {
   }
 
   auto parse_identifier_expr(parse_context &ctx) -> ast_node {
-    auto name{ctx.consume()};
+    auto name{ctx.eat()};
 
     if (not ctx.is_eof() and ctx.peek()->repr[0] == '(') {
       return parse_function_call(ctx, std::move(name));
@@ -128,17 +129,17 @@ namespace dao {
 
   template <typename T>
   auto parse_literal(parse_context &ctx) -> ast_node {
-    auto val{ctx.consume()};
+    auto val{ctx.eat()};
     return std::make_unique<ast>(T{val});
   }
 
   auto parse_parenthetical_expr(parse_context &ctx) -> ast_node {
     // TODO(andrew): expected token error-checking
     // eat '('
-    ctx.eat();
+    ctx.seek();
     auto node{parse_expr(ctx)};
     // eat ')'
-    ctx.eat();
+    ctx.seek();
     return node;
   }
 
@@ -165,7 +166,7 @@ namespace dao {
       }
 
       // eat operand
-      ctx.eat();
+      ctx.seek();
 
       auto rhs{parse_primary_expr(ctx)};
       if (!rhs) {
@@ -175,8 +176,7 @@ namespace dao {
 
       if (ctx.peek()->kind == token_kind::e_operator) {
         // eat operand
-        auto next_op{ctx.peek()->repr[0]};
-        ctx.eat();
+        auto next_op{ctx.eat()[0]};
 
         if (not ctx.is_eof()) {
           auto next_precedence{
@@ -203,7 +203,7 @@ namespace dao {
   }
 
   auto parse_function_arg(parse_context &ctx) -> function_arg {
-    auto name{ctx.consume()};
+    auto name{ctx.eat()};
     return function_arg{std::move(name)};
   }
 
@@ -211,7 +211,7 @@ namespace dao {
     std::vector<function_arg> args{};
 
     // eat '('
-    ctx.eat();
+    ctx.seek();
 
     // TODO(andrew): maybe some kind of generic parse_sequence with separators
     // TODO(andrew): fix no arg sequence
@@ -220,10 +220,10 @@ namespace dao {
 
       // eat ',' or ')'
       if (auto sep{ctx.peek()->repr[0]}; sep == ')') {
-        ctx.eat();
+        ctx.seek();
         return args;
       } else if (sep == ',') {
-        ctx.eat();
+        ctx.seek();
       } else {
         // TODO(andrew): unexpected end of function arg sequence
         return args;
@@ -234,10 +234,10 @@ namespace dao {
 
   auto parse_function_proto(parse_context &ctx) -> function_proto {
     // eat 'function'
-    ctx.eat();
+    ctx.seek();
 
     // eat function identifier
-    auto id{ctx.consume()};
+    auto id{ctx.eat()};
     return function_proto{std::move(id), parse_function_arg_seq(ctx)};
   }
 
@@ -258,7 +258,7 @@ namespace dao {
     std::vector<ast_node> args{};
 
     // eat '('
-    ctx.eat();
+    ctx.seek();
 
     // TODO(andrew): maybe some kind of generic parse_sequence with separators
     // TODO(andrew): fix no arg sequence
@@ -267,10 +267,10 @@ namespace dao {
 
       // eat ',' or ')'
       if (auto sep{ctx.peek()->repr[0]}; sep == ')') {
-        ctx.eat();
+        ctx.seek();
         return args;
       } else if (sep == ',') {
-        ctx.eat();
+        ctx.seek();
       } else {
         // TODO(andrew): unexpected end of function call sequence
         return args;
@@ -292,18 +292,18 @@ namespace dao {
 
   auto parse_external_linkage(parse_context &ctx) -> ast_node {
     // eat 'external'
-    ctx.eat();
+    ctx.seek();
     // eat '('
-    ctx.eat();
+    ctx.seek();
 
     // eat <external_linkage_kind>, e.g.: "C"
-    auto it{supported_linkages.find(ctx.consume())};
+    auto it{supported_linkages.find(ctx.eat())};
     if (it == supported_linkages.end()) {
       // TODO(andrew): ctx.errors, unsupported linkage kind
       return nullptr;
     }
     // eat ')'
-    ctx.eat();
+    ctx.seek();
 
     switch (ctx.peek()->kind) {
     case token_kind::e_keyword_function:
@@ -318,7 +318,7 @@ namespace dao {
 
   auto parse_if_expr(parse_context &ctx) -> ast_node {
     // eat 'if'
-    ctx.eat();
+    ctx.seek();
 
     auto condition{parse_expr(ctx)};
     if (!condition) {
@@ -332,7 +332,7 @@ namespace dao {
     }
 
     // eat 'then'
-    ctx.eat();
+    ctx.seek();
     auto then{parse_expr(ctx)};
     if (!then) {
       // TODO(andrew): ctx.errors
@@ -342,7 +342,7 @@ namespace dao {
     ast_node else_{};
     if (ctx.peek()->kind == token_kind::e_keyword_else) {
       // eat 'else'
-      ctx.eat();
+      ctx.seek();
       if (else_ = parse_expr(ctx); not else_) {
         // TODO(andrew): ctx.errors
         return nullptr;
