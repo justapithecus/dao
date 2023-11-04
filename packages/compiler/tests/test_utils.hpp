@@ -1,6 +1,8 @@
 #pragma once
 #ifdef CTEST
 
+#include <filesystem>
+
 #include "fixtures.hpp"
 #include "serialization/ast_pretty_printer.hpp"
 #include "serialization/token.hpp"
@@ -38,8 +40,15 @@ public:
   }
 };
 
+inline auto constexpr test_path{"packages/compiler/tests/"};
+
+inline auto load_test_examples() {
+  return std::filesystem::directory_iterator(
+    std::string{test_path} + "examples");
+}
+
 inline auto load_tokens(std::string const &fname) {
-  std::ifstream ifs{"packages/compiler/tests/data/" + fname};
+  std::ifstream ifs{std::string{test_path} + "data/" + fname};
   if (ifs) {
     auto data = json::parse(ifs);
     return data.at("tokens").get<std::vector<dao::token>>();
