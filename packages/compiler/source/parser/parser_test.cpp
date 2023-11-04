@@ -3,7 +3,8 @@
 #include "parser/parser.hpp"
 #include "parser/state_machine.h"
 
-auto directory{Approvals::useApprovalsSubdirectory("../../tests")};
+auto directory{
+  Approvals::useApprovalsSubdirectory("../../tests/golden-files/ast")};
 
 auto main() -> int {
 
