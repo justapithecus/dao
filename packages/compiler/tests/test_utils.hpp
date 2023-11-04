@@ -48,7 +48,7 @@ inline auto load_test_examples() {
 }
 
 inline auto load_tokens(std::string const &fname) {
-  std::ifstream ifs{"packages/compiler/tests/data/" + fname};
+  std::ifstream ifs{std::string{test_path} + "data/" + fname};
   if (ifs) {
     auto data = json::parse(ifs);
     return data.at("tokens").get<std::vector<dao::token>>();

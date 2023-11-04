@@ -12,7 +12,7 @@ auto main() -> int {
     auto name{path.stem().c_str()};
     auto filename{path.filename().c_str()};
     auto namer{TemplatedCustomNamer::create(
-      "packages/compiler/tests/golden-files/tokens/" + std::string{name} +
+      std::string{test_path} + "golden-files/tokens/" + std::string{name} +
       ".{ApprovedOrReceived}.{FileExtension}")};
 
     test(name) = [&] {
