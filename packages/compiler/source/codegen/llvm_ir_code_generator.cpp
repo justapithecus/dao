@@ -244,32 +244,33 @@ namespace dao {
       return nullptr;
     }
 
-    // convert condition to bool by comparing neq to 0.0
-    cond_value = builder_.CreateFCmpONE(
-      cond_value, llvm::ConstantFP::get(ctx_, llvm::APFloat(0.0)), "ifcond");
+    if (not cond_value->getType()->isIntegerTy()) {
+      // convert condition to bool (i1 type) by comparing neq to 0.0
+      cond_value = builder_.CreateFCmpONE(
+        cond_value, llvm::ConstantFP::get(ctx_, llvm::APFloat(0.0)), "ifcond");
+    }
+
+    auto function{builder_.GetInsertBlock()->getParent()};
+    auto then_bb{llvm::BasicBlock::Create(ctx_, "then", function)};
+    auto else_bb{llvm::BasicBlock::Create(ctx_, "else")};
+    auto merge_bb{llvm::BasicBlock::Create(ctx_, "ifcont")};
+
+    builder_.CreateCondBr(cond_value, then_bb, else_bb);
 
     // emit then value
+    builder_.SetInsertPoint(then_bb);
     auto then_value{std::visit(*this, *(expr.then_))};
     if (not then_value) {
       // TODO(andrew): ctx.errors
       return nullptr;
     }
 
-    auto function{builder_.GetInsertBlock()->getParent()};
-    auto then_bb{llvm::BasicBlock::Create(ctx_, "then", function)};
-    builder_.SetInsertPoint(then_bb);
-
-    auto merge_bb{llvm::BasicBlock::Create(ctx_, "ifcont")};
     builder_.CreateBr(merge_bb);
     then_bb = builder_.GetInsertBlock();
 
     // emit else block
-    llvm::Value      *else_value{};
-    llvm::BasicBlock *else_bb{};
+    llvm::Value *else_value{};
     if (expr.else_) {
-      else_bb = llvm::BasicBlock::Create(ctx_, "else");
-      builder_.CreateCondBr(cond_value, then_bb, else_bb);
-
       function->insert(function->end(), else_bb);
       builder_.SetInsertPoint(else_bb);
 
@@ -281,9 +282,6 @@ namespace dao {
 
       builder_.CreateBr(merge_bb);
       else_bb = builder_.GetInsertBlock();
-
-    } else {
-      builder_.CreateCondBr(cond_value, then_bb, nullptr);
     }
 
     // emit merge block
@@ -310,12 +308,19 @@ namespace dao {
 
     // TODO(andrew): emit to any ostream and let caller decide type of sink
     llvm::raw_fd_ostream dest{obj_fname, ec, llvm::sys::fs::OF_None};
+    if (ec) {
+      std::cerr << "could not open file: " << ec.message() << std::endl;
+      std::exit(1);
+    }
 
     // TODO(andrew): see new pass managers
     llvm::legacy::PassManager pass{};
 
     auto file_type{llvm::CodeGenFileType::CGFT_ObjectFile};
-    if (machine_->addPassesToEmitFile(pass, dest, nullptr, file_type)) {
+    auto constexpr disable_verify{false};
+    if (machine_->addPassesToEmitFile(
+          pass, dest, nullptr, file_type, disable_verify)) {
+      std::cerr << "failed to emit passes" << std::endl;
       std::exit(1); // TODO(andrew): exceptions
     }
 
