@@ -14,7 +14,10 @@ set(CMAKE_CXX_COMPILER_LAUNCHER "ccache")
 
 include(cmake/llvm.cmake)
 
-include_directories(${CMAKE_INCLUDE_PATH} ${LLVM_INCLUDE_DIRS})
+include_directories(${CMAKE_INCLUDE_PATH}
+  SYSTEM
+    ${LLVM_INCLUDE_DIRS}
+)
 link_directories(${CMAKE_LIBRARY_PATH})
 link_libraries(${LLVM_LIBS})
 

@@ -40,7 +40,9 @@ namespace dao {
     j = std::visit(ast_pretty_printer{}, node);
   }
 
-  inline auto from_json(json const &j, dao::ast &node) {
+  inline auto from_json(
+    [[maybe_unused]] json const &j, [[maybe_unused]] dao::ast &node) {
+    // TODO(andrew): visit for loading from json
   }
 
 } // namespace dao

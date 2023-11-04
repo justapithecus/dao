@@ -27,7 +27,7 @@ namespace dao {
 
     [[nodiscard]]
     auto is_eof() const {
-      return (cursor_ - tokens_.begin()) >= tokens_.size();
+      return not(cursor_ != tokens_.end());
     }
 
     [[nodiscard]]
