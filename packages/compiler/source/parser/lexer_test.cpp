@@ -11,14 +11,17 @@ auto main() -> int {
     auto path{file.path()};
     auto name{path.stem().c_str()};
     auto filename{path.filename().c_str()};
+    auto namer{TemplatedCustomNamer::create(
+      "packages/compiler/tests/golden-files/tokens/" + std::string{name} +
+      ".{ApprovedOrReceived}.{FileExtension}")};
 
     test(name) = [&] {
-      auto namer{TemplatedCustomNamer::create(
-        "packages/compiler/tests/golden-files/tokens/" + std::string{name} +
-        ".{ApprovedOrReceived}.{FileExtension}")};
+      json contents{
+        {"filename", filename},
+        {"tokens", dao::lex(path.c_str())},
+      };
 
-      Approvals::verifyAll(
-        filename, dao::lex(path.c_str()), Options().withNamer(namer));
+      Approvals::verify(json_writer{contents}, Options().withNamer(namer));
     };
   }
 
