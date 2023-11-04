@@ -1,9 +1,9 @@
-#include "test_utils.hpp"
+#include "../../tests/test_utils.hpp"
 
 #include "parser/parser.hpp"
 #include "parser/state_machine.h"
 
-auto directory{Approvals::useApprovalsSubdirectory("golden-files")};
+auto directory{Approvals::useApprovalsSubdirectory("../../tests")};
 
 auto main() -> int {
 
