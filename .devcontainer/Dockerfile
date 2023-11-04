@@ -1,6 +1,7 @@
 FROM mcr.microsoft.com/vscode/devcontainers/cpp:jammy
 
 ENV DEBIAN_FRONTEND="noninteractive"
+ENV DEBCONF_NONINTERACTIVE_SEEN "true"
 
 RUN apt-get update && apt-get dist-upgrade -y
 
@@ -54,5 +55,5 @@ RUN wget -qO- "https://github.com/ccache/ccache/releases/download/${CCACHE_TAG}/
 # Install Conan package manager
 RUN python3.10 -m pip install conan --upgrade
 
-# Taskfile setup
+# Install Task: https://taskfile.dev/
 RUN sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b "/usr/local/bin"
