@@ -26,13 +26,13 @@ namespace dao {
     }
 
     [[nodiscard]]
-    auto peek() const {
-      return cursor_;
+    auto is_eof() const {
+      return (cursor_ - tokens_.begin()) >= tokens_.size();
     }
 
     [[nodiscard]]
-    auto is_eof() const {
-      return (cursor_ - tokens_.begin()) >= tokens_.size();
+    auto peek() const {
+      return cursor_;
     }
 
     auto rewind() {
@@ -43,6 +43,12 @@ namespace dao {
     auto eat() {
       cursor_ = std::next(cursor_);
       return cursor_;
+    }
+
+    auto skip() {
+      while (not is_eof() and cursor_->kind == token_kind::e_new_line) {
+        eat();
+      }
     }
   };
 

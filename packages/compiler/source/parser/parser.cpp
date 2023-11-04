@@ -45,13 +45,15 @@ namespace dao {
   }
 
   auto parse_expr(parse_context &ctx) -> ast_node {
+    ctx.skip();
+
     ast_node node{};
 
     while (not ctx.is_eof()) {
 
       switch (ctx.peek()->kind) {
       case token_kind::e_new_line:
-        ctx.eat();
+        ctx.skip();
         if (node) {
           return node;
         }
@@ -245,11 +247,6 @@ namespace dao {
   auto parse_function_def(parse_context &ctx) -> ast_node {
     auto proto{parse_function_proto(ctx)};
 
-    // skip new-lines
-    while (ctx.peek()->kind == token_kind::e_new_line) {
-      ctx.eat();
-    }
-
     // TODO(andrew): introduce 'external' to distinguish proto-only vs. definition
     auto body{parse_expr(ctx)};
     if (!body) {
@@ -333,10 +330,6 @@ namespace dao {
       return nullptr;
     }
 
-    // skip new-lines
-    while (ctx.peek()->kind == token_kind::e_new_line)
-      ctx.eat();
-
     if (ctx.peek()->kind != token_kind::e_keyword_then) {
       // TODO(andrew): expected 'then'
       return nullptr;
@@ -344,30 +337,16 @@ namespace dao {
 
     // eat 'then'
     ctx.eat();
-
-    // skip new-lines
-    while (ctx.peek()->kind == token_kind::e_new_line)
-      ctx.eat();
-
     auto then{parse_expr(ctx)};
     if (!then) {
       // TODO(andrew): ctx.errors
       return nullptr;
     }
 
-    // skip new-lines
-    while (ctx.peek()->kind == token_kind::e_new_line)
-      ctx.eat();
-
     ast_node else_{};
     if (ctx.peek()->kind == token_kind::e_keyword_else) {
       // eat 'else'
       ctx.eat();
-
-      // skip new-lines
-      while (ctx.peek()->kind == token_kind::e_new_line)
-        ctx.eat();
-
       if (else_ = parse_expr(ctx); not else_) {
         // TODO(andrew): ctx.errors
         return nullptr;

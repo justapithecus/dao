@@ -4,6 +4,9 @@
 # CMake
 build/
 
+# CTest
+Testing/
+
 # ApprovalTests
 *.received.*
 
