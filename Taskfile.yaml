@@ -8,8 +8,6 @@ env:
   BUILD_TYPE: "debug"
 
 tasks:
-  clean: rm -rf build
-
   lock: conan lock create .
 
   install:
@@ -23,12 +21,12 @@ tasks:
   generate:
     aliases: [gen]
     cmds:
-      - |
-        cmake . --preset default \
-        -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+      - cmake . --preset default
+
+  clean: cmake --build --preset default --target clean
 
   build: time cmake --build --preset default
 
   run: ./build/apps/daoc/daoc
 
-  test: ctest --test-dir build --preset conan-debug --parallel 4 --output-on-failure --verbose
+  test: ctest --test-dir build --preset default --parallel 4 --output-on-failure --verbose

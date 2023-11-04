@@ -160,7 +160,8 @@ namespace dao {
 
     while (not ctx.is_eof() and ctx.peek()->kind == token_kind::e_operator) {
       auto op{ctx.peek()->repr[0]};
-      auto token_precedence{binary_op_precedence[op]};
+      auto token_precedence{
+        binary_op_precedence[static_cast<std::uint8_t>(op)]};
       if (token_precedence < op_precedence) {
         return lhs;
       }
@@ -180,7 +181,8 @@ namespace dao {
         ctx.eat();
 
         if (not ctx.is_eof()) {
-          auto next_precedence{binary_op_precedence[next_op]};
+          auto next_precedence{
+            binary_op_precedence[static_cast<std::uint8_t>(next_op)]};
           if (token_precedence < next_precedence) {
             // current right-hand-side becomes the left-hand-side of the inner expression
             ctx.rewind();
