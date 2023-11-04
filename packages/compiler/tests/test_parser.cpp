@@ -7,6 +7,11 @@ auto directory{Approvals::useApprovalsSubdirectory("golden-files")};
 
 auto main() -> int {
 
+  "program"_test = [] {
+    auto tokens{load_tokens("program.json")};
+    Approvals::verify(json_writer{dao::parse(tokens)});
+  };
+
   "identifier_expression_simple"_test = [] {
     auto tokens{load_tokens("identifier_expression_simple.json")};
     Approvals::verify(json_writer{dao::parse(tokens)});
@@ -57,6 +62,11 @@ auto main() -> int {
     Approvals::verify(json_writer{dao::parse(tokens)});
   };
 
+  "binary_expression_nested"_test = [] {
+    auto tokens{load_tokens("binary-expressions/nested.json")};
+    Approvals::verify(json_writer{dao::parse(tokens)});
+  };
+
   "control_flow_if_then_expression"_test = [] {
     auto tokens{load_tokens("control-flow/if_then_expression.json")};
     Approvals::verify(json_writer{dao::parse(tokens)});
@@ -67,8 +77,8 @@ auto main() -> int {
     Approvals::verify(json_writer{dao::parse(tokens)});
   };
 
-  "program"_test = [] {
-    auto tokens{load_tokens("program.json")};
+  "control_flow_conditional_puts"_test = [] {
+    auto tokens{load_tokens("control-flow/conditional_puts.json")};
     Approvals::verify(json_writer{dao::parse(tokens)});
   };
 

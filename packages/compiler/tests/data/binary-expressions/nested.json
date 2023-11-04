@@ -1,10 +1,6 @@
 {
   "tokens": [
     {
-      "kind": "keyword",
-      "repr": "function"
-    },
-    {
       "kind": "identifier",
       "repr": "double"
     },
@@ -13,28 +9,20 @@
       "repr": "("
     },
     {
-      "kind": "identifier",
-      "repr": "x"
+      "kind": "numeral",
+      "repr": "5"
     },
     {
       "kind": "separator",
       "repr": ")"
     },
     {
-      "kind": "new_line",
-      "repr": "\\n"
-    },
-    {
-      "kind": "identifier",
-      "repr": "x"
-    },
-    {
       "kind": "operator",
-      "repr": "*"
+      "repr": ">"
     },
     {
       "kind": "numeral",
-      "repr": "2"
+      "repr": "9"
     }
   ]
 }

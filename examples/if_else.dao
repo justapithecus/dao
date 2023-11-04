@@ -1,0 +1,9 @@
+external (C) function puts(str)
+
+function double(x)
+  x * 2
+
+if double(5) > 9 then
+  puts("10 is greater than 9")
+else
+  puts("Unreachable")

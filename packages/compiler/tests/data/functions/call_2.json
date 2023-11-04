@@ -25,6 +25,10 @@
       "repr": ")"
     },
     {
+      "kind": "new_line",
+      "repr": "\\n"
+    },
+    {
       "kind": "identifier",
       "repr": "distance_euclidean"
     },

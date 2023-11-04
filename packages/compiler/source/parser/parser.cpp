@@ -14,6 +14,9 @@ namespace dao {
 
     while (not ctx.is_eof()) {
       switch (ctx.peek()->kind) {
+      case token_kind::e_new_line:
+        ctx.eat();
+        break;
       case token_kind::e_keyword_external:
         prog.nodes.emplace_back(parse_external_linkage(ctx));
         break;
@@ -47,6 +50,12 @@ namespace dao {
     while (not ctx.is_eof()) {
 
       switch (ctx.peek()->kind) {
+      case token_kind::e_new_line:
+        ctx.eat();
+        if (node) {
+          return node;
+        }
+        break;
       case token_kind::e_keyword_external:
         // TODO(andrew): errors, external can only be at program/module scope
         return nullptr;
@@ -55,11 +64,12 @@ namespace dao {
         break;
       case token_kind::e_keyword_if:
         return parse_if_expr(ctx);
+      case token_kind::e_keyword_then:
+      case token_kind::e_keyword_else:
+        // TODO(andrew): may want to have semicolons...
+        return node;
       case token_kind::e_identifier:
         node = parse_identifier_expr(ctx);
-        if (auto call{std::get_if<function_call>(node.get())}) {
-          return node;
-        }
         break;
       case token_kind::e_numeral:
         node = parse_numeral_expr(ctx);
@@ -139,7 +149,6 @@ namespace dao {
       // TODO(andrew): add to ctx.errors
       return nullptr;
     }
-
     return parse_binary_expr(ctx, std::move(lhs), op_precedence);
   }
 
@@ -236,6 +245,11 @@ namespace dao {
   auto parse_function_def(parse_context &ctx) -> ast_node {
     auto proto{parse_function_proto(ctx)};
 
+    // skip new-lines
+    while (ctx.peek()->kind == token_kind::e_new_line) {
+      ctx.eat();
+    }
+
     // TODO(andrew): introduce 'external' to distinguish proto-only vs. definition
     auto body{parse_expr(ctx)};
     if (!body) {
@@ -319,6 +333,10 @@ namespace dao {
       return nullptr;
     }
 
+    // skip new-lines
+    while (ctx.peek()->kind == token_kind::e_new_line)
+      ctx.eat();
+
     if (ctx.peek()->kind != token_kind::e_keyword_then) {
       // TODO(andrew): expected 'then'
       return nullptr;
@@ -327,16 +345,29 @@ namespace dao {
     // eat 'then'
     ctx.eat();
 
+    // skip new-lines
+    while (ctx.peek()->kind == token_kind::e_new_line)
+      ctx.eat();
+
     auto then{parse_expr(ctx)};
     if (!then) {
       // TODO(andrew): ctx.errors
       return nullptr;
     }
 
+    // skip new-lines
+    while (ctx.peek()->kind == token_kind::e_new_line)
+      ctx.eat();
+
     ast_node else_{};
     if (ctx.peek()->kind == token_kind::e_keyword_else) {
       // eat 'else'
       ctx.eat();
+
+      // skip new-lines
+      while (ctx.peek()->kind == token_kind::e_new_line)
+        ctx.eat();
+
       if (else_ = parse_expr(ctx); not else_) {
         // TODO(andrew): ctx.errors
         return nullptr;

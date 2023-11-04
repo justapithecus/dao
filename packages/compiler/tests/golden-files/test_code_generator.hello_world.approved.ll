@@ -7,7 +7,7 @@ target triple = "x86_64-pc-linux-gnu"
 
 declare i32 @puts(ptr)
 
-define double @triple(double %x) {
+define internal double @triple(double %x) {
 entry:
   %multmp = fmul double %x, 3.000000e+00
   ret double %multmp

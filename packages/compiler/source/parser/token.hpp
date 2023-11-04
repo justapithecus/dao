@@ -8,6 +8,7 @@
 namespace dao {
 
   enum class token_kind : std::uint8_t {
+    e_new_line,
     e_identifier,
     e_separator,
     e_operator,

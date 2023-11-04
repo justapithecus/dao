@@ -57,6 +57,7 @@ namespace dao {
 
   auto llvm_ir_code_generator::generate(dao::ast const &ast) -> void {
     std::visit(*this, ast);
+    std::cout << dumps() << std::endl;
     emit_object_code();
   }
 
@@ -172,7 +173,7 @@ namespace dao {
       auto ft{
         llvm::FunctionType::get(builder_.getDoubleTy(), arg_types, is_var_arg)};
       auto fn{llvm::Function::Create(
-        ft, llvm::Function::ExternalLinkage, proto.id, mod_)};
+        ft, llvm::Function::InternalLinkage, proto.id, mod_)};
 
       // TODO(andrew): ranges
       unsigned int i{0};
@@ -237,7 +238,65 @@ namespace dao {
 
   auto llvm_ir_code_generator::operator()(dao::if_expr const &expr)
     -> llvm::Value * {
-    return nullptr;
+    auto cond_value{std::visit(*this, *(expr.cond_))};
+    if (not cond_value) {
+      // TODO(andrew): ctx.errors
+      return nullptr;
+    }
+
+    if (not cond_value->getType()->isIntegerTy()) {
+      // convert condition to bool (i1 type) by comparing neq to 0.0
+      cond_value = builder_.CreateFCmpONE(
+        cond_value, llvm::ConstantFP::get(ctx_, llvm::APFloat(0.0)), "ifcond");
+    }
+
+    auto function{builder_.GetInsertBlock()->getParent()};
+    auto then_bb{llvm::BasicBlock::Create(ctx_, "then", function)};
+    auto else_bb{llvm::BasicBlock::Create(ctx_, "else")};
+    auto merge_bb{llvm::BasicBlock::Create(ctx_, "ifcont")};
+
+    builder_.CreateCondBr(cond_value, then_bb, else_bb);
+
+    // emit then value
+    builder_.SetInsertPoint(then_bb);
+    auto then_value{std::visit(*this, *(expr.then_))};
+    if (not then_value) {
+      // TODO(andrew): ctx.errors
+      return nullptr;
+    }
+
+    builder_.CreateBr(merge_bb);
+    then_bb = builder_.GetInsertBlock();
+
+    // emit else block
+    llvm::Value *else_value{};
+    if (expr.else_) {
+      function->insert(function->end(), else_bb);
+      builder_.SetInsertPoint(else_bb);
+
+      else_value = std::visit(*this, *(expr.else_));
+      if (not else_value) {
+        // TODO(andrew): ctx.errors
+        return nullptr;
+      }
+
+      builder_.CreateBr(merge_bb);
+      else_bb = builder_.GetInsertBlock();
+    }
+
+    // emit merge block
+    function->insert(function->end(), merge_bb);
+    builder_.SetInsertPoint(merge_bb);
+
+    // TODO(andrew): phi_node type and addIncoming type need to match,
+    //               so then_value.getType() must equal else_value.getType()?
+    auto phi_node{builder_.CreatePHI(then_value->getType(), 2, "iftmp")};
+
+    phi_node->addIncoming(then_value, then_bb);
+    if (else_value and else_bb) {
+      phi_node->addIncoming(else_value, else_bb);
+    }
+    return phi_node;
   }
 
   //---------------------------------------------------------------------------
@@ -249,12 +308,19 @@ namespace dao {
 
     // TODO(andrew): emit to any ostream and let caller decide type of sink
     llvm::raw_fd_ostream dest{obj_fname, ec, llvm::sys::fs::OF_None};
+    if (ec) {
+      std::cerr << "could not open file: " << ec.message() << std::endl;
+      std::exit(1);
+    }
 
     // TODO(andrew): see new pass managers
     llvm::legacy::PassManager pass{};
 
     auto file_type{llvm::CodeGenFileType::CGFT_ObjectFile};
-    if (machine_->addPassesToEmitFile(pass, dest, nullptr, file_type)) {
+    auto constexpr disable_verify{false};
+    if (machine_->addPassesToEmitFile(
+          pass, dest, nullptr, file_type, disable_verify)) {
+      std::cerr << "failed to emit passes" << std::endl;
       std::exit(1); // TODO(andrew): exceptions
     }
 

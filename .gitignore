@@ -9,3 +9,4 @@ build/
 
 # daoc output
 *.o
+*.bin
