@@ -35,17 +35,17 @@ namespace dao {
       return cursor_;
     }
 
-    // seek
-    //
-    // Seeks and returns a cursor to the newly advanced position
+    /// seek
+    ///
+    /// Seeks and returns a cursor to the newly advanced position
     auto seek() {
       cursor_ = std::next(cursor_);
       return cursor_;
     }
 
-    // eat
-    //
-    // Eats and returns the value of that token
+    /// eat
+    ///
+    /// Eats and returns the value of that token
     [[nodiscard]]
     auto eat() {
       auto tok{cursor_};
@@ -53,17 +53,17 @@ namespace dao {
       return tok;
     }
 
-    // rewind
-    //
-    // Rewinds and returns a cursor to its previous position
+    /// rewind
+    ///
+    /// Rewinds and returns a cursor to its previous position
     auto rewind() {
       cursor_ = std::prev(cursor_);
       return cursor_;
     }
 
-    // skip
-    //
-    // Skips consecutive ineffectual new-line tokens
+    /// skip
+    ///
+    /// Skips consecutive ineffectual new-line tokens
     auto skip() {
       while (not is_eof() and cursor_->kind == token_kind::e_new_line) {
         seek();
