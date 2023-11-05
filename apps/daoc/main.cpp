@@ -3,13 +3,15 @@
 #include "parser/parser.hpp"
 
 auto main() -> int {
-  // TODO(andrew): pre-compile modules
+  // TODO(andrew): pre-compile stdlib modules
 
   // auto constexpr source_fname{"examples/hello_world.dao"};
   auto constexpr source_fname{"examples/if_else.dao"};
 
-  auto tokens{dao::lex(source_fname)};
-  auto ast{dao::parse(tokens)};
+  auto        tokens{dao::lex(source_fname)};
+  dao::parser parser{tokens};
+
+  auto ast{parser.parse()};
   auto code_generator{dao::llvm_ir_code_generator{source_fname}};
 
   code_generator.generate(ast);
