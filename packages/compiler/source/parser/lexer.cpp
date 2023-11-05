@@ -31,22 +31,22 @@ namespace dao {
         break;
       }
       case lexical_state_separator: {
-        lexeme.update_repr(src_ptr, 0);
+        lexeme.update_repr(src_ptr);
         tokens.emplace_back(lexeme.as_token(token_kind::e_separator));
         break;
       }
       case lexical_state_operator: {
-        lexeme.update_repr(src_ptr, 0);
+        lexeme.update_repr(src_ptr);
         tokens.emplace_back(lexeme.as_token(token_kind::e_operator));
         break;
       }
       case lexical_state_numeral_end: {
-        lexeme.update_repr(src_ptr, 0);
+        lexeme.update_repr(src_ptr);
         tokens.emplace_back(lexeme.as_token(token_kind::e_numeral));
         break;
       }
       case lexical_state_identifier_end: {
-        lexeme.update_repr(src_ptr, 0);
+        lexeme.update_repr(src_ptr);
         if (auto it{keywords.find(lexeme.repr)}; it != keywords.end()) {
           tokens.emplace_back(lexeme.as_token(it->second));
         } else {
