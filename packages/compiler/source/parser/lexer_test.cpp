@@ -2,12 +2,9 @@
 
 #include "parser/lexer.hpp"
 
-auto directory{
-  Approvals::useApprovalsSubdirectory("../../tests/golden-files/tokens")};
-
 auto main() -> int {
 
-  for (auto const &file : load_test_examples()) {
+  for (auto const &file : load_test_cases()) {
     auto path{file.path()};
     auto name{path.stem().generic_string()};
     auto filename{path.filename().generic_string()};
