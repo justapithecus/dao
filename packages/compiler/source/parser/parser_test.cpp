@@ -3,9 +3,6 @@
 #include "parser/parser.hpp"
 #include "parser/state_machine.h"
 
-auto directory{
-  Approvals::useApprovalsSubdirectory("../../tests/golden-files/ast")};
-
 auto main() -> int {
 
   for (auto const &entry : load_test_cases_tokens()) {
