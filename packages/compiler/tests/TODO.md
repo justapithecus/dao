@@ -1,6 +1,6 @@
 # todo
 
-- [ ] Improve test file organization
 - [ ] Better unit coverage
 - [ ] Better fixtures
+- [ ] Behavior tests
 - [ ] Smoke tests

@@ -1,0 +1,13 @@
+{
+  "filename": "identifier.dao",
+  "tokens": [
+    {
+      "kind": "identifier",
+      "repr": "my_identifier"
+    },
+    {
+      "kind": "new_line",
+      "repr": "\\n"
+    }
+  ]
+}
