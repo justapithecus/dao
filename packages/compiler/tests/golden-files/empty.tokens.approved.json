@@ -1,4 +1,9 @@
 {
   "_filename": "empty.dao",
-  "tokens": []
+  "tokens": [
+    {
+      "kind": "end_of_file",
+      "repr": ""
+    }
+  ]
 }

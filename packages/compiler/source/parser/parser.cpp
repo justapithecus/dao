@@ -10,7 +10,8 @@ namespace dao {
   }
 
   auto parse_context::is_eof() const {
-    return not(cursor_ != tokens_.end());
+    return cursor_ != tokens_.end() and
+           cursor_->kind == token_kind::e_end_of_file;
   }
 
   auto parse_context::peek() const {

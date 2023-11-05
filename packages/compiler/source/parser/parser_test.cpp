@@ -18,7 +18,7 @@ auto main() -> int {
       test(name) = [&] {
         auto tokens{load_tokens(path.generic_string())};
         json contents{
-          {"_filename", filename},
+          {"_filename", base_name + ".dao"},
           {"ast", dao::parser{tokens}.parse()},
         };
 
