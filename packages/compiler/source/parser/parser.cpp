@@ -167,15 +167,6 @@ namespace dao {
       return parse_function_call(std::move(name));
     }
 
-    // if (not ctx_.is_eof()) {
-    //   if (ctx_.peek()->as_operand() == '(') {
-    //     return parse_function_call(std::move(name));
-    //   } else if (ctx_.peek()->kind == token_kind::e_operator) {
-    //     auto node{std::make_unique<ast>(identifier_expr{std::move(name)})};
-    //     return parse_binary_expr(std::move(node));
-    //   }
-    // }
-
     return std::make_unique<ast>(identifier_expr{std::move(name)});
   }
 
