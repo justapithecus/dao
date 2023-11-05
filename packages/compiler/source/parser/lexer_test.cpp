@@ -14,7 +14,7 @@ auto main() -> int {
 
     test(name) = [&] {
       json contents{
-        {"filename", filename},
+        {"_filename", filename},
         {"tokens", dao::lex(path.c_str())},
       };
 

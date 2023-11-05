@@ -1,0 +1,15 @@
+{
+  "_filename": "identifier.tokens.approved.json",
+  "ast": {
+    "type": "program",
+    "value": {
+      "entry": [
+        {
+          "type": "identifier_expression",
+          "value": "my_identifier"
+        }
+      ],
+      "nodes": []
+    }
+  }
+}

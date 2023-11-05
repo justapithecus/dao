@@ -46,14 +46,19 @@ inline auto load_test_cases() {
   return std::filesystem::directory_iterator(std::string{test_path} + "cases");
 }
 
-inline auto load_tokens(std::string const &fname) {
-  std::ifstream ifs{std::string{test_path} + "data/" + fname};
+inline auto load_test_cases_tokens() {
+  return std::filesystem::directory_iterator(
+    std::string{test_path} + "golden-files");
+}
+
+inline auto load_tokens(std::string const &filepath) {
+  std::ifstream ifs{filepath};
   if (ifs) {
     auto data = json::parse(ifs);
     return data.at("tokens").get<std::vector<dao::token>>();
   }
 
-  throw std::runtime_error{"failed to open data/" + fname};
+  throw std::runtime_error{"failed to open data/" + filepath};
 }
 
 #endif
