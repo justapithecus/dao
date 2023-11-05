@@ -1,0 +1,15 @@
+{
+  "_filename": "numeral.tokens.approved.json",
+  "ast": {
+    "type": "program",
+    "value": {
+      "entry": [
+        {
+          "type": "numeral_expression",
+          "value": "3"
+        }
+      ],
+      "nodes": []
+    }
+  }
+}
