@@ -24,15 +24,4 @@ auto main() -> int {
       Approvals::verify(json_writer{contents}, Options().withNamer(namer));
     };
   }
-
-  // TODO(andrew): output json instead of txt
-  "hello_world"_test = [] {
-    auto lexemes{dao::lex("examples/hello_world.dao")};
-    Approvals::verifyAll("hello_world.dao", lexemes);
-  };
-
-  "fibonacci"_test = [] {
-    auto lexemes{dao::lex("examples/fibonacci.dao")};
-    Approvals::verifyAll("fibonacci.dao", lexemes);
-  };
 }

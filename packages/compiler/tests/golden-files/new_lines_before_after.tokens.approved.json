@@ -1,0 +1,73 @@
+{
+  "filename": "new_lines_before_after.dao",
+  "tokens": [
+    {
+      "kind": "new_line",
+      "repr": "\\n"
+    },
+    {
+      "kind": "new_line",
+      "repr": "\\n"
+    },
+    {
+      "kind": "keyword",
+      "repr": "function"
+    },
+    {
+      "kind": "identifier",
+      "repr": "foo"
+    },
+    {
+      "kind": "separator",
+      "repr": "("
+    },
+    {
+      "kind": "identifier",
+      "repr": "x"
+    },
+    {
+      "kind": "separator",
+      "repr": ")"
+    },
+    {
+      "kind": "new_line",
+      "repr": "\\n"
+    },
+    {
+      "kind": "new_line",
+      "repr": "\\n"
+    },
+    {
+      "kind": "new_line",
+      "repr": "\\n"
+    },
+    {
+      "kind": "keyword",
+      "repr": "function"
+    },
+    {
+      "kind": "identifier",
+      "repr": "bar"
+    },
+    {
+      "kind": "separator",
+      "repr": "("
+    },
+    {
+      "kind": "identifier",
+      "repr": "x"
+    },
+    {
+      "kind": "separator",
+      "repr": ")"
+    },
+    {
+      "kind": "new_line",
+      "repr": "\\n"
+    },
+    {
+      "kind": "new_line",
+      "repr": "\\n"
+    }
+  ]
+}

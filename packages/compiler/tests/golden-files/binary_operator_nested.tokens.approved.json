@@ -92,6 +92,10 @@
     {
       "kind": "numeral",
       "repr": "212"
+    },
+    {
+      "kind": "new_line",
+      "repr": "\\n"
     }
   ]
 }
