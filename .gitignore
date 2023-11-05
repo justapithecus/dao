@@ -3,6 +3,7 @@
 
 # CMake
 build/
+CMakeUserPresets.json
 
 # CTest
 Testing/
