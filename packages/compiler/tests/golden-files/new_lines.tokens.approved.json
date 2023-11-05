@@ -1,0 +1,13 @@
+{
+  "filename": "new_lines.dao",
+  "tokens": [
+    {
+      "kind": "new_line",
+      "repr": "\\n"
+    },
+    {
+      "kind": "new_line",
+      "repr": "\\n"
+    }
+  ]
+}

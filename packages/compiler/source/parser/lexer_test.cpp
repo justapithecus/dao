@@ -9,8 +9,8 @@ auto main() -> int {
 
   for (auto const &file : load_test_examples()) {
     auto path{file.path()};
-    auto name{path.stem().c_str()};
-    auto filename{path.filename().c_str()};
+    auto name{path.stem().generic_string()};
+    auto filename{path.filename().generic_string()};
     auto namer{TemplatedCustomNamer::create(
       std::string{test_path} + "golden-files/" + std::string{name} +
       ".tokens.{ApprovedOrReceived}.{FileExtension}")};

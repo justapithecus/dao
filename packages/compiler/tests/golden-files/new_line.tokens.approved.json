@@ -1,0 +1,9 @@
+{
+  "filename": "new_line.dao",
+  "tokens": [
+    {
+      "kind": "new_line",
+      "repr": "\\n"
+    }
+  ]
+}

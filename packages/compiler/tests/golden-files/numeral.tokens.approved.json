@@ -1,0 +1,13 @@
+{
+  "filename": "numeral.dao",
+  "tokens": [
+    {
+      "kind": "numeral",
+      "repr": "3"
+    },
+    {
+      "kind": "new_line",
+      "repr": "\\n"
+    }
+  ]
+}
