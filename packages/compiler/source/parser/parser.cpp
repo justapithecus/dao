@@ -206,16 +206,18 @@ namespace dao {
         if (not ctx_.is_eof()) {
           auto next_precedence{
             binary_op_precedence[static_cast<std::uint8_t>(next_op)]};
-          if (token_precedence < next_precedence) {
-            // current right-hand-side becomes the left-hand-side of the inner expression
+          if (token_precedence <= next_precedence) {
             ctx_.rewind();
+            // current right-hand-side becomes the left-hand-side of the inner expression
             rhs = parse_binary_expr(std::move(rhs), token_precedence + 1);
             if (!rhs) {
               // TODO(andrew): add to ctx.errors
               return nullptr;
             }
 
-            std::swap(lhs, rhs);
+            if (token_precedence != next_precedence) {
+              std::swap(lhs, rhs);
+            }
           }
         }
       }
@@ -279,7 +281,6 @@ namespace dao {
   auto parser::parse_function_def() -> ast_node {
     auto proto{parse_function_proto()};
 
-    // TODO(andrew): introduce 'external' to distinguish proto-only vs. definition
     auto body{parse_expr()};
     if (!body) {
       return std::make_unique<ast>(std::move(proto));
@@ -301,7 +302,7 @@ namespace dao {
       args.emplace_back(parse_primary_expr());
 
       // eat ',' or ')'
-      if (auto sep{ctx_.peek()->repr[0]}; sep == ')') {
+      if (auto sep{ctx_.peek()->as_operand()}; sep == ')') {
         ctx_.seek();
         return args;
       } else if (sep == ',') {
