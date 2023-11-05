@@ -1,0 +1,39 @@
+{
+  "_filename": "function_prototype.tokens.approved.json",
+  "ast": {
+    "type": "program",
+    "value": {
+      "entry": [],
+      "nodes": [
+        {
+          "type": "function_prototype",
+          "value": {
+            "args": [
+              {
+                "name": "x"
+              },
+              {
+                "name": "y"
+              }
+            ],
+            "id": "pow"
+          }
+        },
+        {
+          "type": "external_linkage",
+          "value": {
+            "kind": "C",
+            "prototype": {
+              "args": [
+                {
+                  "name": "str"
+                }
+              ],
+              "id": "puts"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

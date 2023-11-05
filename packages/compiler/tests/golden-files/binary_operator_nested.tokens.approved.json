@@ -96,6 +96,58 @@
     {
       "kind": "new_line",
       "repr": "\\n"
+    },
+    {
+      "kind": "new_line",
+      "repr": "\\n"
+    },
+    {
+      "kind": "identifier",
+      "repr": "sqrt"
+    },
+    {
+      "kind": "separator",
+      "repr": "("
+    },
+    {
+      "kind": "identifier",
+      "repr": "pow"
+    },
+    {
+      "kind": "separator",
+      "repr": "("
+    },
+    {
+      "kind": "identifier",
+      "repr": "p"
+    },
+    {
+      "kind": "operator",
+      "repr": "-"
+    },
+    {
+      "kind": "identifier",
+      "repr": "q"
+    },
+    {
+      "kind": "separator",
+      "repr": ","
+    },
+    {
+      "kind": "numeral",
+      "repr": "2"
+    },
+    {
+      "kind": "separator",
+      "repr": ")"
+    },
+    {
+      "kind": "separator",
+      "repr": ")"
+    },
+    {
+      "kind": "new_line",
+      "repr": "\\n"
     }
   ]
 }

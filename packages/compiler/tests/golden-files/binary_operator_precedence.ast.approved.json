@@ -1,0 +1,59 @@
+{
+  "_filename": "binary_operator_precedence.tokens.approved.json",
+  "ast": {
+    "type": "program",
+    "value": {
+      "entry": [
+        {
+          "type": "binary_expression",
+          "value": {
+            "lhs": {
+              "type": "binary_expression",
+              "value": {
+                "lhs": {
+                  "type": "identifier_expression",
+                  "value": "z"
+                },
+                "operand": "/",
+                "rhs": {
+                  "type": "numeral_expression",
+                  "value": "10"
+                }
+              }
+            },
+            "operand": "+",
+            "rhs": {
+              "type": "identifier_expression",
+              "value": "y"
+            }
+          }
+        },
+        {
+          "type": "binary_expression",
+          "value": {
+            "lhs": {
+              "type": "binary_expression",
+              "value": {
+                "lhs": {
+                  "type": "identifier_expression",
+                  "value": "y"
+                },
+                "operand": "+",
+                "rhs": {
+                  "type": "identifier_expression",
+                  "value": "z"
+                }
+              }
+            },
+            "operand": "/",
+            "rhs": {
+              "type": "numeral_expression",
+              "value": "10"
+            }
+          }
+        }
+      ],
+      "nodes": []
+    }
+  }
+}
