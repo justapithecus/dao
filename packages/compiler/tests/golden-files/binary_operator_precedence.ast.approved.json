@@ -1,5 +1,5 @@
 {
-  "_filename": "binary_operator_precedence.tokens.approved.json",
+  "_filename": "binary_operator_precedence.dao",
   "ast": {
     "type": "program",
     "value": {

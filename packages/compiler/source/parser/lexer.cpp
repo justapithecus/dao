@@ -65,6 +65,7 @@ namespace dao {
 
     } while (state > lexical_state_final);
 
+    tokens.emplace_back(token{"", token_kind::e_end_of_file});
     return tokens;
   }
 } // namespace dao

@@ -96,6 +96,10 @@
     {
       "kind": "new_line",
       "repr": "\\n"
+    },
+    {
+      "kind": "end_of_file",
+      "repr": ""
     }
   ]
 }

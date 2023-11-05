@@ -1,5 +1,5 @@
 {
-  "_filename": "if_then_else.tokens.approved.json",
+  "_filename": "if_then_else.dao",
   "ast": {
     "type": "program",
     "value": {

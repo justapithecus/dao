@@ -14,30 +14,8 @@
 
 namespace dao {
 
-  inline auto operator<<(std::ostream &os, dao::token const &tok)
-    -> std::ostream & {
-    os << std::setw(12);
-
-    switch (tok.kind) {
-      token_desc(token_kind::e_new_line, "New Line");
-      token_desc(token_kind::e_identifier, "Identifier");
-      token_desc(token_kind::e_numeral, "Numeral");
-      token_desc(token_kind::e_operator, "Operator");
-      token_desc(token_kind::e_separator, "Separator");
-      token_desc(token_kind::e_literal, "String Literal");
-      token_desc(token_kind::e_keyword_external, "Keyword");
-      token_desc(token_kind::e_keyword_function, "Keyword");
-      token_desc(token_kind::e_keyword_if, "Keyword");
-      token_desc(token_kind::e_keyword_then, "Keyword");
-      token_desc(token_kind::e_keyword_else, "Keyword");
-      os << "Unknown";
-      break;
-    }
-
-    return os << " | " << tok.repr << " |";
-  }
-
   inline ankerl::unordered_dense::map<dao::token_kind, std::string> kind_to_str{
+    {token_kind::e_end_of_file, "end_of_file"},
     {token_kind::e_new_line, "new_line"},
     {token_kind::e_identifier, "identifier"},
     {token_kind::e_numeral, "numeral"},
@@ -47,6 +25,7 @@ namespace dao {
   };
 
   inline ankerl::unordered_dense::map<std::string, dao::token_kind> str_to_kind{
+    {"end_of_file", token_kind::e_end_of_file},
     {"new_line", token_kind::e_new_line},
     {"identifier", token_kind::e_identifier},
     {"numeral", token_kind::e_numeral},
