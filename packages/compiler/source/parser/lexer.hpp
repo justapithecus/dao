@@ -20,7 +20,7 @@ namespace dao {
       , col_num{1} {
     }
 
-    auto update_repr(char const *src_ptr, int end_offset) {
+    auto update_repr(char const *src_ptr, int end_offset = 0) {
       auto first{src_ptr - len};
       auto last{first + (len + end_offset)};
       repr = std::string{first, last};

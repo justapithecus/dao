@@ -19,6 +19,7 @@ unsigned char const equivalence_class[256] = {
   [')']        = offset(glyph_separator),
   ['*']        = offset(glyph_operator),
   ['+']        = offset(glyph_operator),
+  [',']        = offset(glyph_separator),
   ['-']        = offset(glyph_operator),
   // TODO(andrew): glyph_accessor to distinguish for identifiers and numerals
   ['.']        = offset(glyph_operator),
