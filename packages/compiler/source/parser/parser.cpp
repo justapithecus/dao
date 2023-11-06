@@ -180,10 +180,6 @@ namespace dao {
   auto parser::parse_identifier_expr() -> ast_node {
     auto name{ctx_.eat()->repr};
 
-    // if (not ctx_.is_eof() and ctx_.peek()->as_operand() == '(') {
-    //   return parse_function_call(std::move(name));
-    // }
-
     if (not ctx_.is_eof()) {
       if (ctx_.peek()->as_operand() == '(') {
         return parse_function_call(std::move(name));
@@ -283,7 +279,6 @@ namespace dao {
     }
 
     // TODO(andrew): maybe some kind of generic parse_sequence with separators
-    // TODO(andrew): fix no arg sequence
     while (not ctx_.is_eof()) {
       args.emplace_back(parse_function_arg());
 
@@ -335,7 +330,6 @@ namespace dao {
     }
 
     // TODO(andrew): maybe some kind of generic parse_sequence with separators
-    // TODO(andrew): fix no arg sequence
     while (not ctx_.is_eof()) {
       args.emplace_back(parse_primary_expr());
 
