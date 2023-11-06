@@ -32,6 +32,28 @@
               "id": "puts"
             }
           }
+        },
+        {
+          "type": "function_prototype",
+          "value": {
+            "args": [
+              {
+                "name": "x"
+              }
+            ],
+            "id": "foo"
+          }
+        },
+        {
+          "type": "function_prototype",
+          "value": {
+            "args": [
+              {
+                "name": "x"
+              }
+            ],
+            "id": "bar"
+          }
         }
       ]
     }
