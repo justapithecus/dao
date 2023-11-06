@@ -20,6 +20,8 @@ namespace dao {
     e_keyword_if,
     e_keyword_then,
     e_keyword_else,
+    e_keyword_alias,
+    e_keyword_as,
   };
 
   struct token {

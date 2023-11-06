@@ -52,6 +52,9 @@ namespace dao {
       case token_kind::e_new_line:
         ctx_.skip();
         break;
+      case token_kind::e_keyword_alias:
+        prog.meta.emplace_back(parse_type_alias());
+        break;
       case token_kind::e_keyword_external:
         prog.nodes.emplace_back(parse_external_linkage());
         break;
@@ -428,6 +431,29 @@ namespace dao {
 
     return std::make_unique<ast>(
       if_expr{std::move(condition), std::move(then), std::move(else_)});
+  }
+
+  auto parser::parse_type_alias() -> ast_node {
+    // eat 'alias'
+    ctx_.seek();
+
+    auto from{parse_identifier_expr()};
+    if (not from or not std::holds_alternative<identifier_expr>(*from)) {
+      // TODO(andrew): ctx.errors
+      return nullptr;
+    }
+
+    // eat 'as'
+    ctx_.seek();
+
+    auto to{parse_identifier_expr()};
+    if (not to or not std::holds_alternative<identifier_expr>(*to)) {
+      // TODO(andrew): ctx.errors
+      return nullptr;
+    }
+
+    return std::make_unique<ast>(type_alias{
+      std::get<identifier_expr>(*from), std::get<identifier_expr>(*to)});
   }
 
 } // namespace dao

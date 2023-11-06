@@ -2,6 +2,8 @@
 
 #include <ankerl/unordered_dense.h>
 
+#include "expression.hpp"
+
 namespace dao {
 
   enum class builtin_type_kind {
@@ -12,6 +14,7 @@ namespace dao {
     builtin_types;
 
   struct type_alias {
-    std::string typename_;
+    identifier_expr from;
+    identifier_expr to;
   };
 } // namespace dao

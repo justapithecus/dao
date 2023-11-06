@@ -26,7 +26,20 @@ namespace dao {
   using ast_node = std::unique_ptr<ast>;
 
   struct program_ast {
+    /// meta
+    ///
+    /// Compile-time meta-programming expressions
+    std::vector<ast_node> meta;
+
+    /// entry
+    ///
+    /// Auto-generated program entrypoint in the absence of an explicitly
+    /// user-defined main function
     std::vector<ast_node> entry;
+
+    /// nodes
+    ///
+    /// AST nodes with run-time impact
     std::vector<ast_node> nodes;
   };
 

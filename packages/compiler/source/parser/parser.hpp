@@ -151,6 +151,11 @@ namespace dao {
     /// <else_expr> ::= 'else' <primary_expr>
     /// <if_expr> ::= 'if' <primary_expr> 'then' { <expr> } [ <else_expr> ]
     auto parse_if_expr() -> ast_node;
+
+    /// Parses a type alias
+    ///
+    /// <type_alias> ::= 'alias' <identifier_expr> 'as' <identifier_expr>
+    auto parse_type_alias() -> ast_node;
   };
 
 } // namespace dao

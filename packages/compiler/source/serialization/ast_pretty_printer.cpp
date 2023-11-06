@@ -135,4 +135,18 @@ namespace dao {
     };
   }
 
+  auto ast_pretty_printer::operator()(dao::type_alias const &meta) const
+    -> json {
+    return json{
+      {"type", "type_alias"},
+      {
+        "value",
+        {
+          {"from", meta.from},
+          {"to", meta.to},
+        },
+      },
+    };
+  }
+
 } // namespace dao

@@ -1,1 +1,1 @@
-type c_char = i8;
+alias int8 as c_char

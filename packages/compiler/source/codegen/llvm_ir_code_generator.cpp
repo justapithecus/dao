@@ -73,6 +73,11 @@ namespace dao {
   //---------------------------------------------------------------------------
   auto llvm_ir_code_generator::operator()(dao::program_ast const &prog)
     -> llvm::Value * {
+    // evaluate metaprogramming (eventually this may not always be at the beginning
+    // and may be interleaved)
+    std::for_each(prog.meta.begin(), prog.meta.end(),
+      [this](auto &&node) { std::visit(*this, *node); });
+
     // build program definitions
     std::for_each(prog.nodes.begin(), prog.nodes.end(),
       [this](auto &&node) { std::visit(*this, *node); });
@@ -297,6 +302,11 @@ namespace dao {
       phi_node->addIncoming(else_value, else_bb);
     }
     return phi_node;
+  }
+
+  auto llvm_ir_code_generator::operator()(dao::type_alias const &)
+    -> llvm::Value * {
+    return nullptr;
   }
 
   //---------------------------------------------------------------------------
