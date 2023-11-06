@@ -106,11 +106,11 @@ namespace dao {
         }
         break;
       case token_kind::e_keyword_external:
-        // TODO(andrew): errors, external can only be at program/module scope
-        return nullptr;
+        // TODO(andrew): ctx.errors, currently do not support parsing of external linkages
+        //               and functions inside of function definitions
+        [[fallthrough]];
       case token_kind::e_keyword_function:
-        node = parse_function_def();
-        break;
+        return nullptr;
       case token_kind::e_keyword_if:
         return parse_if_expr();
       case token_kind::e_keyword_then:
@@ -308,8 +308,17 @@ namespace dao {
   auto parser::parse_function_def() -> ast_node {
     auto proto{parse_function_proto()};
 
+    ctx_.skip();
+
+    // currently do not support defining functions or declaring prototypes
+    // inside of function bodies
+    if (ctx_.peek()->kind == token_kind::e_keyword_function or
+        ctx_.peek()->kind == token_kind::e_keyword_external) {
+      return std::make_unique<ast>(std::move(proto));
+    }
+
     auto body{parse_expr()};
-    if (!body) {
+    if (not body) {
       return std::make_unique<ast>(std::move(proto));
     }
 
