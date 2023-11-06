@@ -1,8 +1,9 @@
 #include "../../tests/test_utils.hpp"
 
-#include "codegen/llvm_ir_code_generator.hpp"
-#include "parser/lexer.hpp"
-#include "parser/parser.hpp"
+#include "../parser/lexer.hpp"
+#include "../parser/parser.hpp"
+#include "llvm_ir_code_generator.hpp"
+
 auto main() -> int {
   // use approved lexer outputs as inputs to parser
   for (auto const &file : load_test_cases("programs")) {
@@ -10,7 +11,7 @@ auto main() -> int {
     auto name{path.stem().generic_string()};
     auto filename{path.filename().generic_string()};
     auto namer{TemplatedCustomNamer::create(
-      std::string{test_path} + "golden-files/ir/" + std::string{name} +
+      std::string{test_path} + "golden-files/llvm/" + std::string{name} +
       ".{ApprovedOrReceived}.ll")};
 
     test(name) = [&] {

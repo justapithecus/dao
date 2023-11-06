@@ -1,5 +1,7 @@
 add_library(libdao_compiler
   STATIC
+    source/analysis/semantic_analyzer.cpp
+    source/ast/types.cpp
     source/codegen/llvm_ir_code_generator.cpp
     source/parser/lexer.cpp
     source/parser/parser.cpp
@@ -15,4 +17,5 @@ set_target_properties(libdao_compiler
 include(test.cmake)
 add_compiler_test(lexer source/parser/lexer_test.cpp)
 add_compiler_test(parser source/parser/parser_test.cpp)
+add_compiler_test(semantic_analyzer source/analysis/semantic_analyzer_test.cpp)
 add_compiler_test(llvm_ir_code_generator source/codegen/llvm_ir_code_generator_test.cpp)
