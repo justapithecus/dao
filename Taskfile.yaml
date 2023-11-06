@@ -29,4 +29,4 @@ tasks:
 
   run: ./build/apps/daoc/daoc
 
-  test: ctest --test-dir build --preset default --parallel 4 --output-on-failure --verbose
+  test: ctest --test-dir build --preset default --output-on-failure --verbose

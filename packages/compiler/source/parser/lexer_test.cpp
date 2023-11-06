@@ -9,7 +9,7 @@ auto main() -> int {
     auto name{path.stem().generic_string()};
     auto filename{path.filename().generic_string()};
     auto namer{TemplatedCustomNamer::create(
-      std::string{test_path} + "golden-files/" + std::string{name} +
+      std::string{test_path} + "golden-files/json/" + std::string{name} +
       ".tokens.{ApprovedOrReceived}.{FileExtension}")};
 
     test(name) = [&] {
