@@ -9,6 +9,7 @@ namespace dao {
         "value",
         {
           {"entry", prog.entry},
+          {"meta", prog.meta},
           {"nodes", prog.nodes},
         },
       },

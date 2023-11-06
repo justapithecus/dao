@@ -4,6 +4,7 @@
     "type": "program",
     "value": {
       "entry": [],
+      "meta": [],
       "nodes": []
     }
   }

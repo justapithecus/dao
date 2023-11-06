@@ -8,7 +8,6 @@ namespace dao {
     {"then", token_kind::e_keyword_then},
     {"else", token_kind::e_keyword_else},
     {"alias", token_kind::e_keyword_alias},
-    {"alias", token_kind::e_keyword_alias},
     {"as", token_kind::e_keyword_as},
   };
 }
