@@ -1,0 +1,7 @@
+external(C) function puts(str)
+
+function triple(x)
+  x * 3
+
+puts("Hello world from dao!")
+puts(triple(7))

@@ -57,7 +57,6 @@ namespace dao {
 
   auto llvm_ir_code_generator::generate(dao::ast const &ast) -> void {
     std::visit(*this, ast);
-    std::cout << dumps() << std::endl;
     emit_object_code();
   }
 

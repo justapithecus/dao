@@ -4,7 +4,7 @@
 
 auto main() -> int {
 
-  for (auto const &file : load_test_cases()) {
+  for (auto const &file : load_test_cases("cases")) {
     auto path{file.path()};
     auto name{path.stem().generic_string()};
     auto filename{path.filename().generic_string()};
