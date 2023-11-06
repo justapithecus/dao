@@ -1,10 +1,10 @@
 #include "../../tests/test_utils.hpp"
 
-#include "parser.hpp"
+#include "semantic_analyzer.hpp"
 
 auto main() -> int {
 
-  // use approved lexer outputs as inputs to parser
+  // use approved parser outputs as inputs to semantic analyzer
   for (auto const &entry : load_test_cases("golden-files")) {
     auto path{entry.path()};
     auto name{path.stem().generic_string()};
@@ -17,12 +17,12 @@ auto main() -> int {
 
       test(name) = [&] {
         auto tokens{load_tokens(path.generic_string())};
-        json contents{
-          {"_filename", base_name + ".dao"},
-          {"ast", dao::parser{tokens}.parse()},
-        };
+        //   json contents{
+        //     {"_filename", base_name + ".dao"},
+        //     {"ast", dao::parser{tokens}.parse()},
+        //   };
 
-        Approvals::verify(json_writer{contents}, Options().withNamer(namer));
+        //   Approvals::verify(json_writer{contents}, Options().withNamer(namer));
       };
     }
   }

@@ -1,6 +1,6 @@
 #include "../../tests/test_utils.hpp"
 
-#include "parser/lexer.hpp"
+#include "lexer.hpp"
 
 auto main() -> int {
 
