@@ -3,35 +3,26 @@
 #include "codegen/llvm_ir_code_generator.hpp"
 #include "parser/lexer.hpp"
 #include "parser/parser.hpp"
-
-auto directory{
-  Approvals::useApprovalsSubdirectory("../../tests/golden-files/ir")};
-
 auto main() -> int {
-  "triple"_test = [] {
-    auto constexpr source_fname{"examples/triple.dao"};
-    auto code_generator{dao::llvm_ir_code_generator{source_fname}};
+  // use approved lexer outputs as inputs to parser
+  for (auto const &file : load_test_cases("programs")) {
+    auto path{file.path()};
+    auto name{path.stem().generic_string()};
+    auto filename{path.filename().generic_string()};
+    auto namer{TemplatedCustomNamer::create(
+      std::string{test_path} + "golden-files/ir/" + std::string{name} +
+      ".{ApprovedOrReceived}.ll")};
 
-    std::visit(code_generator, dao::parser{dao::lex(source_fname)}.parse());
-    Approvals::verify(code_generator.dumps(),
-      ApprovalTests::Options().fileOptions().withFileExtension(".ll"));
-  };
+    test(name) = [&] {
+      auto code_generator{dao::llvm_ir_code_generator{filename}};
+      auto ast{dao::parser{dao::lex(path.generic_string())}.parse()};
+      std::visit(code_generator, std::move(ast));
 
-  "hello_world"_test = [] {
-    auto constexpr source_fname{"examples/hello_world.dao"};
-    auto code_generator{dao::llvm_ir_code_generator{source_fname}};
-
-    std::visit(code_generator, dao::parser{dao::lex(source_fname)}.parse());
-    Approvals::verify(code_generator.dumps(),
-      ApprovalTests::Options().fileOptions().withFileExtension(".ll"));
-  };
-
-  "if_else"_test = [] {
-    auto constexpr source_fname{"examples/if_else.dao"};
-    auto code_generator{dao::llvm_ir_code_generator{source_fname}};
-
-    std::visit(code_generator, dao::parser{dao::lex(source_fname)}.parse());
-    Approvals::verify(code_generator.dumps(),
-      ApprovalTests::Options().fileOptions().withFileExtension(".ll"));
-  };
+      auto opts{ApprovalTests::Options()
+                  .fileOptions()
+                  .withFileExtension(".ll")
+                  .withNamer(namer)};
+      Approvals::verify(code_generator.dumps(), opts);
+    };
+  }
 }

@@ -42,13 +42,8 @@ public:
 
 inline auto constexpr test_path{"packages/compiler/tests/"};
 
-inline auto load_test_cases() {
-  return std::filesystem::directory_iterator(std::string{test_path} + "cases");
-}
-
-inline auto load_test_cases_tokens() {
-  return std::filesystem::directory_iterator(
-    std::string{test_path} + "golden-files");
+inline auto load_test_cases(std::string dir) {
+  return std::filesystem::directory_iterator(std::string{test_path} + dir);
 }
 
 inline auto load_tokens(std::string const &filepath) {

@@ -5,7 +5,8 @@
 
 auto main() -> int {
 
-  for (auto const &entry : load_test_cases_tokens()) {
+  // use approved lexer outputs as inputs to parser
+  for (auto const &entry : load_test_cases("golden-files")) {
     auto path{entry.path()};
     auto name{path.stem().generic_string()};
     if (entry.is_regular_file() and name.find("tokens") != std::string::npos) {
