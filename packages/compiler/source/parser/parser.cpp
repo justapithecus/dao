@@ -97,8 +97,10 @@ namespace dao {
 
       switch (ctx_.peek()->kind) {
       case token_kind::e_new_line:
-        ctx_.skip();
         // new-line tokens act as terminators
+        ctx_.skip();
+        [[fallthrough]];
+      case token_kind::e_end_of_file:
         if (node) {
           return node;
         }
@@ -160,7 +162,13 @@ namespace dao {
     case token_kind::e_literal:
       return parse_literal<string_literal>();
     case token_kind::e_separator:
-      return parse_parenthetical_expr();
+      if (ctx_.peek()->repr == "(") {
+        return parse_parenthetical_expr();
+      } else {
+        throw std::runtime_error{
+          "found unexpected separator: " + ctx_.peek()->repr};
+      }
+      break;
     case token_kind::e_operator:
       return parse_binary_expr();
     default:
@@ -268,6 +276,12 @@ namespace dao {
     // eat '('
     ctx_.seek();
 
+    // no-args
+    if (auto sep{ctx_.peek()->as_operand()}; sep == ')') {
+      ctx_.seek();
+      return args;
+    }
+
     // TODO(andrew): maybe some kind of generic parse_sequence with separators
     // TODO(andrew): fix no arg sequence
     while (not ctx_.is_eof()) {
@@ -313,6 +327,12 @@ namespace dao {
 
     // eat '('
     ctx_.seek();
+
+    // no-args
+    if (auto sep{ctx_.peek()->as_operand()}; sep == ')') {
+      ctx_.seek();
+      return args;
+    }
 
     // TODO(andrew): maybe some kind of generic parse_sequence with separators
     // TODO(andrew): fix no arg sequence

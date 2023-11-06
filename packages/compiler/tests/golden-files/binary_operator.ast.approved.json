@@ -22,23 +22,23 @@
           "type": "binary_expression",
           "value": {
             "lhs": {
+              "type": "identifier_expression",
+              "value": "x"
+            },
+            "operand": "/",
+            "rhs": {
               "type": "binary_expression",
               "value": {
                 "lhs": {
                   "type": "identifier_expression",
-                  "value": "x"
+                  "value": "y"
                 },
-                "operand": "/",
+                "operand": "*",
                 "rhs": {
                   "type": "identifier_expression",
-                  "value": "y"
+                  "value": "z"
                 }
               }
-            },
-            "operand": "*",
-            "rhs": {
-              "type": "identifier_expression",
-              "value": "z"
             }
           }
         }
