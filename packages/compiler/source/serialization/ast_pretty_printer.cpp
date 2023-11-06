@@ -9,6 +9,7 @@ namespace dao {
         "value",
         {
           {"entry", prog.entry},
+          {"meta", prog.meta},
           {"nodes", prog.nodes},
         },
       },
@@ -130,6 +131,20 @@ namespace dao {
           {"condition", expr.cond_},
           {"then", expr.then_},
           {"else", expr.else_},
+        },
+      },
+    };
+  }
+
+  auto ast_pretty_printer::operator()(dao::type_alias const &meta) const
+    -> json {
+    return json{
+      {"type", "type_alias"},
+      {
+        "value",
+        {
+          {"from", meta.from},
+          {"to", meta.to},
         },
       },
     };
