@@ -1,5 +1,6 @@
 add_library(libdao_compiler
   STATIC
+    source/analysis/semantic_analyzer.cpp
     source/codegen/llvm_ir_code_generator.cpp
     source/parser/lexer.cpp
     source/parser/parser.cpp
