@@ -2,6 +2,11 @@
 
 namespace dao {
 
+  auto semantic_analyzer::dump() const -> decltype(types_) {
+    // just return single table for now
+    return types_;
+  }
+
   auto semantic_analyzer::operator()(dao::program_ast const &prog) -> void {
     // evaluate metaprogramming (eventually this may not always be at the beginning
     // and may be interleaved)

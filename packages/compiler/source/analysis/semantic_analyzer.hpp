@@ -10,6 +10,8 @@ namespace dao {
     ankerl::unordered_dense::map<std::string, std::string> types_;
 
   public:
+    auto dump() const -> decltype(types_);
+
     // Visitors
     auto operator()(dao::program_ast const &) -> void;
     auto operator()(dao::external_linkage_ast const &) -> void;

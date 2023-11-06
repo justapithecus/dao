@@ -1,5 +1,6 @@
 #include "../../tests/test_utils.hpp"
 
+#include "../parser/parser.hpp"
 #include "semantic_analyzer.hpp"
 
 auto main() -> int {
@@ -12,17 +13,25 @@ auto main() -> int {
       auto filename{path.filename().generic_string()};
       auto base_name{path.stem().stem().stem().generic_string()};
       auto namer{TemplatedCustomNamer::create(
-        std::string{test_path} + "golden-files/" + std::string{base_name} +
-        ".ast.{ApprovedOrReceived}.{FileExtension}")};
+        std::string{test_path} + "golden-files/tables/" +
+        std::string{base_name} + ".{ApprovedOrReceived}.{FileExtension}")};
 
       test(name) = [&] {
+        // TODO(andrew): load AST from json directly
         auto tokens{load_tokens(path.generic_string())};
-        //   json contents{
-        //     {"_filename", base_name + ".dao"},
-        //     {"ast", dao::parser{tokens}.parse()},
-        //   };
+        auto analyzer{dao::semantic_analyzer{}};
+        auto ast{dao::parser{tokens}.parse()};
+        std::visit(analyzer, std::move(ast));
 
-        //   Approvals::verify(json_writer{contents}, Options().withNamer(namer));
+        json contents{
+          {"_filename", base_name + ".dao"},
+          {
+            "metatables",
+            {"types", analyzer.dump()},
+          },
+        };
+
+        Approvals::verify(json_writer{contents}, Options().withNamer(namer));
       };
     }
   }
