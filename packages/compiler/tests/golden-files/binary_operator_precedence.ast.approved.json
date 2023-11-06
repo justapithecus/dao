@@ -8,6 +8,11 @@
           "type": "binary_expression",
           "value": {
             "lhs": {
+              "type": "identifier_expression",
+              "value": "y"
+            },
+            "operand": "+",
+            "rhs": {
               "type": "binary_expression",
               "value": {
                 "lhs": {
@@ -20,11 +25,6 @@
                   "value": "10"
                 }
               }
-            },
-            "operand": "+",
-            "rhs": {
-              "type": "identifier_expression",
-              "value": "y"
             }
           }
         },

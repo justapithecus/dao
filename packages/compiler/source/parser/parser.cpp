@@ -97,8 +97,10 @@ namespace dao {
 
       switch (ctx_.peek()->kind) {
       case token_kind::e_new_line:
-        ctx_.skip();
         // new-line tokens act as terminators
+        ctx_.skip();
+        [[fallthrough]];
+      case token_kind::e_end_of_file:
         if (node) {
           return node;
         }
@@ -125,7 +127,15 @@ namespace dao {
         node = parse_literal<string_literal>();
         break;
       case token_kind::e_separator:
-        node = parse_parenthetical_expr();
+        if (ctx_.peek()->repr == "(") {
+          node = parse_parenthetical_expr();
+        } else if ((ctx_.peek()->repr == ")" or ctx_.peek()->repr == ",") and
+                   node) {
+          return node;
+        } else {
+          throw std::runtime_error{"found unexpected separator: " +
+                                   ctx_.peek()->repr + " or node was nullptr"};
+        }
         break;
       case token_kind::e_operator:
         return parse_binary_expr(std::move(node));
@@ -152,7 +162,13 @@ namespace dao {
     case token_kind::e_literal:
       return parse_literal<string_literal>();
     case token_kind::e_separator:
-      return parse_parenthetical_expr();
+      if (ctx_.peek()->repr == "(") {
+        return parse_parenthetical_expr();
+      } else {
+        throw std::runtime_error{
+          "found unexpected separator: " + ctx_.peek()->repr};
+      }
+      break;
     case token_kind::e_operator:
       return parse_binary_expr();
     default:
@@ -164,8 +180,13 @@ namespace dao {
   auto parser::parse_identifier_expr() -> ast_node {
     auto name{ctx_.eat()->repr};
 
-    if (not ctx_.is_eof() and ctx_.peek()->as_operand() == '(') {
-      return parse_function_call(std::move(name));
+    if (not ctx_.is_eof()) {
+      if (ctx_.peek()->as_operand() == '(') {
+        return parse_function_call(std::move(name));
+      } else if (ctx_.peek()->kind == token_kind::e_operator) {
+        auto node{std::make_unique<ast>(identifier_expr{std::move(name)})};
+        return parse_binary_expr(std::move(node));
+      }
     }
 
     return std::make_unique<ast>(identifier_expr{std::move(name)});
@@ -251,8 +272,13 @@ namespace dao {
     // eat '('
     ctx_.seek();
 
+    // no-args
+    if (auto sep{ctx_.peek()->as_operand()}; sep == ')') {
+      ctx_.seek();
+      return args;
+    }
+
     // TODO(andrew): maybe some kind of generic parse_sequence with separators
-    // TODO(andrew): fix no arg sequence
     while (not ctx_.is_eof()) {
       args.emplace_back(parse_function_arg());
 
@@ -297,8 +323,13 @@ namespace dao {
     // eat '('
     ctx_.seek();
 
+    // no-args
+    if (auto sep{ctx_.peek()->as_operand()}; sep == ')') {
+      ctx_.seek();
+      return args;
+    }
+
     // TODO(andrew): maybe some kind of generic parse_sequence with separators
-    // TODO(andrew): fix no arg sequence
     while (not ctx_.is_eof()) {
       args.emplace_back(parse_primary_expr());
 

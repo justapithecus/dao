@@ -1,20 +1,24 @@
 {
-  "_filename": "binary_operator.dao",
+  "_filename": "parentheses.dao",
   "ast": {
     "type": "program",
     "value": {
       "entry": [
         {
+          "type": "identifier_expression",
+          "value": "my_var"
+        },
+        {
           "type": "binary_expression",
           "value": {
             "lhs": {
-              "type": "numeral_expression",
-              "value": "15"
+              "type": "identifier_expression",
+              "value": "my_var"
             },
-            "operand": "+",
+            "operand": "*",
             "rhs": {
               "type": "numeral_expression",
-              "value": "32"
+              "value": "9"
             }
           }
         },
@@ -22,23 +26,23 @@
           "type": "binary_expression",
           "value": {
             "lhs": {
-              "type": "identifier_expression",
-              "value": "x"
-            },
-            "operand": "/",
-            "rhs": {
               "type": "binary_expression",
               "value": {
                 "lhs": {
-                  "type": "identifier_expression",
-                  "value": "y"
+                  "type": "numeral_expression",
+                  "value": "7"
                 },
-                "operand": "*",
+                "operand": "+",
                 "rhs": {
                   "type": "identifier_expression",
-                  "value": "z"
+                  "value": "my_var"
                 }
               }
+            },
+            "operand": "*",
+            "rhs": {
+              "type": "numeral_expression",
+              "value": "5"
             }
           }
         }
