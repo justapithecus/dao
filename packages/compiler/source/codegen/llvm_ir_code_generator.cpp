@@ -276,6 +276,32 @@ namespace dao {
   //---------------------------------------------------------------------------
   // Private Methods
   //---------------------------------------------------------------------------
+  auto llvm_ir_code_generator::resolve_llvm_type(
+    std::optional<std::string> const &typename_) -> llvm::Type * {
+    if (typename_.has_value()) {
+      auto resolved{typename_.value()};
+
+      // resolve to builtin
+      if (auto it{tables_.types_.find(resolved)}; it != tables_.types_.end()) {
+        resolved = it->second;
+      }
+
+      // convert builtin type to LLVM type
+      if (auto it{builtin_types.find(resolved)}; it != builtin_types.end()) {
+        switch (it->second) {
+        case builtin_type_kind::e_int8:
+          // TODO(andrew): placeholder and actually incorrect until ptr types are introduced
+          return builder_.getInt8PtrTy();
+        case builtin_type_kind::e_int32:
+          return builder_.getInt32Ty();
+        }
+      }
+    }
+    // for now, default to double when arg type is not specified, i.e. deduced
+    // collect error when type cannot be deduced
+    return builder_.getDoubleTy();
+  }
+
   auto llvm_ir_code_generator::generate_function_prototype(
     function_proto const &proto, llvm::Function::LinkageTypes linkages)
     -> llvm::Value * {
@@ -283,33 +309,11 @@ namespace dao {
     arg_types.reserve(proto.args.size());
     std::transform(proto.args.begin(), proto.args.end(),
       std::back_inserter(arg_types), [this](auto &&arg) -> llvm::Type * {
-        if (arg.typename_.has_value()) {
-          auto typename_{arg.typename_.value()};
-
-          // resolve to builtin
-          if (auto it{tables_.types_.find(typename_)};
-              it != tables_.types_.end()) {
-            typename_ = it->second;
-          }
-
-          // convert builtin type to LLVM type
-          if (auto it{builtin_types.find(typename_)};
-              it != builtin_types.end()) {
-            switch (it->second) {
-            case builtin_type_kind::e_int8:
-              // TODO(andrew): placeholder and actually incorrect until ptr types are introduced
-              return builder_.getInt8PtrTy();
-            }
-          }
-        }
-        // for now, default to double when arg type is not specified, i.e. deduced
-        // collect error when type cannot be deduced
-        return builder_.getDoubleTy();
+        return resolve_llvm_type(arg.typename_);
       });
 
     // TODO(andrew): implement return type resolution
-    auto return_type{
-      proto.id == "puts" ? builder_.getInt32Ty() : builder_.getDoubleTy()};
+    auto return_type{resolve_llvm_type(proto.ret)};
     auto constexpr is_var_arg{false};
     auto ft{llvm::FunctionType::get(return_type, arg_types, is_var_arg)};
     auto fn{llvm::Function::Create(ft, linkages, proto.id, mod_)};
