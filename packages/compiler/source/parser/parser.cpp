@@ -126,7 +126,7 @@ namespace dao {
       case token_kind::e_numeral:
         node = parse_literal<numeral_expr>();
         break;
-      case token_kind::e_literal:
+      case token_kind::e_string_literal:
         node = parse_literal<string_literal>();
         break;
       case token_kind::e_separator:
@@ -162,7 +162,7 @@ namespace dao {
       return parse_identifier_expr();
     case token_kind::e_numeral:
       return parse_literal<numeral_expr>();
-    case token_kind::e_literal:
+    case token_kind::e_string_literal:
       return parse_literal<string_literal>();
     case token_kind::e_separator:
       if (ctx_.peek()->repr == "(") {

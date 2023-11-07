@@ -13,8 +13,8 @@ namespace dao {
     e_identifier,
     e_separator,
     e_operator,
-    e_numeral,
-    e_literal, // TODO(andrew): distinguish string_literal vs. numeral_literal eventually
+    e_numeral, // TODO(andrew): rename to numeral_literal
+    e_string_literal,
     e_keyword_external,
     e_keyword_function,
     e_keyword_if,
@@ -22,6 +22,9 @@ namespace dao {
     e_keyword_else,
     e_keyword_alias,
     e_keyword_as,
+    e_keyword_ptr,
+    e_keyword_mutable,
+    e_keyword_readonly,
   };
 
   enum class operand_kind : std::uint8_t {

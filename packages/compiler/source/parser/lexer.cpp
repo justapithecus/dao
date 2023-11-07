@@ -56,7 +56,7 @@ namespace dao {
       }
       case lexical_state_string_literal_end: {
         lexeme.update_repr(src_ptr, -1);
-        tokens.emplace_back(lexeme.as_token(token_kind::e_literal));
+        tokens.emplace_back(lexeme.as_token(token_kind::e_string_literal));
         break;
       }
       default:

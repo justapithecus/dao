@@ -9,5 +9,8 @@ namespace dao {
     {"else", token_kind::e_keyword_else},
     {"alias", token_kind::e_keyword_alias},
     {"as", token_kind::e_keyword_as},
+    {"ptr", token_kind::e_keyword_as},
+    {"mutable", token_kind::e_keyword_as},
+    {"readonly", token_kind::e_keyword_as},
   };
 }

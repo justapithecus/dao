@@ -21,7 +21,7 @@ namespace dao {
     {token_kind::e_numeral, "numeral"},
     {token_kind::e_operator, "operator"},
     {token_kind::e_separator, "separator"},
-    {token_kind::e_literal, "literal"},
+    {token_kind::e_string_literal, "literal"},
   };
 
   inline ankerl::unordered_dense::map<std::string, dao::token_kind> str_to_kind{
@@ -31,7 +31,7 @@ namespace dao {
     {"numeral", token_kind::e_numeral},
     {"operator", token_kind::e_operator},
     {"separator", token_kind::e_separator},
-    {"literal", token_kind::e_literal},
+    {"literal", token_kind::e_string_literal},
   };
 
   inline auto to_json(json &j, dao::token const &tok) {

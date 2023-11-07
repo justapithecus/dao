@@ -159,9 +159,9 @@ namespace dao {
 
     /// Parses a type expression
     ///
-    /// <typename> ::= <identifier_expr>
     /// <type_qualifier> ::= [ 'mut' ]
     /// <type_declarator> ::= [ 'ptr' ]
+    /// <typename> ::= <identifier_expr>
     /// <type_expression> ::= [ <type_declarator> ] [ <type_qualifier> ] <typename>
     auto parse_type_expr() -> type_expression;
   };
