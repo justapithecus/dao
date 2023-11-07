@@ -20,8 +20,6 @@ namespace dao {
     auto operator()(dao::type_alias const &) const -> json;
   };
 
-  auto constexpr compiler_directive_deduced_type{"[[dao::deduced_type]]"};
-
   inline auto to_json(json &j, dao::function_arg const &arg) {
     j = json{
       {"name", arg.name},

@@ -6,6 +6,9 @@
 
 namespace dao {
 
+  inline auto constexpr compiler_directive_deduced_type{
+    "[[dao::deduced_type]]"};
+
   enum class builtin_type_kind {
     e_int8,
   };
