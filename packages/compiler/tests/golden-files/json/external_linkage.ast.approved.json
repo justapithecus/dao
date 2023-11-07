@@ -31,7 +31,8 @@
                   "typename": "c_char"
                 }
               ],
-              "id": "puts"
+              "id": "puts",
+              "return_typename": "[[dao::deduced_type]]"
             }
           }
         }

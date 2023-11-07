@@ -34,7 +34,8 @@
                   "typename": "[[dao::deduced_type]]"
                 }
               ],
-              "id": "puts"
+              "id": "puts",
+              "return_typename": "[[dao::deduced_type]]"
             }
           }
         },

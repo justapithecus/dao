@@ -37,12 +37,21 @@ namespace dao {
   }
 
   inline auto to_json(json &j, dao::function_proto const &proto) {
-    j = json{{"id", proto.id}, {"args", proto.args}};
+    j = json{
+      {"id", proto.id},
+      {"args", proto.args},
+      {"return_typename", proto.ret.value_or(compiler_directive_deduced_type)},
+    };
   }
 
   inline auto from_json(json const &j, dao::function_proto &proto) {
     j.at("id").get_to(proto.id);
     j.at("args").get_to(proto.args);
+    j.at("return_typename").get_to(proto.ret);
+
+    if (proto.ret == compiler_directive_deduced_type) {
+      proto.ret = std::nullopt;
+    }
   }
 
   inline auto to_json(json &j, dao::ast const &node) -> void {
