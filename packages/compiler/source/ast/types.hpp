@@ -11,6 +11,7 @@ namespace dao {
 
   enum class builtin_type_kind {
     e_int8,
+    e_int32,
   };
 
   extern ankerl::unordered_dense::map<std::string, builtin_type_kind> const

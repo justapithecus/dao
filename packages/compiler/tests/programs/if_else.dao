@@ -1,6 +1,7 @@
 alias int8 as c_char
+alias int32 as c_int
 
-external (C) function puts(str: c_char)
+external (C) function puts(str: c_char) -> c_int
 
 function double(x)
   x * 2
