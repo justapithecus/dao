@@ -1,4 +1,6 @@
-external (C) function puts(str)
+alias int8 as c_char
+
+external (C) function puts(str: c_char)
 
 function double(x)
   x * 2

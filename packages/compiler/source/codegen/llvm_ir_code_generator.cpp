@@ -96,7 +96,8 @@ namespace dao {
   auto llvm_ir_code_generator::operator()(dao::external_linkage_ast const &link)
     -> llvm::Value * {
     // TODO(andrew): name mangler depending on linkage type
-    return std::visit(*this, static_cast<ast>(link.proto));
+    return generate_function_prototype(
+      link.proto, llvm::Function::ExternalLinkage);
   }
 
   auto llvm_ir_code_generator::operator()(dao::identifier_expr const &expr)
@@ -147,40 +148,7 @@ namespace dao {
 
   auto llvm_ir_code_generator::operator()(dao::function_proto const &proto)
     -> llvm::Value * {
-    // TODO(andrew): arg and ret type resolution
-    if (proto.id == "puts") {
-      std::vector<llvm::Type *> arg_types{
-        proto.args.size(), builder_.getInt8PtrTy()};
-
-      auto constexpr is_var_arg{false};
-      auto ft{
-        llvm::FunctionType::get(builder_.getInt32Ty(), arg_types, is_var_arg)};
-      auto fn{llvm::Function::Create(
-        ft, llvm::Function::ExternalLinkage, proto.id, mod_)};
-
-      // TODO(andrew): ranges
-      unsigned int i{0};
-      for (auto &arg : fn->args()) {
-        arg.setName(proto.args[i++].name);
-      }
-      return fn;
-    } else {
-      std::vector<llvm::Type *> arg_types{
-        proto.args.size(), builder_.getDoubleTy()};
-
-      auto constexpr is_var_arg{false};
-      auto ft{
-        llvm::FunctionType::get(builder_.getDoubleTy(), arg_types, is_var_arg)};
-      auto fn{llvm::Function::Create(
-        ft, llvm::Function::InternalLinkage, proto.id, mod_)};
-
-      // TODO(andrew): ranges
-      unsigned int i{0};
-      for (auto &arg : fn->args()) {
-        arg.setName(proto.args[i++].name);
-      }
-      return fn;
-    }
+    return generate_function_prototype(proto, llvm::Function::InternalLinkage);
   }
 
   auto llvm_ir_code_generator::operator()(dao::function_def const &def)
@@ -306,6 +274,34 @@ namespace dao {
   //---------------------------------------------------------------------------
   // Private Methods
   //---------------------------------------------------------------------------
+  auto llvm_ir_code_generator::generate_function_prototype(
+    function_proto const &proto, llvm::Function::LinkageTypes linkages)
+    -> llvm::Value * {
+    std::vector<llvm::Type *> arg_types{};
+    arg_types.reserve(proto.args.size());
+    std::transform(proto.args.begin(), proto.args.end(),
+      std::back_inserter(arg_types), [this](auto &&arg) -> llvm::Type * {
+        // TODO(andrew): type resolution in semantic analyzer tables
+        // for now, default to double when arg type is not specified, i.e. deduced
+        return arg.typename_.has_value() ? builder_.getInt8PtrTy()
+                                         : builder_.getDoubleTy();
+      });
+
+    // TODO(andrew): implement return type resolution
+    auto return_type{
+      proto.id == "puts" ? builder_.getInt32Ty() : builder_.getDoubleTy()};
+    auto constexpr is_var_arg{false};
+    auto ft{llvm::FunctionType::get(return_type, arg_types, is_var_arg)};
+    auto fn{llvm::Function::Create(ft, linkages, proto.id, mod_)};
+
+    // TODO(andrew): ranges
+    unsigned int i{0};
+    for (auto &arg : fn->args()) {
+      arg.setName(proto.args[i++].name);
+    }
+    return fn;
+  }
+
   auto llvm_ir_code_generator::emit_object_code() -> void {
     auto            obj_fname{mod_.getSourceFileName() + ".o"};
     std::error_code ec;

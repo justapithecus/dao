@@ -38,6 +38,9 @@ namespace dao {
     auto operator()(dao::type_alias const &) -> llvm::Value *;
 
   private:
+    auto generate_function_prototype(dao::function_proto const &proto,
+      llvm::Function::LinkageTypes linkages) -> llvm::Value *;
+
     auto emit_object_code() -> void;
   };
 } // namespace dao
