@@ -19,7 +19,8 @@
                 "typename": "[[dao::deduced_type]]"
               }
             ],
-            "id": "pow"
+            "id": "pow",
+            "return_typename": "[[dao::deduced_type]]"
           }
         },
         {
@@ -46,7 +47,8 @@
                 "typename": "[[dao::deduced_type]]"
               }
             ],
-            "id": "foo"
+            "id": "foo",
+            "return_typename": "[[dao::deduced_type]]"
           }
         },
         {
@@ -58,7 +60,8 @@
                 "typename": "[[dao::deduced_type]]"
               }
             ],
-            "id": "bar"
+            "id": "bar",
+            "return_typename": "[[dao::deduced_type]]"
           }
         }
       ]

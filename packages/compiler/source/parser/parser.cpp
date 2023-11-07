@@ -207,7 +207,7 @@ namespace dao {
   auto parser::parse_binary_expr(ast_node lhs, std::uint8_t op_precedence)
     -> ast_node {
 
-    while (not ctx_.is_eof() and ctx_.peek()->kind == token_kind::e_operator) {
+    while (ctx_.peek()->kind == token_kind::e_operator) {
       auto op{ctx_.peek()->as_operand()};
       auto token_precedence{binary_op_precedence[+op]};
       if (token_precedence < op_precedence) {
@@ -318,6 +318,8 @@ namespace dao {
     // eat function identifier
     auto id{ctx_.eat()->repr};
 
+    auto args{parse_function_arg_seq()};
+
     // parse optional return type specifier
     auto ret{std::optional<std::string>{std::nullopt}};
 
@@ -333,8 +335,7 @@ namespace dao {
       }
     }
 
-    return function_proto{
-      std::move(id), parse_function_arg_seq(), std::move(ret)};
+    return function_proto{std::move(id), std::move(args), std::move(ret)};
   }
 
   auto parser::parse_function_def() -> ast_node {

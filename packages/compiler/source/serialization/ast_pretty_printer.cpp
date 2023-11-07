@@ -88,6 +88,8 @@ namespace dao {
         {
           {"id", expr.id},
           {"args", expr.args},
+          {"return_typename",
+            expr.ret.value_or(compiler_directive_deduced_type)},
         },
       },
     };
