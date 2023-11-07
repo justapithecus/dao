@@ -24,6 +24,7 @@ typedef enum lexical_state {
   lexical_state_numeral,
   lexical_state_numeral_end,
   lexical_state_operator,
+  lexical_state_operator_end,
   lexical_state_string_literal,
   lexical_state_string_literal_end,
   lexical_state_new_line,

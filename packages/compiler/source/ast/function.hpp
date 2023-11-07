@@ -12,8 +12,9 @@ namespace dao {
   };
 
   struct function_proto {
-    std::string               id;
-    std::vector<function_arg> args;
+    std::string                id;
+    std::vector<function_arg>  args;
+    std::optional<std::string> ret;
   };
 
   struct function_def {

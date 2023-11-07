@@ -35,7 +35,7 @@ namespace dao {
         tokens.emplace_back(lexeme.as_token(token_kind::e_separator));
         break;
       }
-      case lexical_state_operator: {
+      case lexical_state_operator_end: {
         lexeme.update_repr(src_ptr);
         tokens.emplace_back(lexeme.as_token(token_kind::e_operator));
         break;
