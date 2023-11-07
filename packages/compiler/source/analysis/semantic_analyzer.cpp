@@ -51,8 +51,10 @@ namespace dao {
         not builtin_types.contains(meta.from.name)) {
 
       // TODO(andrew): errors - aliasing from a type that has not been defined
+    } else {
+      // TODO(andrew): can resolve type earlier here by using the builtin kind enum
+      //               for the alias "from"
+      types_.emplace(meta.to.name, meta.from.name);
     }
-
-    types_.emplace(meta.to.name, meta.from.name);
   }
 } // namespace dao
