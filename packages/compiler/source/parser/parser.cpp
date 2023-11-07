@@ -266,7 +266,21 @@ namespace dao {
 
   auto parser::parse_function_arg() -> function_arg {
     auto name{ctx_.eat()->repr};
-    return function_arg{std::move(name)};
+    auto typename_{std::optional<std::string>{std::nullopt}};
+
+    if (ctx_.peek()->as_operand() == ':') {
+      // eat ':'
+      ctx_.seek();
+
+      if (auto node{parse_identifier_expr()};
+          node and std::holds_alternative<identifier_expr>(*node)) {
+        typename_ = std::get<identifier_expr>(*node).name;
+      } else {
+        // TODO(andrew): errors - expected typename identifier, got something else
+      }
+    }
+
+    return function_arg{std::move(name), std::move(typename_)};
   }
 
   auto parser::parse_function_arg_seq() -> std::vector<function_arg> {

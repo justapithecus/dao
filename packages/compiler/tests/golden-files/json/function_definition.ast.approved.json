@@ -26,7 +26,8 @@
             "prototype": {
               "args": [
                 {
-                  "name": "x"
+                  "name": "x",
+                  "typename": "[[dao::deduced_type]]"
                 }
               ],
               "id": "double"
@@ -73,10 +74,12 @@
             "prototype": {
               "args": [
                 {
-                  "name": "p"
+                  "name": "p",
+                  "typename": "[[dao::deduced_type]]"
                 },
                 {
-                  "name": "q"
+                  "name": "q",
+                  "typename": "[[dao::deduced_type]]"
                 }
               ],
               "id": "distance_euclidean"

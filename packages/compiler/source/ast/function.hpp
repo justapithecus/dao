@@ -1,11 +1,14 @@
 #pragma once
 
+#include <optional>
+
 #include "ast.hpp"
 
 namespace dao {
 
   struct function_arg {
-    std::string name;
+    std::string                name;
+    std::optional<std::string> typename_;
   };
 
   struct function_proto {
