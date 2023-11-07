@@ -24,12 +24,23 @@ namespace dao {
     e_keyword_as,
   };
 
+  enum class operand_kind : std::uint8_t {
+    e_single,
+    e_multi,
+  };
+
   struct token {
     std::string     repr;
     dao::token_kind kind;
 
+    template <operand_kind Op = operand_kind::e_single>
     auto as_operand() const noexcept {
       return repr[0];
+    }
+
+    template <>
+    auto as_operand<operand_kind::e_multi>() const noexcept {
+      return repr;
     }
   };
 

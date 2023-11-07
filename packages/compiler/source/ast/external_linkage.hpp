@@ -4,7 +4,7 @@
 
 namespace dao {
 
-  enum class linkage_kind {
+  enum class linkage_kind : std::uint8_t {
     e_c_linkage,
   };
 
