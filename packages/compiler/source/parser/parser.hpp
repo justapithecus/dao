@@ -108,8 +108,8 @@ namespace dao {
 
     /// Parses a function argument
     ///
-    /// TODO(andrew): add type hints
-    /// <function_arg> ::= <identifier>
+    /// <type_expr> ::= <identifier_expr>
+    /// <function_arg> ::= <identifier_expr> [':' <type_expr> ]
     auto parse_function_arg() -> function_arg;
 
     /// Parses a function argument sequence

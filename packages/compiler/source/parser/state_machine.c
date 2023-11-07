@@ -29,6 +29,7 @@ unsigned char const equivalence_class[256] = {
   ['>']        = offset(glyph_operator),
   // Numbers
   [48 ... 57]  = offset(glyph_number),
+  [':']        = offset(glyph_separator),
   // Letters
   [65 ... 90]  = offset(glyph_letter),
   ['_']        = offset(glyph_letter),
