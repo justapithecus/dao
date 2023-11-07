@@ -12,7 +12,9 @@ auto main() -> int {
   dao::parser parser{tokens};
 
   auto ast{parser.parse()};
-  auto code_generator{dao::llvm_ir_code_generator{source_fname}};
+  auto analyzer{dao::semantic_analyzer{}};
+  auto tables{analyzer.analyze(ast)};
+  auto code_generator{dao::llvm_ir_code_generator{source_fname, tables}};
 
   code_generator.generate(ast);
 

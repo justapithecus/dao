@@ -6,10 +6,12 @@
 #include <llvm/IR/Module.h>
 #include <llvm/Target/TargetMachine.h>
 
-#include "../ast/index.hpp"
+#include "../analysis/semantic_analyzer.hpp"
 
 namespace dao {
 
+  // TODO(andrew): may want to have a single top-level visitor that runs handler functions for
+  //               semantic analysis and codegen
   class llvm_ir_code_generator {
     llvm::LLVMContext                    ctx_;
     // TODO(andrew): more than 1 main module
@@ -17,10 +19,13 @@ namespace dao {
     llvm::IRBuilder<>                    builder_;
     std::unique_ptr<llvm::TargetMachine> machine_;
 
+    dao::analysis_tables const                              &tables_;
     ankerl::unordered_dense::map<std::string, llvm::Value *> identifiers_;
 
   public:
-    explicit llvm_ir_code_generator(std::string source_fname);
+    explicit llvm_ir_code_generator(
+      std::string source_fname, dao::analysis_tables const &tables);
+
     auto generate(dao::ast const &) -> void;
     auto dumps() const -> std::string;
 

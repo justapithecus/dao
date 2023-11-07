@@ -2,9 +2,13 @@
 
 namespace dao {
 
-  auto semantic_analyzer::dump() const -> decltype(types_) {
+  semantic_analyzer::semantic_analyzer() {
+  }
+
+  auto semantic_analyzer::analyze(dao::ast const &ast) -> analysis_tables {
+    std::visit(*this, ast);
     // just return single table for now
-    return types_;
+    return analysis_tables{types_};
   }
 
   auto semantic_analyzer::operator()(dao::program_ast const &prog) -> void {
