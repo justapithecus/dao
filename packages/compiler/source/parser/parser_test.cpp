@@ -8,7 +8,8 @@ auto main() -> int {
   for (auto const &entry : load_test_cases("golden-files/json")) {
     auto path{entry.path()};
     auto name{path.stem().generic_string()};
-    if (entry.is_regular_file() and name.find("tokens") != std::string::npos) {
+    if (entry.is_regular_file() and
+        name.find("tokens.approved") != std::string::npos) {
       auto filename{path.filename().generic_string()};
       auto base_name{path.stem().stem().stem().generic_string()};
       auto namer{TemplatedCustomNamer::create(

@@ -11,10 +11,12 @@
           "value": {
             "args": [
               {
-                "name": "x"
+                "name": "x",
+                "typename": "[[dao::deduced_type]]"
               },
               {
-                "name": "y"
+                "name": "y",
+                "typename": "[[dao::deduced_type]]"
               }
             ],
             "id": "pow"
@@ -27,7 +29,8 @@
             "prototype": {
               "args": [
                 {
-                  "name": "str"
+                  "name": "str",
+                  "typename": "[[dao::deduced_type]]"
                 }
               ],
               "id": "puts"
@@ -39,7 +42,8 @@
           "value": {
             "args": [
               {
-                "name": "x"
+                "name": "x",
+                "typename": "[[dao::deduced_type]]"
               }
             ],
             "id": "foo"
@@ -50,7 +54,8 @@
           "value": {
             "args": [
               {
-                "name": "x"
+                "name": "x",
+                "typename": "[[dao::deduced_type]]"
               }
             ],
             "id": "bar"

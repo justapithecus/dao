@@ -1,0 +1,3 @@
+alias int8 as c_char
+
+external(C) function puts(str: c_char)

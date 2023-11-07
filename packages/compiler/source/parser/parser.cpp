@@ -266,7 +266,7 @@ namespace dao {
 
   auto parser::parse_function_arg() -> function_arg {
     auto name{ctx_.eat()->repr};
-    auto typename_{std::optional<std::string>{}};
+    auto typename_{std::optional<std::string>{std::nullopt}};
 
     if (ctx_.peek()->as_operand() == ':') {
       // eat ':'
@@ -274,6 +274,8 @@ namespace dao {
       auto node{parse_identifier_expr()};
       if (node and std::holds_alternative<identifier_expr>(*node)) {
         typename_ = std::get<identifier_expr>(*node).name;
+      } else {
+        // TODO(andrew): errors - expected typename identifier, got something else
       }
     }
 
