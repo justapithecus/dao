@@ -312,9 +312,8 @@ namespace dao {
         return resolve_llvm_type(arg.typename_);
       });
 
-    // TODO(andrew): implement return type resolution
-    auto return_type{resolve_llvm_type(proto.ret)};
     auto constexpr is_var_arg{false};
+    auto return_type{resolve_llvm_type(proto.ret)};
     auto ft{llvm::FunctionType::get(return_type, arg_types, is_var_arg)};
     auto fn{llvm::Function::Create(ft, linkages, proto.id, mod_)};
 
