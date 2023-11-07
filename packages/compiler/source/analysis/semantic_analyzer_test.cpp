@@ -28,13 +28,13 @@ auto main() -> int {
 
       test(name) = [&, ast = std::move(ast)] {
         auto analyzer{dao::semantic_analyzer{}};
-        std::visit(analyzer, std::move(ast));
+        auto tables{analyzer.analyze(std::move(ast))};
 
         json contents{
           {"_filename", base_name + ".dao"},
           {
             "metatables",
-            {"types", analyzer.dump()},
+            {"types", tables.types_},
           },
         };
 

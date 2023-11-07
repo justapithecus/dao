@@ -2,9 +2,13 @@
 
 namespace dao {
 
-  auto semantic_analyzer::dump() const -> decltype(types_) {
+  semantic_analyzer::semantic_analyzer() {
+  }
+
+  auto semantic_analyzer::analyze(dao::ast const &ast) -> analysis_tables {
+    std::visit(*this, ast);
     // just return single table for now
-    return types_;
+    return analysis_tables{types_};
   }
 
   auto semantic_analyzer::operator()(dao::program_ast const &prog) -> void {
@@ -47,8 +51,10 @@ namespace dao {
         not builtin_types.contains(meta.from.name)) {
 
       // TODO(andrew): errors - aliasing from a type that has not been defined
+    } else {
+      // TODO(andrew): can resolve type earlier here by using the builtin kind enum
+      //               for the alias "from"
+      types_.emplace(meta.to.name, meta.from.name);
     }
-
-    types_.emplace(meta.to.name, meta.from.name);
   }
 } // namespace dao

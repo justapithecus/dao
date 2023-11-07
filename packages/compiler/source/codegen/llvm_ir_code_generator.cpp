@@ -45,11 +45,13 @@ namespace dao {
     return std::unique_ptr<llvm::TargetMachine>(target_machine);
   }
 
-  llvm_ir_code_generator::llvm_ir_code_generator(std::string source_fname)
+  llvm_ir_code_generator::llvm_ir_code_generator(
+    std::string source_fname, dao::analysis_tables const &tables)
     : ctx_{}
     , mod_{"main", ctx_}
     , builder_{ctx_}
     , machine_{set_target_machine(mod_)}
+    , tables_{tables}
     , identifiers_{} {
 
     mod_.setSourceFileName(std::move(source_fname));
@@ -281,10 +283,28 @@ namespace dao {
     arg_types.reserve(proto.args.size());
     std::transform(proto.args.begin(), proto.args.end(),
       std::back_inserter(arg_types), [this](auto &&arg) -> llvm::Type * {
-        // TODO(andrew): type resolution in semantic analyzer tables
+        if (arg.typename_.has_value()) {
+          auto typename_{arg.typename_.value()};
+
+          // resolve to builtin
+          if (auto it{tables_.types_.find(typename_)};
+              it != tables_.types_.end()) {
+            typename_ = it->second;
+          }
+
+          // convert builtin type to LLVM type
+          if (auto it{builtin_types.find(typename_)};
+              it != builtin_types.end()) {
+            switch (it->second) {
+            case builtin_type_kind::e_int8:
+              // TODO(andrew): placeholder and actually incorrect until ptr types are introduced
+              return builder_.getInt8PtrTy();
+            }
+          }
+        }
         // for now, default to double when arg type is not specified, i.e. deduced
-        return arg.typename_.has_value() ? builder_.getInt8PtrTy()
-                                         : builder_.getDoubleTy();
+        // collect error when type cannot be deduced
+        return builder_.getDoubleTy();
       });
 
     // TODO(andrew): implement return type resolution

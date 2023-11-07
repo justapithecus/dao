@@ -6,11 +6,17 @@
 
 namespace dao {
 
+  struct analysis_tables {
+    ankerl::unordered_dense::map<std::string, std::string> const &types_;
+  };
+
   class semantic_analyzer {
     ankerl::unordered_dense::map<std::string, std::string> types_;
 
   public:
-    auto dump() const -> decltype(types_);
+    explicit semantic_analyzer();
+
+    auto analyze(dao::ast const &ast) -> analysis_tables;
 
     // Visitors
     auto operator()(dao::program_ast const &) -> void;
