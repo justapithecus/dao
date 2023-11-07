@@ -486,4 +486,8 @@ namespace dao {
       std::get<identifier_expr>(*from), std::get<identifier_expr>(*to)});
   }
 
+  auto parser::parse_type_expr() -> type_expression {
+    return type_expression{};
+  };
+
 } // namespace dao

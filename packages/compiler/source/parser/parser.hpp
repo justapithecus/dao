@@ -156,6 +156,14 @@ namespace dao {
     ///
     /// <type_alias> ::= 'alias' <identifier_expr> 'as' <identifier_expr>
     auto parse_type_alias() -> ast_node;
+
+    /// Parses a type expression
+    ///
+    /// <typename> ::= <identifier_expr>
+    /// <type_qualifier> ::= [ 'mut' ]
+    /// <type_declarator> ::= [ 'ptr' ]
+    /// <type_expression> ::= [ <type_declarator> ] [ <type_qualifier> ] <typename>
+    auto parse_type_expr() -> type_expression;
   };
 
 } // namespace dao
