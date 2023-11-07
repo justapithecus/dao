@@ -83,13 +83,7 @@ namespace dao {
     -> json {
     return json{
       {"type", "function_prototype"},
-      {
-        "value",
-        {
-          {"id", expr.id},
-          {"args", expr.args},
-        },
-      },
+      {"value", expr},
     };
   }
 

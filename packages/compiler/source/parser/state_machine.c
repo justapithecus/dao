@@ -55,11 +55,19 @@ unsigned char const equivalence_class[256] = {
 unsigned char const transition[LEX_TRANS_SIZE] = {
   initiating_states(lexical_state_next_char),
   initiating_states(lexical_state_new_line),
+  initiating_states(lexical_state_separator),
   initiating_states(lexical_state_identifier_end),
   initiating_states(lexical_state_numeral_end),
-  initiating_states(lexical_state_separator),
-  initiating_states(lexical_state_operator),
   initiating_states(lexical_state_string_literal_end),
+  initiating_states(lexical_state_operator_end),
+
+  reduce(lexical_state_operator, glyph_white_space, lexical_state_operator_end),
+  reduce(lexical_state_operator, glyph_new_line, lexical_state_operator_end),
+  reduce(lexical_state_operator, glyph_letter, lexical_state_operator_end),
+  reduce(lexical_state_operator, glyph_number, lexical_state_operator_end),
+  reduce(lexical_state_operator, glyph_operator, lexical_state_operator),
+  reduce(lexical_state_operator, glyph_separator, lexical_state_operator_end),
+  reduce(lexical_state_operator, glyph_double_quote, lexical_state_operator_end),
 
   reduce(lexical_state_identifier, glyph_white_space, lexical_state_identifier_end),
   reduce(lexical_state_identifier, glyph_new_line, lexical_state_identifier_end),
@@ -90,14 +98,15 @@ unsigned char const transition[LEX_TRANS_SIZE] = {
 char const ch_rewind[lexical_state_count] = {
   [lexical_state_identifier_end] = -1,
   [lexical_state_numeral_end]    = -1,
+  [lexical_state_operator_end]   = -1,
 };
 
 unsigned char const inside[lexical_state_count] = {
   [lexical_state_separator]      = 1,
-  [lexical_state_operator]       = 1,
   [lexical_state_identifier]     = 1,
   [lexical_state_numeral]        = 1,
   [lexical_state_string_literal] = 1,
+  [lexical_state_operator]       = 1,
 };
 
 unsigned char const binary_op_precedence[256] = {

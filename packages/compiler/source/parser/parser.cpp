@@ -207,10 +207,9 @@ namespace dao {
   auto parser::parse_binary_expr(ast_node lhs, std::uint8_t op_precedence)
     -> ast_node {
 
-    while (not ctx_.is_eof() and ctx_.peek()->kind == token_kind::e_operator) {
+    while (ctx_.peek()->kind == token_kind::e_operator) {
       auto op{ctx_.peek()->as_operand()};
-      auto token_precedence{
-        binary_op_precedence[static_cast<std::uint8_t>(op)]};
+      auto token_precedence{binary_op_precedence[+op]};
       if (token_precedence < op_precedence) {
         return lhs;
       }
@@ -229,8 +228,7 @@ namespace dao {
         auto next_op{ctx_.eat()->as_operand()};
 
         if (not ctx_.is_eof()) {
-          auto next_precedence{
-            binary_op_precedence[static_cast<std::uint8_t>(next_op)]};
+          auto next_precedence{binary_op_precedence[+next_op]};
           if (token_precedence <= next_precedence) {
             ctx_.rewind();
             // current right-hand-side becomes the left-hand-side of the inner expression
@@ -276,7 +274,7 @@ namespace dao {
           node and std::holds_alternative<identifier_expr>(*node)) {
         typename_ = std::get<identifier_expr>(*node).name;
       } else {
-        // TODO(andrew): errors - expected typename identifier, got something else
+        // TODO(andrew): errors - expected function arg type specifier, got something else
       }
     }
 
@@ -319,7 +317,25 @@ namespace dao {
 
     // eat function identifier
     auto id{ctx_.eat()->repr};
-    return function_proto{std::move(id), parse_function_arg_seq()};
+
+    auto args{parse_function_arg_seq()};
+
+    // parse optional return type specifier
+    auto ret{std::optional<std::string>{std::nullopt}};
+
+    if (ctx_.peek()->as_operand<operand_kind::e_multi>() == "->") {
+      // eat '->'
+      ctx_.seek();
+
+      if (auto node{parse_identifier_expr()};
+          node and std::holds_alternative<identifier_expr>(*node)) {
+        ret = std::get<identifier_expr>(*node).name;
+      } else {
+        // TODO(andrew): errors - expected return type specifier, got something else
+      }
+    }
+
+    return function_proto{std::move(id), std::move(args), std::move(ret)};
   }
 
   auto parser::parse_function_def() -> ast_node {
