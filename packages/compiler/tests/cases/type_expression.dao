@@ -1,0 +1,4 @@
+alias i8 as c_char
+alias i32 as c_int
+
+external(C) function puts(str: readonly ptr c_char) -> int32

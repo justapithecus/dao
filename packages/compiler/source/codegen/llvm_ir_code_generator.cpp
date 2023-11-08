@@ -277,9 +277,9 @@ namespace dao {
   // Private Methods
   //---------------------------------------------------------------------------
   auto llvm_ir_code_generator::resolve_llvm_type(
-    std::optional<std::string> const &typename_) -> llvm::Type * {
-    if (typename_.has_value()) {
-      auto resolved{typename_.value()};
+    dao::type_expression const &expr) -> llvm::Type * {
+    if (expr.typename_.has_value()) {
+      auto resolved{expr.typename_.value()};
 
       // resolve to builtin
       if (auto it{tables_.types_.find(resolved)}; it != tables_.types_.end()) {
@@ -288,12 +288,16 @@ namespace dao {
 
       // convert builtin type to LLVM type
       if (auto it{builtin_types.find(resolved)}; it != builtin_types.end()) {
+        auto is_pointer{expr.declarator == type_declarator::e_pointer};
+
         switch (it->second) {
         case builtin_type_kind::e_int8:
-          // TODO(andrew): placeholder and actually incorrect until ptr types are introduced
-          return builder_.getInt8PtrTy();
+          return is_pointer ? static_cast<llvm::Type *>(builder_.getInt8PtrTy())
+                            : builder_.getInt8Ty();
         case builtin_type_kind::e_int32:
-          return builder_.getInt32Ty();
+          return is_pointer
+                   ? static_cast<llvm::Type *>(llvm::Type::getInt32PtrTy(ctx_))
+                   : builder_.getInt32Ty();
         }
       }
     }
@@ -309,7 +313,7 @@ namespace dao {
     arg_types.reserve(proto.args.size());
     std::transform(proto.args.begin(), proto.args.end(),
       std::back_inserter(arg_types), [this](auto &&arg) -> llvm::Type * {
-        return resolve_llvm_type(arg.typename_);
+        return resolve_llvm_type(arg.type_expr);
       });
 
     auto constexpr is_var_arg{false};

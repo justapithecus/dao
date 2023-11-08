@@ -43,8 +43,7 @@ namespace dao {
     auto operator()(dao::type_alias const &) -> llvm::Value *;
 
   private:
-    auto resolve_llvm_type(std::optional<std::string> const &typename_)
-      -> llvm::Type *;
+    auto resolve_llvm_type(dao::type_expression const &expr) -> llvm::Type *;
 
     auto generate_function_prototype(dao::function_proto const &proto,
       llvm::Function::LinkageTypes linkages) -> llvm::Value *;
