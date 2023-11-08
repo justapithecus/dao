@@ -22,8 +22,8 @@ namespace dao {
 
   enum class type_declarator : std::uint8_t {
     e_value,
-    e_reference,
     e_pointer,
+    e_reference,
   };
 
   extern ankerl::unordered_dense::map<std::string, builtin_type_kind> const

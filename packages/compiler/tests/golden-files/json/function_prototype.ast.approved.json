@@ -12,15 +12,27 @@
             "args": [
               {
                 "name": "x",
-                "typename": "[[dao::deduced_type]]"
+                "type": {
+                  "declarator": "value",
+                  "qualifier": "mutable",
+                  "typename": "[[dao::deduced_type]]"
+                }
               },
               {
                 "name": "y",
-                "typename": "[[dao::deduced_type]]"
+                "type": {
+                  "declarator": "value",
+                  "qualifier": "mutable",
+                  "typename": "[[dao::deduced_type]]"
+                }
               }
             ],
             "id": "pow",
-            "return_typename": "[[dao::deduced_type]]"
+            "return_type": {
+              "declarator": "value",
+              "qualifier": "mutable",
+              "typename": "[[dao::deduced_type]]"
+            }
           }
         },
         {
@@ -31,11 +43,19 @@
               "args": [
                 {
                   "name": "str",
-                  "typename": "[[dao::deduced_type]]"
+                  "type": {
+                    "declarator": "value",
+                    "qualifier": "mutable",
+                    "typename": "[[dao::deduced_type]]"
+                  }
                 }
               ],
               "id": "puts",
-              "return_typename": "[[dao::deduced_type]]"
+              "return_type": {
+                "declarator": "value",
+                "qualifier": "mutable",
+                "typename": "[[dao::deduced_type]]"
+              }
             }
           }
         },
@@ -45,11 +65,19 @@
             "args": [
               {
                 "name": "x",
-                "typename": "[[dao::deduced_type]]"
+                "type": {
+                  "declarator": "value",
+                  "qualifier": "mutable",
+                  "typename": "[[dao::deduced_type]]"
+                }
               }
             ],
             "id": "foo",
-            "return_typename": "[[dao::deduced_type]]"
+            "return_type": {
+              "declarator": "value",
+              "qualifier": "mutable",
+              "typename": "[[dao::deduced_type]]"
+            }
           }
         },
         {
@@ -58,11 +86,19 @@
             "args": [
               {
                 "name": "x",
-                "typename": "[[dao::deduced_type]]"
+                "type": {
+                  "declarator": "value",
+                  "qualifier": "mutable",
+                  "typename": "[[dao::deduced_type]]"
+                }
               }
             ],
             "id": "bar",
-            "return_typename": "[[dao::deduced_type]]"
+            "return_type": {
+              "declarator": "value",
+              "qualifier": "mutable",
+              "typename": "[[dao::deduced_type]]"
+            }
           }
         }
       ]

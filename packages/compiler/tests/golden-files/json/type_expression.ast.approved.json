@@ -1,5 +1,5 @@
 {
-  "_filename": "external_linkage.dao",
+  "_filename": "type_expression.dao",
   "ast": {
     "type": "program",
     "value": {
@@ -10,11 +10,24 @@
           "value": {
             "from": {
               "type": "identifier_expression",
-              "value": "int8"
+              "value": "i8"
             },
             "to": {
               "type": "identifier_expression",
               "value": "c_char"
+            }
+          }
+        },
+        {
+          "type": "type_alias",
+          "value": {
+            "from": {
+              "type": "identifier_expression",
+              "value": "i32"
+            },
+            "to": {
+              "type": "identifier_expression",
+              "value": "c_int"
             }
           }
         }
@@ -29,8 +42,8 @@
                 {
                   "name": "str",
                   "type": {
-                    "declarator": "value",
-                    "qualifier": "mutable",
+                    "declarator": "pointer",
+                    "qualifier": "readonly",
                     "typename": "c_char"
                   }
                 }
@@ -39,7 +52,7 @@
               "return_type": {
                 "declarator": "value",
                 "qualifier": "mutable",
-                "typename": "[[dao::deduced_type]]"
+                "typename": "int32"
               }
             }
           }
