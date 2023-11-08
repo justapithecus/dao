@@ -7,6 +7,7 @@
 #include <llvm/Target/TargetMachine.h>
 
 #include "../analysis/semantic_analyzer.hpp"
+#include "module.hpp"
 
 namespace dao {
 
@@ -18,6 +19,8 @@ namespace dao {
     llvm::Module                         mod_;
     llvm::IRBuilder<>                    builder_;
     std::unique_ptr<llvm::TargetMachine> machine_;
+
+    ankerl::unordered_dense::map<std::string, dao::module> modules_;
 
     dao::analysis_tables const                              &tables_;
     ankerl::unordered_dense::map<std::string, llvm::Value *> identifiers_;
