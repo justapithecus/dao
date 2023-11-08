@@ -27,11 +27,19 @@
               "args": [
                 {
                   "name": "x",
-                  "typename": "[[dao::deduced_type]]"
+                  "type": {
+                    "declarator": "value",
+                    "qualifier": "mutable",
+                    "typename": "[[dao::deduced_type]]"
+                  }
                 }
               ],
               "id": "double",
-              "return_typename": "[[dao::deduced_type]]"
+              "return_type": {
+                "declarator": "value",
+                "qualifier": "mutable",
+                "typename": "[[dao::deduced_type]]"
+              }
             }
           }
         },
@@ -76,15 +84,27 @@
               "args": [
                 {
                   "name": "p",
-                  "typename": "[[dao::deduced_type]]"
+                  "type": {
+                    "declarator": "value",
+                    "qualifier": "mutable",
+                    "typename": "[[dao::deduced_type]]"
+                  }
                 },
                 {
                   "name": "q",
-                  "typename": "[[dao::deduced_type]]"
+                  "type": {
+                    "declarator": "value",
+                    "qualifier": "mutable",
+                    "typename": "[[dao::deduced_type]]"
+                  }
                 }
               ],
               "id": "distance_euclidean",
-              "return_typename": "[[dao::deduced_type]]"
+              "return_type": {
+                "declarator": "value",
+                "qualifier": "mutable",
+                "typename": "[[dao::deduced_type]]"
+              }
             }
           }
         }

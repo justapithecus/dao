@@ -12,11 +12,19 @@
             "args": [
               {
                 "name": "bar",
-                "typename": "[[dao::deduced_type]]"
+                "type": {
+                  "declarator": "value",
+                  "qualifier": "mutable",
+                  "typename": "[[dao::deduced_type]]"
+                }
               }
             ],
             "id": "foo",
-            "return_typename": "baz"
+            "return_type": {
+              "declarator": "value",
+              "qualifier": "mutable",
+              "typename": "baz"
+            }
           }
         }
       ]

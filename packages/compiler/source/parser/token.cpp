@@ -9,9 +9,9 @@ namespace dao {
     {"else", token_kind::e_keyword_else},
     {"alias", token_kind::e_keyword_alias},
     {"as", token_kind::e_keyword_as},
-    {"ptr", token_kind::e_keyword_as},
-    {"mutable", token_kind::e_keyword_as},
-    {"readonly", token_kind::e_keyword_as},
+    {"ptr", token_kind::e_keyword_ptr},
+    {"mutable", token_kind::e_keyword_mutable},
+    {"readonly", token_kind::e_keyword_readonly},
   };
 
   ankerl::unordered_dense::map<token_kind, type_qualifier> const

@@ -1,10 +1,6 @@
 {
-  "_filename": "new_lines.dao",
+  "_filename": "1_new_line.dao",
   "tokens": [
-    {
-      "kind": "new_line",
-      "repr": "\\n"
-    },
     {
       "kind": "new_line",
       "repr": "\\n"
