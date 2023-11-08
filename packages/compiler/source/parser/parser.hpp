@@ -159,7 +159,7 @@ namespace dao {
 
     /// Parses a type expression
     ///
-    /// <type_qualifier> ::= [ 'mut' ]
+    /// <type_qualifier> ::= [ 'mutable' | 'readonly' ]
     /// <type_declarator> ::= [ 'ptr' ]
     /// <typename> ::= <identifier_expr>
     /// <type_expression> ::= [ <type_declarator> ] [ <type_qualifier> ] <typename>

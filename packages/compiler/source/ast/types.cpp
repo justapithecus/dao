@@ -7,4 +7,5 @@ namespace dao {
       {"int8", builtin_type_kind::e_int8},
       {"int32", builtin_type_kind::e_int32},
     };
+
 }

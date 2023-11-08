@@ -1,20 +1,18 @@
 #pragma once
 
-#include <optional>
-
-#include "ast.hpp"
+#include "types.hpp"
 
 namespace dao {
 
   struct function_arg {
-    std::string                name;
-    std::optional<std::string> typename_;
+    std::string     name;
+    type_expression type_expr;
   };
 
   struct function_proto {
-    std::string                id;
-    std::vector<function_arg>  args;
-    std::optional<std::string> ret;
+    std::string               id;
+    std::vector<function_arg> args;
+    type_expression           ret;
   };
 
   struct function_def {

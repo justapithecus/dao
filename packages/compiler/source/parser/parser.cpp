@@ -264,21 +264,16 @@ namespace dao {
 
   auto parser::parse_function_arg() -> function_arg {
     auto name{ctx_.eat()->repr};
-    auto typename_{std::optional<std::string>{std::nullopt}};
+    auto type_expr{type_expression{}};
 
     if (ctx_.peek()->as_operand() == ':') {
       // eat ':'
       ctx_.seek();
 
-      if (auto node{parse_identifier_expr()};
-          node and std::holds_alternative<identifier_expr>(*node)) {
-        typename_ = std::get<identifier_expr>(*node).name;
-      } else {
-        // TODO(andrew): errors - expected function arg type specifier, got something else
-      }
+      type_expr = parse_type_expr();
     }
 
-    return function_arg{std::move(name), std::move(typename_)};
+    return function_arg{std::move(name), std::move(type_expr)};
   }
 
   auto parser::parse_function_arg_seq() -> std::vector<function_arg> {
@@ -321,18 +316,13 @@ namespace dao {
     auto args{parse_function_arg_seq()};
 
     // parse optional return type specifier
-    auto ret{std::optional<std::string>{std::nullopt}};
+    auto ret{type_expression{}};
 
     if (ctx_.peek()->as_operand<operand_kind::e_multi>() == "->") {
       // eat '->'
       ctx_.seek();
 
-      if (auto node{parse_identifier_expr()};
-          node and std::holds_alternative<identifier_expr>(*node)) {
-        ret = std::get<identifier_expr>(*node).name;
-      } else {
-        // TODO(andrew): errors - expected return type specifier, got something else
-      }
+      ret = parse_type_expr();
     }
 
     return function_proto{std::move(id), std::move(args), std::move(ret)};
@@ -487,7 +477,28 @@ namespace dao {
   }
 
   auto parser::parse_type_expr() -> type_expression {
-    return type_expression{};
+    auto expr{type_expression{}};
+
+    if (auto tok{ctx_.peek()}; tok->is_type_qualifer()) {
+      expr.qualifier = token_to_type_qualifier.at(tok->kind);
+
+      ctx_.seek();
+    }
+
+    if (auto tok{ctx_.peek()}; tok->is_type_declarator()) {
+      expr.declarator = type_declarator::e_pointer;
+
+      ctx_.seek();
+    }
+
+    if (auto typename_{parse_identifier_expr()};
+        typename_ and std::holds_alternative<identifier_expr>(*typename_)) {
+      expr.typename_ = std::get<identifier_expr>(*typename_).name;
+    } else {
+      // TODO(andrew): add to ctx.errors, expected typename, got something else
+    }
+
+    return expr;
   };
 
 } // namespace dao

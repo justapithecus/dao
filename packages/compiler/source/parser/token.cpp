@@ -13,4 +13,10 @@ namespace dao {
     {"mutable", token_kind::e_keyword_as},
     {"readonly", token_kind::e_keyword_as},
   };
-}
+
+  ankerl::unordered_dense::map<token_kind, type_qualifier> const
+    token_to_type_qualifier{
+      {token_kind::e_keyword_mutable, type_qualifier::e_mutable},
+      {token_kind::e_keyword_readonly, type_qualifier::e_readonly},
+    };
+} // namespace dao

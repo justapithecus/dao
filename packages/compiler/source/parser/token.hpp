@@ -3,6 +3,7 @@
 #include <ankerl/unordered_dense.h>
 #include <string>
 
+#include "../ast/types.hpp"
 #include "state_machine.h"
 
 namespace dao {
@@ -36,6 +37,15 @@ namespace dao {
     std::string     repr;
     dao::token_kind kind;
 
+    auto is_type_qualifer() const -> bool {
+      return kind == token_kind::e_keyword_mutable or
+             kind == token_kind::e_keyword_readonly;
+    }
+
+    auto is_type_declarator() const -> bool {
+      return kind == token_kind::e_keyword_ptr;
+    }
+
     template <operand_kind Op = operand_kind::e_single>
     auto as_operand() const noexcept {
       return repr[0];
@@ -49,6 +59,9 @@ namespace dao {
 
   extern ankerl::unordered_dense::map<std::string, dao::token_kind> const
     keywords;
+
+  extern ankerl::unordered_dense::map<token_kind, type_qualifier> const
+    token_to_type_qualifier;
 
 #ifdef _LIBCPP_VERSION
   // libc++

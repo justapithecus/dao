@@ -2,10 +2,8 @@
 #ifdef CTEST
 
 #include <ankerl/unordered_dense.h>
-#include <iomanip>
 
 #include "../parser/token.hpp"
-#include "json.hpp"
 
 #define token_desc(kind, desc)                                                 \
   case (kind):                                                                 \

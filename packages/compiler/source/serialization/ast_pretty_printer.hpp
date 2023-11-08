@@ -3,6 +3,7 @@
 
 #include "../ast/index.hpp"
 #include "json.hpp"
+#include "types.hpp"
 
 namespace dao {
 
@@ -20,38 +21,53 @@ namespace dao {
     auto operator()(dao::type_alias const &) const -> json;
   };
 
+  inline auto to_json(json &j, dao::type_expression const &expr) {
+    j = json{
+      {"typename", expr.typename_.value_or(compiler_directive_deduced_type)},
+      {"qualifier", qualifier_to_str[static_cast<int>(expr.qualifier)]},
+      {"declarator", declarator_to_str[static_cast<int>(expr.declarator)]},
+    };
+  }
+
+  inline auto from_json(json const &j, dao::type_expression &expr) {
+    j.at("typename").get_to(expr.typename_);
+
+    std::string qualifier, declarator{};
+    j.at("qualifier").get_to(qualifier);
+    j.at("declarator").get_to(declarator);
+
+    if (expr.typename_ == compiler_directive_deduced_type) {
+      expr.typename_ = std::nullopt;
+    }
+
+    expr.qualifier  = str_to_qualifier.at(qualifier);
+    expr.declarator = str_to_declarator.at(declarator);
+  }
+
   inline auto to_json(json &j, dao::function_arg const &arg) {
     j = json{
       {"name", arg.name},
-      {"typename", arg.typename_.value_or(compiler_directive_deduced_type)},
+      {"type", arg.type_expr},
     };
   }
 
   inline auto from_json(json const &j, dao::function_arg &arg) {
     j.at("name").get_to(arg.name);
-    j.at("typename").get_to(arg.typename_);
-
-    if (arg.typename_ == compiler_directive_deduced_type) {
-      arg.typename_ = std::nullopt;
-    }
+    j.at("type").get_to(arg.type_expr);
   }
 
   inline auto to_json(json &j, dao::function_proto const &proto) {
     j = json{
       {"id", proto.id},
       {"args", proto.args},
-      {"return_typename", proto.ret.value_or(compiler_directive_deduced_type)},
+      {"return_type", proto.ret},
     };
   }
 
   inline auto from_json(json const &j, dao::function_proto &proto) {
     j.at("id").get_to(proto.id);
     j.at("args").get_to(proto.args);
-    j.at("return_typename").get_to(proto.ret);
-
-    if (proto.ret == compiler_directive_deduced_type) {
-      proto.ret = std::nullopt;
-    }
+    j.at("return_type").get_to(proto.ret);
   }
 
   inline auto to_json(json &j, dao::ast const &node) -> void {
