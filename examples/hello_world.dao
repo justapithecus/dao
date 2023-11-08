@@ -1,4 +1,7 @@
-external(C) function puts(str)
+alias int8 as c_char
+alias int32 as c_int
+
+external(C) function puts(str: ptr c_char) -> c_int
 
 function triple(x)
   x * 3

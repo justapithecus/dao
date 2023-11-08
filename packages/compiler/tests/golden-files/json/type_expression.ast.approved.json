@@ -10,7 +10,7 @@
           "value": {
             "from": {
               "type": "identifier_expression",
-              "value": "i8"
+              "value": "int8"
             },
             "to": {
               "type": "identifier_expression",
@@ -23,7 +23,7 @@
           "value": {
             "from": {
               "type": "identifier_expression",
-              "value": "i32"
+              "value": "int32"
             },
             "to": {
               "type": "identifier_expression",
