@@ -7,7 +7,7 @@
     },
     {
       "kind": "identifier",
-      "repr": "i8"
+      "repr": "int8"
     },
     {
       "kind": "keyword",
@@ -27,7 +27,7 @@
     },
     {
       "kind": "identifier",
-      "repr": "i32"
+      "repr": "int32"
     },
     {
       "kind": "keyword",
