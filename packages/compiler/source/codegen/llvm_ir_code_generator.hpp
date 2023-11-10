@@ -1,13 +1,11 @@
 #pragma once
 
-#include <ankerl/unordered_dense.h>
 #include <llvm/IR/IRBuilder.h>
 #include <llvm/IR/LLVMContext.h>
 #include <llvm/IR/Module.h>
 #include <llvm/Target/TargetMachine.h>
 
 #include "../analysis/semantic_analyzer.hpp"
-#include "module.hpp"
 
 namespace dao {
 
@@ -20,16 +18,17 @@ namespace dao {
     llvm::IRBuilder<>                    builder_;
     std::unique_ptr<llvm::TargetMachine> machine_;
 
-    ankerl::unordered_dense::map<std::string, dao::module> modules_;
-
     dao::analysis_tables const                              &tables_;
     ankerl::unordered_dense::map<std::string, llvm::Value *> identifiers_;
 
+    bool emit_main_;
+
   public:
-    explicit llvm_ir_code_generator(
-      std::string source_fname, dao::analysis_tables const &tables);
+    explicit llvm_ir_code_generator(std::string source_fname,
+      dao::analysis_tables const &tables, bool emit_main = false);
 
     auto generate(dao::ast const &) -> void;
+    auto emit(dao::ast const &) -> void;
     auto dumps() const -> std::string;
 
     // Visitors

@@ -1,5 +1,6 @@
 #include "llvm_ir_code_generator.hpp"
 
+#include <filesystem>
 #include <iostream>
 #include <llvm/IR/LegacyPassManager.h>
 #include <llvm/IR/Verifier.h>
@@ -45,20 +46,28 @@ namespace dao {
     return std::unique_ptr<llvm::TargetMachine>(target_machine);
   }
 
-  llvm_ir_code_generator::llvm_ir_code_generator(
-    std::string source_fname, dao::analysis_tables const &tables)
+  llvm_ir_code_generator::llvm_ir_code_generator(std::string source_fname,
+    dao::analysis_tables const &tables, bool emit_main)
     : ctx_{}
-    , mod_{"main", ctx_}
+    , mod_{std::filesystem::path{source_fname}
+             .replace_extension("")
+             .generic_string(),
+        ctx_}
     , builder_{ctx_}
     , machine_{set_target_machine(mod_)}
     , tables_{tables}
-    , identifiers_{} {
+    , identifiers_{}
+    , emit_main_{emit_main} {
 
     mod_.setSourceFileName(std::move(source_fname));
   }
 
   auto llvm_ir_code_generator::generate(dao::ast const &ast) -> void {
     std::visit(*this, ast);
+  }
+
+  auto llvm_ir_code_generator::emit(dao::ast const &ast) -> void {
+    generate(ast);
     emit_object_code();
   }
 
@@ -77,6 +86,10 @@ namespace dao {
     // build program definitions
     std::for_each(prog.nodes.begin(), prog.nodes.end(),
       [this](auto &&node) { std::visit(*this, *node); });
+
+    if (not emit_main_) {
+      return nullptr;
+    }
 
     // build program entrypoint
     auto ft{llvm::FunctionType::get(builder_.getInt32Ty(), false)};
