@@ -3,6 +3,7 @@ add_library(libdao_compiler
     source/analysis/semantic_analyzer.cpp
     source/ast/types.cpp
     source/codegen/llvm_ir_code_generator.cpp
+    source/codegen/module.cpp
     source/parser/lexer.cpp
     source/parser/parser.cpp
     source/parser/state_machine.c

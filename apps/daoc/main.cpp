@@ -9,10 +9,10 @@ auto compile_module(std::string const &source_fpath, bool emit_main = false) {
   auto ast{parser.parse()};
   auto analyzer{dao::semantic_analyzer{}};
   auto tables{analyzer.analyze(ast)};
-  auto code_generator{
-    dao::llvm_ir_code_generator{source_fpath, tables, emit_main}};
+  auto code_generator{dao::llvm_ir_code_generator{tables}};
 
-  code_generator.emit(ast);
+  code_generator.emit(source_fpath, ast, emit_main);
+  std::cout << code_generator.dumps(source_fpath) << "\n";
 }
 
 auto compile_standard_library() {
