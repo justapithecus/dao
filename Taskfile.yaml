@@ -3,9 +3,9 @@ version: "3"
 env:
   DOCKER_BUILDKIT: 1
   BUILDKIT_PROGRESS: "plain"
-  BUILD_OS: "ubuntu-22.04"
+  BUILD_OS: "linux"
   BUILD_COMPILER: "clang"
-  BUILD_TYPE: "debug"
+  BUILD_TYPE: "Debug"
 
 tasks:
   lock: conan lock create .
@@ -14,9 +14,10 @@ tasks:
     cmds:
       - |
         conan install . \
-          --profile="profiles/${BUILD_OS}.${BUILD_COMPILER}.${BUILD_TYPE}.ini" \
+          --profile="profiles/${BUILD_OS}.${BUILD_COMPILER}.ini" \
           --output-folder="build" \
-          --build=missing
+          --build=missing \
+          --settings=build_type=${BUILD_TYPE}
 
   generate:
     aliases: [gen]
