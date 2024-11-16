@@ -7,14 +7,22 @@ env:
   BUILD_COMPILER: "clang"
   BUILD_TYPE: "Debug"
 
+  # TODO (andrew): disambiguate host vs target (a.k.a. conan build) settings
+
 tasks:
-  lock: conan lock create .
+  lock:
+    cmds:
+      - |
+        conan lock create . \
+          --profile:host="profiles/${BUILD_OS}.${BUILD_COMPILER}.ini" \
+          --profile:build="profiles/${BUILD_OS}.${BUILD_COMPILER}.ini"
 
   install:
     cmds:
       - |
         conan install . \
-          --profile="profiles/${BUILD_OS}.${BUILD_COMPILER}.ini" \
+          --profile:host="profiles/${BUILD_OS}.${BUILD_COMPILER}.ini" \
+          --profile:build="profiles/${BUILD_OS}.${BUILD_COMPILER}.ini" \
           --output-folder="build" \
           --build=missing \
           --settings=build_type=${BUILD_TYPE}
