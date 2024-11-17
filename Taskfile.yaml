@@ -13,14 +13,14 @@ tasks:
   lock:
     cmds:
       - |
-        conan lock create . \
+        devbox run conan lock create . \
           --profile:host="profiles/${BUILD_OS}.${BUILD_COMPILER}.ini" \
           --profile:build="profiles/${BUILD_OS}.${BUILD_COMPILER}.ini"
 
   install:
     cmds:
       - |
-        conan install . \
+        devbox run conan install . \
           --profile:host="profiles/${BUILD_OS}.${BUILD_COMPILER}.ini" \
           --profile:build="profiles/${BUILD_OS}.${BUILD_COMPILER}.ini" \
           --output-folder="build" \
@@ -30,12 +30,12 @@ tasks:
   generate:
     aliases: [gen]
     cmds:
-      - cmake . --preset default
+      - devbox run cmake . --preset default
 
-  clean: cmake --build --preset default --target clean
+  clean: devbox run cmake --build --preset default --target clean
 
-  build: time cmake --build --preset default
+  build: time devbox run cmake --build --preset default
 
   run: ./build/apps/daoc/daoc
 
-  test: ctest --test-dir build --preset default --output-on-failure --verbose
+  test: devbox run ctest --test-dir build --preset default --output-on-failure --verbose
