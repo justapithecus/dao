@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.27.6)
+cmake_minimum_required(VERSION 3.30.4)
 project(dao
   LANGUAGES C CXX
 )

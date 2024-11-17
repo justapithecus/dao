@@ -1,0 +1,27 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.13.6/.schema/devbox.schema.json",
+  "packages": {
+    "conan":   "2.9.1",
+    "cmake":   "3.30.4",
+    "ccache":  "4.10.2",
+    "go-task": "3.39.2",
+    "ninja":   "1.12.1",
+    "direnv":  "2.35.0",
+    "llvm_19": {
+      "version": "19.1.1",
+      "outputs": ["dev", "lib"]
+    },
+    "clang_19": "19.1.1",
+    "lld_19":   "19.1.1"
+  },
+  "shell": {
+    "init_hook": [
+      "echo 'Welcome to devbox!' > /dev/null"
+    ],
+    "scripts": {
+      "test": [
+        "echo \"Error: no test specified\" && exit 1"
+      ]
+    }
+  }
+}
