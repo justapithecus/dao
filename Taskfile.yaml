@@ -11,6 +11,7 @@ env:
 
 tasks:
   lock:
+    aliases: [l]
     cmds:
       - |
         devbox run conan lock create . \
@@ -18,6 +19,7 @@ tasks:
           --profile:build="profiles/${BUILD_OS}.${BUILD_COMPILER}.ini"
 
   install:
+    aliases: [i]
     cmds:
       - |
         devbox run conan install . \
@@ -28,13 +30,16 @@ tasks:
           --settings=build_type=${BUILD_TYPE}
 
   generate:
-    aliases: [gen]
+    aliases: [g, gen]
     cmds:
       - devbox run cmake . --preset default
 
   clean: devbox run cmake --build --preset default --target clean
 
-  build: time devbox run cmake --build --preset default
+  build:
+    aliases: [b]
+    cmds:
+      - time devbox run cmake --build --preset default
 
   run: ./build/apps/daoc/daoc
 
